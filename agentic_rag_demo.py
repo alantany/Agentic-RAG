@@ -1,14 +1,38 @@
 import streamlit as st
-from openai import OpenAI
-import weaviate
-from sqlalchemy import create_engine, text
+import importlib
+import subprocess
+import sys
+import sqlite3
+import json
+from vector_store import VectorStore
 import networkx as nx
+
+# 检查并安装依赖
+def install_missing_packages():
+    required_packages = {
+        'openai': 'openai',
+        'faiss': 'faiss-cpu',
+        'sqlalchemy': 'sqlalchemy',
+        'networkx': 'networkx',
+        'sentence_transformers': 'sentence-transformers'
+    }
+    
+    for package, pip_name in required_packages.items():
+        if importlib.util.find_spec(package) is None:
+            st.warning(f"正在安装 {pip_name}...")
+            subprocess.check_call([sys.executable, "-m", "pip", "install", pip_name])
+            st.success(f"{pip_name} 安装成功！")
+
+install_missing_packages()
 
 # 初始化OpenAI客户端
 client = OpenAI(
     api_key="sk-2D0EZSwcWUcD4c2K59353b7214854bBd8f35Ac131564EfBa",
     base_url="https://free.gpt.ge/v1"
 )
+
+# 初始化向量存储
+vector_store = VectorStore()
 
 # 设置页面配置
 st.set_page_config(page_title="Agentic RAG 系统", layout="wide")
@@ -19,24 +43,41 @@ if 'chat_history' not in st.session_state:
 
 def get_vector_search_results(query: str) -> list:
     try:
-        # 这里添加实际的Weaviate查询逻辑
-        return ["向量搜索结果示例"]
+        results = vector_store.search(query)
+        return [f"{item['title']}: {item['content']}" for item in results]
     except Exception as e:
         st.error(f"向量搜索错误: {str(e)}")
         return []
 
 def get_rdb_search_results(query: str) -> list:
     try:
-        # 这里添加实际的数据库查询逻辑
-        return ["关系数据库搜索结果示例"]
+        conn = sqlite3.connect('knowledge_base.db')
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+        SELECT title, content FROM documents 
+        WHERE title LIKE ? OR content LIKE ?
+        LIMIT 3
+        """, (f"%{query}%", f"%{query}%"))
+        
+        results = cursor.fetchall()
+        conn.close()
+        
+        return [f"{title}: {content}" for title, content in results]
     except Exception as e:
         st.error(f"数据库搜索错误: {str(e)}")
         return []
 
 def get_graph_search_results(query: str) -> list:
     try:
-        # 这里添加实际的图数据库查询逻辑
-        return ["图数据库搜索结果示例"]
+        G = nx.read_gexf("knowledge_graph.gexf")
+        results = []
+        
+        for node in G.nodes(data=True):
+            if query.lower() in node[1].get('content', '').lower():
+                results.append(f"{node[0]}: {node[1].get('content', '')}")
+        
+        return results[:3]
     except Exception as e:
         st.error(f"图数据库搜索错误: {str(e)}")
         return []
@@ -62,6 +103,36 @@ def get_llm_response(query: str, search_results: dict) -> str:
     except Exception as e:
         st.error(f"LLM响应错误: {str(e)}")
         return "抱歉，生成回答时出现错误。"
+
+def process_medical_query(query: str):
+    """处理医疗查询"""
+    # 向量搜索找相似病例
+    vector_results = vector_store.search(query)
+    
+    # 关系数据库查询具体信息
+    with sqlite3.connect('medical_records.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT p.name, d.diagnosis 
+            FROM patients p 
+            JOIN diagnoses d ON p.id = d.patient_id 
+            WHERE d.diagnosis LIKE ?
+        """, (f"%{query}%",))
+        sql_results = cursor.fetchall()
+    
+    # 图数据库查询关系
+    G = nx.read_gexf("medical_graph.gexf")
+    graph_results = []
+    for node in G.nodes(data=True):
+        if query.lower() in str(node[1]).lower():
+            neighbors = list(G.neighbors(node[0]))
+            graph_results.append(f"{node[0]} 相关: {neighbors}")
+    
+    return {
+        "vector": vector_results,
+        "sql": sql_results,
+        "graph": graph_results
+    }
 
 # 主界面
 st.title("🤖 Agentic RAG 系统")

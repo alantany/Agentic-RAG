@@ -1,0 +1,8 @@
+streamlit
+openai
+faiss-cpu
+sqlalchemy
+networkx
+sentence-transformers
+pickle5
+PyPDF2
