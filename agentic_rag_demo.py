@@ -11,7 +11,7 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 import pickle
 import os
-import PyPDF2
+import pdfplumber
 from datetime import datetime
 import re
 
@@ -304,18 +304,21 @@ with st.sidebar:
     if uploaded_file is not None:
         if st.button("导入数据"):
             with st.spinner("正在导入数据..."):
-                # 读取PDF内容
-                pdf_reader = PyPDF2.PdfReader(uploaded_file)
-                pdf_content = ""
-                for page in pdf_reader.pages:
-                    pdf_content += page.extract_text()
-                
-                # 导入数据
-                if import_medical_data(pdf_content):
-                    st.success("数据导入成功！")
-                    st.session_state.data_initialized = True
-                else:
-                    st.error("数据导入失败！")
+                try:
+                    # 使用pdfplumber读取PDF内容
+                    with pdfplumber.open(uploaded_file) as pdf:
+                        pdf_content = ""
+                        for page in pdf.pages:
+                            pdf_content += page.extract_text()
+                    
+                    # 导入数据
+                    if import_medical_data(pdf_content):
+                        st.success("数据导入成功！")
+                        st.session_state.data_initialized = True
+                    else:
+                        st.error("数据导入失败！")
+                except Exception as e:
+                    st.error(f"PDF读取错误: {str(e)}")
     
     # 搜索方法选择
     st.subheader("搜索配置")
