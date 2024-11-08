@@ -1,0 +1,132 @@
+# Agentic RAG系统开发手册
+
+## 理解Agentic RAG的基本概念
+- RAG（检索增强生成）
+- Agentic RAG
+
+## Agentic RAG的核心组件
+- AI代理
+- 工具
+
+## Agentic RAG的架构
+- 单代理系统
+- 多代理系统
+
+## 实现步骤
+
+### 准备环境
+- 安装必要的库
+  ```bash
+  pip install weaviate-client streamlit sqlalchemy networkx
+  ```
+
+### 构建向量搜索功能
+- 使用Weaviate进行向量搜索
+  ```python
+  def get_vector_search_results(query: str) -> str:
+      client = Client("http://localhost:8080")
+      response = client.query.hybrid(query, limit=5)
+      return response
+  ```
+
+### 构建关系数据库搜索功能
+- 使用SQLAlchemy连接和查询关系数据库
+  ```python
+  from sqlalchemy import create_engine, text
+
+  def get_rdb_search_results(query: str) -> str:
+      engine = create_engine('sqlite:///example.db')
+      with engine.connect() as connection:
+          result = connection.execute(text("SELECT * FROM documents WHERE content LIKE :query"), {"query": f"%{query}%"})
+          return [row for row in result]
+  ```
+
+### 构建图数据库搜索功能
+- 使用NetworkX进行图数据库的查询
+  ```python
+  import networkx as nx
+
+  def get_graph_search_results(query: str, graph: nx.Graph) -> str:
+      # 假设图中节点有属性 'content'
+      results = [node for node, data in graph.nodes(data=True) if query in data.get('content', '')]
+      return results
+  ```
+
+### 集成到Streamlit应用
+- 创建Streamlit应用
+  ```python
+  import streamlit as st
+
+  st.title("Agentic RAG Demo")
+
+  query = st.text_input("输入查询：")
+
+  if st.button("检索和生成"):
+      vector_results = get_vector_search_results(query)
+      st.write("向量搜索结果：", vector_results)
+      
+      rdb_results = get_rdb_search_results(query)
+      st.write("关系数据库搜索结果：", rdb_results)
+      
+      # 假设已创建一个NetworkX图对象graph
+      graph_results = get_graph_search_results(query, graph)
+      st.write("图数据库搜索结果：", graph_results)
+  ```
+
+## 验证和迭代
+- 运行Streamlit应用
+
+## Git 提交
+- 提交代码到Git
+  ```bash
+  git add agentic_rag_demo.py
+  git commit -m "实现基于向量、关系数据库和图数据库的搜索功能"
+  git push origin main
+  ``` 
+架构图
++-------------------+
+|   用户界面 (UI)   |
+|  (Streamlit App)  |
++-------------------+
+          |
+          v
++-------------------+
+|   输入处理模块    |
+| (Query Processing)|
++-------------------+
+          |
+          v
++-------------------+       +-------------------+       +-------------------+
+| 向量搜索模块     |       | 关系数据库模块    |       | 图数据库模块     |
+| (Weaviate Client)|       | (SQLAlchemy)      |       | (NetworkX)       |
++-------------------+       +-------------------+       +-------------------+
+          |                         |                         |
+          v                         v                         v
++-------------------+       +-------------------+       +-------------------+
+|  检索结果整合模块 |       |  检索结果整合模块 |       |  检索结果整合模块 |
++-------------------+       +-------------------+       +-------------------+
+          |                         |                         |
+          +-------------------------+-------------------------+
+                                    |
+                                    v
++-------------------+
+|  生成模块 (LLM)   |
+| (Response Gen.)   |
++-------------------+
+          |
+          v
++-------------------+
+|   输出展示模块    |
+| (Result Display)  |
++-------------------+
+
+说明
+用户界面 (UI)：用户通过Streamlit应用输入查询。
+输入处理模块：处理用户输入的查询。
+向量搜索模块：使用Weaviate进行向量搜索。
+关系数据库模块：使用SQLAlchemy查询关系数据库。
+图数据库模块：使用NetworkX查询图数据库。
+检索结果整合模块：整合来自不同数据源的检索结果。
+生成模块 (LLM)：使用大型语言模型生成响应。
+输出展示模块：在Streamlit应用中展示最终结果。
+你可以根据这个描述创建一个更详细的架构图，帮助你和团队更好地理解和实现Agentic RAG系统。
