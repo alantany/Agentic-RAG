@@ -6,6 +6,8 @@ import traceback
 import time
 import jieba  # 添加中文分词库
 import networkx as nx
+import json
+from openai import OpenAI
 
 # 初始化 Pinecone
 def init_pinecone():
@@ -262,3 +264,98 @@ def get_graph_search_results(query: str) -> list:
         st.error(f"错误类型: {type(e).__name__}")
         st.error(f"错误堆栈: {traceback.format_exc()}")
         return []
+
+def generate_graph_query(query: str) -> dict:
+    """使用LLM生成图数据库查询条件"""
+    try:
+        st.write("开始创建OpenAI客户端...")
+        client = OpenAI(
+            api_key="sk-1pUmQlsIkgla3CuvKTgCrzDZ3r0pBxO608YJvIHCN18lvOrn",
+            base_url="https://api.chatanywhere.tech/v1",
+            timeout=60
+        )
+        st.write("✅ OpenAI客户端创建成功")
+        
+        # 读取图数据库的结构信息
+        G = nx.read_gexf("medical_graph.gexf")
+        
+        # 获取图的基本信息
+        graph_info = {
+            "node_types": list(set(nx.get_node_attributes(G, 'type').values())),
+            "relationships": list(set(nx.get_edge_attributes(G, 'relationship').values())),
+            "nodes_sample": {
+                node: data for node, data in list(G.nodes(data=True))[:5]
+            },
+            "edges_sample": {
+                f"{u}->{v}": data for u, v, data in list(G.edges(data=True))[:5]
+            }
+        }
+        
+        prompt = f"""请根据问题和图数据库结构生成图数据库查询条件。
+
+图数据库结构：
+节点类型: {graph_info["node_types"]}
+关系类型: {graph_info["relationships"]}
+节点示例: {json.dumps(graph_info["nodes_sample"], ensure_ascii=False, indent=2)}
+关系示例: {json.dumps(graph_info["edges_sample"], ensure_ascii=False, indent=2)}
+
+用户问题：{query}
+
+请生成一个包含查询条件的字典，示例格式：
+
+1. 查询患者的主诉：
+{{
+    "start_node": {{"type": "patient", "name": "从问题中提取的患者姓名"}},
+    "relationship": "complains_of",
+    "end_node": {{"type": "chief_complaint"}},
+    "return": ["end_node.content"]
+}}
+
+注意：
+1. 从用户问题中提取正确的患者姓名
+2. 使用正确的节点类型和关系类型
+3. 使用正确的属性名称
+4. 指定要返回的具体属性
+
+请直接返回查询条件的JSON字符串，不要包含任何其他内容。"""
+
+        st.write("🔄 正在调用OpenAI API...")
+        response = client.chat.completions.create(
+            model="gpt-4o-mini-2024-07-18",
+            messages=[
+                {
+                    "role": "system", 
+                    "content": "你是一个图数据库查询专家。请根据实际的图数据库结构生成精确的查询条件。"
+                },
+                {
+                    "role": "user", 
+                    "content": prompt
+                }
+            ],
+            temperature=0.1
+        )
+        st.write("✅ OpenAI API调用成功")
+        
+        # 获取响应文本并清理
+        query_str = response.choices[0].message.content.strip()
+        st.write("原始响应文本：", query_str)
+        
+        if query_str.startswith('```json'):
+            query_str = query_str[7:]
+        if query_str.endswith('```'):
+            query_str = query_str[:-3]
+        query_str = query_str.strip()
+        
+        st.write("清理后的JSON字符串：", query_str)
+        
+        # 显示生成的查询条件
+        st.write("生成的图数据库查询条件：")
+        st.code(query_str, language="json")
+        
+        return json.loads(query_str)
+        
+    except Exception as e:
+        st.error(f"生成图数据库查询条件错误: {str(e)}")
+        st.error(f"错误类型: {type(e).__name__}")
+        st.error(f"错误堆栈: {traceback.format_exc()}")
+        return None
