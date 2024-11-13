@@ -1,69 +1,63 @@
-import faiss
-import numpy as np
-from sentence_transformers import SentenceTransformer
-import pickle
-import os
+import streamlit as st
+from transformers import AutoTokenizer, AutoModel
+import torch
+import tiktoken
 
-class VectorStore:
-    def __init__(self):
-        # 初始化文本向量化模型
-        self.model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
-        self.dimension = 384  # paraphrase-multilingual-MiniLM-L12-v2 的向量维度
-        
-        # 初始化FAISS索引
-        self.index = faiss.IndexFlatL2(self.dimension)
-        self.documents = []
-        
-        # 如果存在持久化的数据，则加载
-        if os.path.exists('vector_store.pkl'):
-            self.load_store()
+# 全局变量，确保只加载一次
+if 'tokenizer' not in st.session_state:
+    st.session_state.tokenizer = AutoTokenizer.from_pretrained('bert-base-chinese')
+if 'model' not in st.session_state:
+    st.session_state.model = AutoModel.from_pretrained('bert-base-chinese')
+
+def num_tokens_from_string(string: str) -> int:
+    """计算文本的token数量"""
+    encoding = tiktoken.encoding_for_model("gpt-4o-mini")
+    return len(encoding.encode(string))
+
+def get_embeddings(text: str):
+    """获取文本的向量表示"""
+    inputs = st.session_state.tokenizer(text, return_tensors="pt", padding=True, truncation=True, max_length=512)
+    with torch.no_grad():
+        outputs = st.session_state.model(**inputs)
+    # 直接返回tensor而不是numpy数组
+    return outputs.last_hidden_state.mean(dim=1).squeeze()
+
+def vectorize_document(text: str, max_tokens: int = 4096):
+    """处理并向量化文档"""
+    # 分块
+    chunks = []
+    current_chunk = ""
+    for sentence in text.split('.'):
+        if num_tokens_from_string(current_chunk + sentence) > max_tokens:
+            if current_chunk:
+                chunks.append(current_chunk)
+            current_chunk = sentence
+        else:
+            current_chunk += sentence + '.'
+    if current_chunk:
+        chunks.append(current_chunk)
     
-    def text_to_vector(self, text: str):
-        """将文本转换为向量"""
-        return self.model.encode(text)
+    # 向量化
+    vectors = [get_embeddings(chunk) for chunk in chunks]
+    vectors = torch.stack(vectors)
     
-    def add_document(self, doc: dict):
-        """添加文档到向量数据库"""
-        # 获取文本的向量表示
-        vector = self.text_to_vector(doc["content"])
+    return chunks, vectors
+
+def search_similar(query: str, vectors, chunks: list, k: int = 3):
+    """搜索相似文档片段"""
+    try:
+        query_vector = get_embeddings(query)
         
-        # 添加到FAISS索引
-        self.index.add(np.array([vector], dtype=np.float32))
-        self.documents.append(doc)
+        # 计算余弦相似度
+        similarities = torch.nn.functional.cosine_similarity(query_vector.unsqueeze(0), vectors)
         
-        # 保存到文件
-        self.save_store()
-    
-    def search(self, query: str, limit: int = 3):
-        """向量相似度搜索"""
-        query_vector = self.text_to_vector(query)
+        # 获取最相似的k个文档
+        top_k = torch.topk(similarities, min(k, len(chunks)))
         
-        # 搜索最相似的向量
-        D, I = self.index.search(np.array([query_vector], dtype=np.float32), limit)
-        
-        # 返回对应的文档
         results = []
-        for idx in I[0]:
-            if idx < len(self.documents):  # 确保索引有效
-                results.append(self.documents[idx])
-        
+        for idx in top_k.indices:
+            results.append(chunks[int(idx)])
         return results
-    
-    def save_store(self):
-        """保存向量存储到文件"""
-        store_data = {
-            'index': faiss.serialize_index(self.index),
-            'documents': self.documents
-        }
-        with open('vector_store.pkl', 'wb') as f:
-            pickle.dump(store_data, f)
-    
-    def load_store(self):
-        """从文件加载向量存储"""
-        try:
-            with open('vector_store.pkl', 'rb') as f:
-                store_data = pickle.load(f)
-                self.index = faiss.deserialize_index(store_data['index'])
-                self.documents = store_data['documents']
-        except Exception as e:
-            print(f"加载向量存储失败: {str(e)}") 
+    except Exception as e:
+        st.error(f"搜索错误: {str(e)}")
+        return []

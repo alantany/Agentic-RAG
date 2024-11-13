@@ -3,7 +3,7 @@ import sqlite3
 import networkx as nx
 import json
 import os
-from vector_store import VectorStore
+from vector_store import vectorize_document, search_similar
 
 # 示例数据
 sample_documents = [
@@ -27,12 +27,16 @@ sample_documents = [
 def setup_vector_store():
     """设置和导入向量数据库数据"""
     try:
-        vector_store = VectorStore()
-        
         # 导入数据
         for doc in sample_documents:
-            vector_store.add_document(doc)
-        
+            chunks, index = vectorize_document(doc["content"])
+            # 存储到session state
+            if 'file_chunks' not in st.session_state:
+                st.session_state.file_chunks = {}
+            if 'file_indices' not in st.session_state:
+                st.session_state.file_indices = {}
+            st.session_state.file_chunks[doc["title"]] = chunks
+            st.session_state.file_indices[doc["title"]] = index
         return True
     except Exception as e:
         print(f"向量存储设置错误: {str(e)}")
