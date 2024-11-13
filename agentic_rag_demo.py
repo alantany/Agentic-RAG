@@ -237,7 +237,7 @@ def get_database_commands(text: str) -> dict:
             
             # 验证JSON结构
             if not isinstance(commands, dict):
-                raise ValueError("��回的不是有效的JSON对象")
+                raise ValueError("回的不是有效的JSON对象")
             if "relational_db" not in commands or "graph_db" not in commands:
                 raise ValueError("JSON缺少必要的键")
             
@@ -392,7 +392,7 @@ class MedicalRecordParser:
                 '动态心电图': r'动态心电图\s*:(.*?)。',
                 '眼震电图': r'眼震电图提示(.*?)。',
                 '血常规': r'血常规[检查]*[:：](.*?)',
-                '心脏超���': r'心脏超声[检查]*[:：](.*?)。'
+                '心脏超': r'心脏超声[检查]*[:：](.*?)。'
             }
             for exam, pattern in exam_patterns.items():
                 if match := re.search(pattern, self.content):
@@ -604,7 +604,7 @@ def generate_graph_query(query: str) -> dict:
 
 用户问题：{query}
 
-请���一个包含查询条件的字典，示例格式：
+请一个包含查询条件的字典，示例格式：
 
 1. 查询患者的主诉：
 {{
@@ -741,26 +741,28 @@ def generate_mongodb_query(query: str) -> dict:
             schema = json.load(f)
         st.write("✅ JSON模板读取成功")
         
-        prompt = f"""你是一个MongoDB查询专家。请根据以下问题和数结构生成MongoDB查询条件。
+        prompt = f"""你是一个MongoDB查询专家。请根据以下问题和数据结构生成MongoDB查询条件。
 
-据结构：
+数据结构：
 {json.dumps(schema, ensure_ascii=False, indent=2)}
 
 用户问题：{query}
 
-请生成一个MongoDB查询对象，必须包含query和projection两字段。示例格式：
+请生成一个MongoDB查询对象，必须包含query和projection两个字段。示例格式：
 
+对于嵌套字段的查询示例：
 {{
-    "query": {{"患者姓名": "马某某"}},
-    "projection": {{"患者姓名": 1, "生命体征.血压": 1, "_id": 0}}
+    "query": {{"患者姓名": "周某某"}},
+    "projection": {{"患者姓名": 1, "生化指标.白细胞": 1, "_id": 0}}
 }}
 
 注意：
 1. 必须返回合法的JSON格式
 2. 必须包含query和projection两个字段
-3. 使用双引号而不是单引
+3. 使用双引号而不是单引号
 4. 字段名必须与数据结构中的完全匹配
-5. 不要返回任何其他内容，只返回JSON对象
+5. 对于嵌套字段，使用点号表示法
+6. 不要返回任何其他内容，只返回JSON对象
 
 请直接返回查询对象，不要包含任何解释或说明。"""
 
@@ -926,7 +928,7 @@ with st.sidebar:
             for file in uploaded_files:
                 st.write(f"- {file.name}")
             
-            if st.button("导入数据"):
+            if st.button("导入据"):
                 with st.spinner("正在导入数据..."):
                     success = True
                     
@@ -1029,10 +1031,10 @@ with st.sidebar:
                     docs = list(db.patients.find())
                     if docs:
                         for doc in docs:
-                            with st.expander(f"患者：{doc.get('患姓名', '未知患者')}"):
+                            with st.expander(f"患者：{doc.get('患者姓名', '未知患者')}"):
                                 # 基本信息
                                 st.write("👤 基本信息：")
-                                for key in ['��别', '年龄', '民族', '职业', '婚姻状况', '入院日期', '出院日期']:
+                                for key in ['性别', '年龄', '民族', '职业', '婚姻状况', '入院日期', '出院日期']:
                                     if key in doc:
                                         st.write(f"{key}: {doc[key]}")
                                 
@@ -1451,7 +1453,7 @@ def clean_mongodb_data():
         db = get_mongodb_connection()
         if db is not None:
             result = db.patients.delete_many({})
-            st.write(f"已删除所有记录（共 {result.deleted_count} 条）")
+            st.write(f"已删除所有记录（共 {result.deleted_count} ���）")
             st.success("✅ MongoDB已完全清空")
             
             if 'mongodb_records' in st.session_state:
