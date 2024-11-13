@@ -1,0 +1,3071 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
+  <meta lastmodifieddate="2024-11-12">
+    <creator>NetworkX 3.4.2</creator>
+  </meta>
+  <graph defaultedgetype="undirected" mode="static" name="">
+    <attributes mode="static" class="edge">
+      <attribute id="5" title="relationship" type="string" />
+    </attributes>
+    <attributes mode="static" class="node">
+      <attribute id="0" title="type" type="string" />
+      <attribute id="1" title="name" type="string" />
+      <attribute id="2" title="value" type="string" />
+      <attribute id="3" title="content" type="string" />
+      <attribute id="4" title="status" type="string" />
+    </attributes>
+    <nodes>
+      <node id="蒲某某" label="蒲某某">
+        <attvalues>
+          <attvalue for="0" value="patient" />
+        </attvalues>
+      </node>
+      <node id="性别_女_蒲某某" label="性别_女_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="性别" />
+          <attvalue for="2" value="女" />
+        </attvalues>
+      </node>
+      <node id="年龄_86_蒲某某" label="年龄_86_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="年龄" />
+          <attvalue for="2" value="86" />
+        </attvalues>
+      </node>
+      <node id="民族_汉族_蒲某某" label="民族_汉族_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="民族" />
+          <attvalue for="2" value="汉族" />
+        </attvalues>
+      </node>
+      <node id="职业_离休_蒲某某" label="职业_离休_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="职业" />
+          <attvalue for="2" value="离休" />
+        </attvalues>
+      </node>
+      <node id="婚姻状况_已婚_蒲某某" label="婚姻状况_已婚_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="婚姻状况" />
+          <attvalue for="2" value="已婚" />
+        </attvalues>
+      </node>
+      <node id="入院日期_2024-06-16_蒲某某" label="入院日期_2024-06-16_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="入院日期" />
+          <attvalue for="2" value="2024-06-16" />
+        </attvalues>
+      </node>
+      <node id="出院日期_2024-06-22_蒲某某" label="出院日期_2024-06-22_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="出院日期" />
+          <attvalue for="2" value="2024-06-22" />
+        </attvalues>
+      </node>
+      <node id="住院天数_6_蒲某某" label="住院天数_6_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="住院天数" />
+          <attvalue for="2" value="6" />
+        </attvalues>
+      </node>
+      <node id="主诉_间断意识丧失 1个月_蒲某某" label="主诉_间断意识丧失 1个月_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="chief_complaint" />
+          <attvalue for="3" value="间断意识丧失 1个月" />
+        </attvalues>
+      </node>
+      <node id="现病史_1个月前如厕时突发意识不清，伴有大汗、四肢无力_蒲某某" label="现病史_1个月前如厕时突发意识不清，伴有大汗、四肢无力_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="1个月前如厕时突发意识不清，伴有大汗、四肢无力" />
+        </attvalues>
+      </node>
+      <node id="现病史_症状持续2分钟后自行缓解_蒲某某" label="现病史_症状持续2分钟后自行缓解_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="症状持续2分钟后自行缓解" />
+        </attvalues>
+      </node>
+      <node id="现病史_今晨患者再次出现上述症状，伴有头晕、恶心、呕吐_蒲某某" label="现病史_今晨患者再次出现上述症状，伴有头晕、恶心、呕吐_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="今晨患者再次出现上述症状，伴有头晕、恶心、呕吐" />
+        </attvalues>
+      </node>
+      <node id="现病史_既往哮喘 30年余，慢阻肺病史4年余，肠梗阻病史30余年_蒲某某" label="现病史_既往哮喘 30年余，慢阻肺病史4年余，肠梗阻病史30余年_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="既往哮喘 30年余，慢阻肺病史4年余，肠梗阻病史30余年" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_一过性意识丧失_蒲某某" label="入院诊断_一过性意识丧失_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="一过性意识丧失" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_慢性阻塞性肺疾病_蒲某某" label="入院诊断_慢性阻塞性肺疾病_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="慢性阻塞性肺疾病" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_支气管哮喘_蒲某某" label="入院诊断_支气管哮喘_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="支气管哮喘" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_脑血管供血不足_蒲某某" label="出院诊断_脑血管供血不足_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="脑血管供血不足" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_体位性低血压_蒲某某" label="出院诊断_体位性低血压_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="体位性低血压" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_慢性阻塞性肺疾病_蒲某某" label="出院诊断_慢性阻塞性肺疾病_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="慢性阻塞性肺疾病" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_支气管哮喘_蒲某某" label="出院诊断_支气管哮喘_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="支气管哮喘" />
+        </attvalues>
+      </node>
+      <node id="生命体征_体温_36.2℃_蒲某某" label="生命体征_体温_36.2℃_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="体温" />
+          <attvalue for="2" value="36.2℃" />
+        </attvalues>
+      </node>
+      <node id="生命体征_脉搏_70 次/分_蒲某某" label="生命体征_脉搏_70 次/分_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="脉搏" />
+          <attvalue for="2" value="70 次/分" />
+        </attvalues>
+      </node>
+      <node id="生命体征_呼吸_18 次/分_蒲某某" label="生命体征_呼吸_18 次/分_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="呼吸" />
+          <attvalue for="2" value="18 次/分" />
+        </attvalues>
+      </node>
+      <node id="生命体征_血压_130/80 mmHg_蒲某某" label="生命体征_血压_130/80 mmHg_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="血压" />
+          <attvalue for="2" value="130/80 mmHg" />
+        </attvalues>
+      </node>
+      <node id="生化指标_估算肾小球滤过率_71.37 mL/min/1.73m^2_蒲某某" label="生化指标_估算肾小球滤过率_71.37 mL/min/1.73m^2_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="估算肾小球滤过率" />
+          <attvalue for="2" value="71.37 mL/min/1.73m^2" />
+        </attvalues>
+      </node>
+      <node id="生化指标_乳酸_3.78 mmol/L_蒲某某" label="生化指标_乳酸_3.78 mmol/L_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="乳酸" />
+          <attvalue for="2" value="3.78 mmol/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_丙酸氨基转移酶_6.5 U/L_蒲某某" label="生化指标_丙酸氨基转移酶_6.5 U/L_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="丙酸氨基转移酶" />
+          <attvalue for="2" value="6.5 U/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_总蛋白_58.4 g/L_蒲某某" label="生化指标_总蛋白_58.4 g/L_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="总蛋白" />
+          <attvalue for="2" value="58.4 g/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_白蛋白_34.4 g/L_蒲某某" label="生化指标_白蛋白_34.4 g/L_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="白蛋白" />
+          <attvalue for="2" value="34.4 g/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_载脂蛋白 A1_0.94 g/L_蒲某某" label="生化指标_载脂蛋白 A1_0.94 g/L_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="载脂蛋白 A1" />
+          <attvalue for="2" value="0.94 g/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_肌酸激酶_18.3 U/L_蒲某某" label="生化指标_肌酸激酶_18.3 U/L_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="肌酸激酶" />
+          <attvalue for="2" value="18.3 U/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_三碘甲状腺原氨酸_0.87 nmol/L_蒲某某" label="生化指标_三碘甲状腺原氨酸_0.87 nmol/L_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="三碘甲状腺原氨酸" />
+          <attvalue for="2" value="0.87 nmol/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_白细胞_122.0/uL_蒲某某" label="生化指标_白细胞_122.0/uL_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="白细胞" />
+          <attvalue for="2" value="122.0/uL" />
+        </attvalues>
+      </node>
+      <node id="生化指标_白细胞（高倍视野）_22.18/HP_蒲某某" label="生化指标_白细胞（高倍视野）_22.18/HP_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="白细胞（高倍视野）" />
+          <attvalue for="2" value="22.18/HP" />
+        </attvalues>
+      </node>
+      <node id="生化指标_尿白细胞_1+_蒲某某" label="生化指标_尿白细胞_1+_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="尿白细胞" />
+          <attvalue for="2" value="1+" />
+        </attvalues>
+      </node>
+      <node id="生化指标_尿蛋白_1+_蒲某某" label="生化指标_尿蛋白_1+_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="尿蛋白" />
+          <attvalue for="2" value="1+" />
+        </attvalues>
+      </node>
+      <node id="生化指标_尿胆红素_1+_蒲某某" label="生化指标_尿胆红素_1+_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="尿胆红素" />
+          <attvalue for="2" value="1+" />
+        </attvalues>
+      </node>
+      <node id="生化指标_鳞状上皮细胞_107/uL_蒲某某" label="生化指标_鳞状上皮细胞_107/uL_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="鳞状上皮细胞" />
+          <attvalue for="2" value="107/uL" />
+        </attvalues>
+      </node>
+      <node id="生化指标_非鳞状上皮_8.0/uL_蒲某某" label="生化指标_非鳞状上皮_8.0/uL_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="非鳞状上皮" />
+          <attvalue for="2" value="8.0/uL" />
+        </attvalues>
+      </node>
+      <node id="生化指标_粘液丝_4671/LP_蒲某某" label="生化指标_粘液丝_4671/LP_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="粘液丝" />
+          <attvalue for="2" value="4671/LP" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_嘱其回家后注意休息_蒲某某" label="出院医嘱_嘱其回家后注意休息_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="嘱其回家后注意休息" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_按时口服药物_蒲某某" label="出院医嘱_按时口服药物_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="按时口服药物" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_有情况随诊_蒲某某" label="出院医嘱_有情况随诊_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="有情况随诊" />
+        </attvalues>
+      </node>
+      <node id="诊疗经过_蒲某某" label="诊疗经过_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="treatment_course" />
+          <attvalue for="3" value="入院后给予尿常规化学+有形成分分析，生化检查显示多项指标异常，头颅核磁示多发腔隙性脑梗死，脑白质脱髓鞘改变，老年性脑改变。给予改善循环、营养神经治疗，病情平稳后出院。" />
+        </attvalues>
+      </node>
+      <node id="出院情况_好转_蒲某某" label="出院情况_好转_蒲某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_status" />
+          <attvalue for="4" value="好转" />
+        </attvalues>
+      </node>
+      <node id="马某某" label="马某某">
+        <attvalues>
+          <attvalue for="0" value="patient" />
+        </attvalues>
+      </node>
+      <node id="性别_男_马某某" label="性别_男_马某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="性别" />
+          <attvalue for="2" value="男" />
+        </attvalues>
+      </node>
+      <node id="年龄_93_马某某" label="年龄_93_马某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="年龄" />
+          <attvalue for="2" value="93" />
+        </attvalues>
+      </node>
+      <node id="民族_汉族_马某某" label="民族_汉族_马某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="民族" />
+          <attvalue for="2" value="汉族" />
+        </attvalues>
+      </node>
+      <node id="职业_离休_马某某" label="职业_离休_马某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="职业" />
+          <attvalue for="2" value="离休" />
+        </attvalues>
+      </node>
+      <node id="婚姻状况_已婚_马某某" label="婚姻状况_已婚_马某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="婚姻状况" />
+          <attvalue for="2" value="已婚" />
+        </attvalues>
+      </node>
+      <node id="入院日期_2024-05-21_马某某" label="入院日期_2024-05-21_马某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="入院日期" />
+          <attvalue for="2" value="2024-05-21" />
+        </attvalues>
+      </node>
+      <node id="出院日期_2024-06-24_马某某" label="出院日期_2024-06-24_马某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="出院日期" />
+          <attvalue for="2" value="2024-06-24" />
+        </attvalues>
+      </node>
+      <node id="住院天数_34_马某某" label="住院天数_34_马某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="住院天数" />
+          <attvalue for="2" value="34" />
+        </attvalues>
+      </node>
+      <node id="主诉_意识模糊 3天_马某某" label="主诉_意识模糊 3天_马某某">
+        <attvalues>
+          <attvalue for="0" value="chief_complaint" />
+          <attvalue for="3" value="意识模糊 3天" />
+        </attvalues>
+      </node>
+      <node id="现病史_意识模糊_马某某" label="现病史_意识模糊_马某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="意识模糊" />
+        </attvalues>
+      </node>
+      <node id="现病史_发热_马某某" label="现病史_发热_马某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="发热" />
+        </attvalues>
+      </node>
+      <node id="现病史_乏力_马某某" label="现病史_乏力_马某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="乏力" />
+        </attvalues>
+      </node>
+      <node id="现病史_饮食呛咳_马某某" label="现病史_饮食呛咳_马某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="饮食呛咳" />
+        </attvalues>
+      </node>
+      <node id="现病史_高血压病史 4 年_马某某" label="现病史_高血压病史 4 年_马某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="高血压病史 4 年" />
+        </attvalues>
+      </node>
+      <node id="现病史_睡眠障碍 3 年_马某某" label="现病史_睡眠障碍 3 年_马某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="睡眠障碍 3 年" />
+        </attvalues>
+      </node>
+      <node id="现病史_认知障碍 1 年_马某某" label="现病史_认知障碍 1 年_马某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="认知障碍 1 年" />
+        </attvalues>
+      </node>
+      <node id="现病史_前列腺增生、尿频 1 年_马某某" label="现病史_前列腺增生、尿频 1 年_马某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="前列腺增生、尿频 1 年" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_多发性脑梗死_马某某" label="入院诊断_多发性脑梗死_马某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="多发性脑梗死" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_呼吸衰竭_马某某" label="入院诊断_呼吸衰竭_马某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="呼吸衰竭" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_意识障碍_马某某" label="入院诊断_意识障碍_马某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="意识障碍" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_细菌性肺炎_马某某" label="入院诊断_细菌性肺炎_马某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="细菌性肺炎" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_消化性溃疡伴出血_马某某" label="入院诊断_消化性溃疡伴出血_马某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="消化性溃疡伴出血" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_冠状动脉粥样硬化性心脏病_马某某" label="入院诊断_冠状动脉粥样硬化性心脏病_马某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="冠状动脉粥样硬化性心脏病" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_脑动脉硬化_马某某" label="入院诊断_脑动脉硬化_马某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="脑动脉硬化" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_高血压病 3 级（极高危险组）_马某某" label="入院诊断_高血压病 3 级（极高危险组）_马某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="高血压病 3 级（极高危险组）" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_睡眠障碍_马某某" label="入院诊断_睡眠障碍_马某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="睡眠障碍" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_前列腺增生_马某某" label="入院诊断_前列腺增生_马某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="前列腺增生" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_胃食管反流_马某某" label="入院诊断_胃食管反流_马某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="胃食管反流" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_认知障碍_马某某" label="入院诊断_认知障碍_马某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="认知障碍" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_肝功能异常_马某某" label="入院诊断_肝功能异常_马某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="肝功能异常" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_低蛋白血症_马某某" label="入院诊断_低蛋白血症_马某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="低蛋白血症" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_多发性脑梗死_马某某" label="出院诊断_多发性脑梗死_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="多发性脑梗死" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_呼吸衰竭_马某某" label="出院诊断_呼吸衰竭_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="呼吸衰竭" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_意识障碍_马某某" label="出院诊断_意识障碍_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="意识障碍" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_细菌性肺炎_马某某" label="出院诊断_细菌性肺炎_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="细菌性肺炎" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_消化性溃疡伴出血_马某某" label="出院诊断_消化性溃疡伴出血_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="消化性溃疡伴出血" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_冠状动脉粥样硬化性心脏病_马某某" label="出院诊断_冠状动脉粥样硬化性心脏病_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="冠状动脉粥样硬化性心脏病" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_脑动脉硬化_马某某" label="出院诊断_脑动脉硬化_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="脑动脉硬化" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_高血压病 3 级（极高危险组）_马某某" label="出院诊断_高血压病 3 级（极高危险组）_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="高血压病 3 级（极高危险组）" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_睡眠障碍_马某某" label="出院诊断_睡眠障碍_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="睡眠障碍" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_前列腺增生_马某某" label="出院诊断_前列腺增生_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="前列腺增生" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_胃食管反流_马某某" label="出院诊断_胃食管反流_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="胃食管反流" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_认知障碍_马某某" label="出院诊断_认知障碍_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="认知障碍" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_肝功能异常_马某某" label="出院诊断_肝功能异常_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="肝功能异常" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_低蛋白血症_马某某" label="出院诊断_低蛋白血症_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="低蛋白血症" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_泌尿系感染_马某某" label="出院诊断_泌尿系感染_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="泌尿系感染" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_营养性贫血_马某某" label="出院诊断_营养性贫血_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="营养性贫血" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_肾功能异常_马某某" label="出院诊断_肾功能异常_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="肾功能异常" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_喉头水肿_马某某" label="出院诊断_喉头水肿_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="喉头水肿" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_高尿酸血症_马某某" label="出院诊断_高尿酸血症_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="高尿酸血症" />
+        </attvalues>
+      </node>
+      <node id="生命体征_体温_36.5℃_马某某" label="生命体征_体温_36.5℃_马某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="体温" />
+          <attvalue for="2" value="36.5℃" />
+        </attvalues>
+      </node>
+      <node id="生命体征_脉搏_70 次/分_马某某" label="生命体征_脉搏_70 次/分_马某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="脉搏" />
+          <attvalue for="2" value="70 次/分" />
+        </attvalues>
+      </node>
+      <node id="生命体征_呼吸_18 次/分_马某某" label="生命体征_呼吸_18 次/分_马某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="呼吸" />
+          <attvalue for="2" value="18 次/分" />
+        </attvalues>
+      </node>
+      <node id="生命体征_血压_130/80 mmHg_马某某" label="生命体征_血压_130/80 mmHg_马某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="血压" />
+          <attvalue for="2" value="130/80 mmHg" />
+        </attvalues>
+      </node>
+      <node id="生化指标_C 反应蛋白_194.46 mg/L_马某某" label="生化指标_C 反应蛋白_194.46 mg/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="C 反应蛋白" />
+          <attvalue for="2" value="194.46 mg/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_白细胞_9.31×10^9/L_马某某" label="生化指标_白细胞_9.31×10^9/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="白细胞" />
+          <attvalue for="2" value="9.31×10^9/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_淋巴细胞百分比_7.1%_马某某" label="生化指标_淋巴细胞百分比_7.1%_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="淋巴细胞百分比" />
+          <attvalue for="2" value="7.1%" />
+        </attvalues>
+      </node>
+      <node id="生化指标_单核细胞百分比_3.2%_马某某" label="生化指标_单核细胞百分比_3.2%_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="单核细胞百分比" />
+          <attvalue for="2" value="3.2%" />
+        </attvalues>
+      </node>
+      <node id="生化指标_中性粒细胞百分比_89.5%_马某某" label="生化指标_中性粒细胞百分比_89.5%_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="中性粒细胞百分比" />
+          <attvalue for="2" value="89.5%" />
+        </attvalues>
+      </node>
+      <node id="生化指标_红细胞_3.16×10^12/L_马某某" label="生化指标_红细胞_3.16×10^12/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="红细胞" />
+          <attvalue for="2" value="3.16×10^12/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_血红蛋白_97 g/L_马某某" label="生化指标_血红蛋白_97 g/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="血红蛋白" />
+          <attvalue for="2" value="97 g/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_血小板_115×10^9/L_马某某" label="生化指标_血小板_115×10^9/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="血小板" />
+          <attvalue for="2" value="115×10^9/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_肌红蛋白_301.3 ng/mL_马某某" label="生化指标_肌红蛋白_301.3 ng/mL_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="肌红蛋白" />
+          <attvalue for="2" value="301.3 ng/mL" />
+        </attvalues>
+      </node>
+      <node id="生化指标_高敏肌钙蛋白 I_74.5 pg/mL_马某某" label="生化指标_高敏肌钙蛋白 I_74.5 pg/mL_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="高敏肌钙蛋白 I" />
+          <attvalue for="2" value="74.5 pg/mL" />
+        </attvalues>
+      </node>
+      <node id="生化指标_钙_2.01 mmol/L_马某某" label="生化指标_钙_2.01 mmol/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="钙" />
+          <attvalue for="2" value="2.01 mmol/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_尿素_38.1 mmol/L_马某某" label="生化指标_尿素_38.1 mmol/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="尿素" />
+          <attvalue for="2" value="38.1 mmol/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_肌酐_329.5 μmol/L_马某某" label="生化指标_肌酐_329.5 μmol/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="肌酐" />
+          <attvalue for="2" value="329.5 μmol/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_尿酸_543.2 μmol/L_马某某" label="生化指标_尿酸_543.2 μmol/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="尿酸" />
+          <attvalue for="2" value="543.2 μmol/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_估算肾小球滤过率_13.16 mL/min/1.73m^2_马某某" label="生化指标_估算肾小球滤过率_13.16 mL/min/1.73m^2_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="估算肾小球滤过率" />
+          <attvalue for="2" value="13.16 mL/min/1.73m^2" />
+        </attvalues>
+      </node>
+      <node id="生化指标_葡萄糖_6.92 mmol/L_马某某" label="生化指标_葡萄糖_6.92 mmol/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="葡萄糖" />
+          <attvalue for="2" value="6.92 mmol/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_胆碱酯酶_3945.8 U/L_马某某" label="生化指标_胆碱酯酶_3945.8 U/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="胆碱酯酶" />
+          <attvalue for="2" value="3945.8 U/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_乳酸_2.56 mmol/L_马某某" label="生化指标_乳酸_2.56 mmol/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="乳酸" />
+          <attvalue for="2" value="2.56 mmol/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_天冬氨酸氨基转移酶_80.6 U/L_马某某" label="生化指标_天冬氨酸氨基转移酶_80.6 U/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="天冬氨酸氨基转移酶" />
+          <attvalue for="2" value="80.6 U/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_总蛋白_55.1 g/L_马某某" label="生化指标_总蛋白_55.1 g/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="总蛋白" />
+          <attvalue for="2" value="55.1 g/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_白蛋白_30.1 g/L_马某某" label="生化指标_白蛋白_30.1 g/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="白蛋白" />
+          <attvalue for="2" value="30.1 g/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_前白蛋白_0.12 g/L_马某某" label="生化指标_前白蛋白_0.12 g/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="前白蛋白" />
+          <attvalue for="2" value="0.12 g/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_D-二聚体_950 μg/L_马某某" label="生化指标_D-二聚体_950 μg/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="D-二聚体" />
+          <attvalue for="2" value="950 μg/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_纤维蛋白原降解产物_8.0 mg/L_马某某" label="生化指标_纤维蛋白原降解产物_8.0 mg/L_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="纤维蛋白原降解产物" />
+          <attvalue for="2" value="8.0 mg/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_尿蛋白_1+_马某某" label="生化指标_尿蛋白_1+_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="尿蛋白" />
+          <attvalue for="2" value="1+" />
+        </attvalues>
+      </node>
+      <node id="生化指标_尿白细胞_615.0/uL_马某某" label="生化指标_尿白细胞_615.0/uL_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="尿白细胞" />
+          <attvalue for="2" value="615.0/uL" />
+        </attvalues>
+      </node>
+      <node id="生化指标_尿白细胞（高倍视野）_111.82/HP_马某某" label="生化指标_尿白细胞（高倍视野）_111.82/HP_马某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="尿白细胞（高倍视野）" />
+          <attvalue for="2" value="111.82/HP" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_低盐低脂饮食_马某某" label="出院医嘱_低盐低脂饮食_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="低盐低脂饮食" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_加强卧床护理_马某某" label="出院医嘱_加强卧床护理_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="加强卧床护理" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_遵嘱服药_马某某" label="出院医嘱_遵嘱服药_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="遵嘱服药" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_定期复查肺部 CT_马某某" label="出院医嘱_定期复查肺部 CT_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="定期复查肺部 CT" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_呼吸内科随诊_马某某" label="出院医嘱_呼吸内科随诊_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="呼吸内科随诊" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_不适时神经内科随诊_马某某" label="出院医嘱_不适时神经内科随诊_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="不适时神经内科随诊" />
+        </attvalues>
+      </node>
+      <node id="诊疗经过_马某某" label="诊疗经过_马某某">
+        <attvalues>
+          <attvalue for="0" value="treatment_course" />
+          <attvalue for="3" value="患者入院检验检查结合病史诊断为多发性脑梗死，意识障碍，呼吸衰竭等，血常规：C反应蛋白（快速）:194.46mg/L↑;*白细胞:9.31*10^9/L;淋巴细胞百分比:7.1%↓;单核细胞百分比:3.2%;中性粒细胞百分比:89.5%↑;*红细胞:3.16*10^12/L↓;*血红蛋白:97g/L↓;*血小板:115*10^9/L↓;心肌酶：肌红蛋白:301.3ng/mL↑;高敏肌钙蛋白 I:74.5pg/mL↑;肝肾功：*钙:2.01mmol/L↓;*尿素:38.1mmol/L↑;肌酐(酶法):329.5μmol/L↑;*尿酸:543.2μmol/L↑;估算肾小球滤过率:13.16mL/min/1.73m^2↓;*葡萄糖:6.92mmol/L↑;胆碱酯酶:3945.8U/L↓;乳酸:2.56mmol/L↑;*天冬氨酸氨基转移酶:80.6U/L↑;*总蛋白:55.1g/L↓;*白蛋白:30.1g/L↓;前白蛋白:0.12g/L↓;患者昨日夜间体温升高，呼吸机辅助下指氧稳定，继续美罗培南抗感染治疗。患者血小板偏低，考虑与感染相关，警惕出血风险，注意动态复查。患者双下肢水肿，血清白蛋白降低，考虑低蛋白血症，予以输入白蛋白，改善水肿情况。患者呼吸衰竭，持续呼吸机辅助呼吸，持续无法脱机，予以行气管切开术，手术过程顺利。患者应用美罗培南抗感染治疗，复查常规化验：全血细胞计数+5分类：*白细胞:9.97×10^9/L↑;单核细胞百分比:10.3%↑;中性粒细胞百分比:75.7%↑;单核细胞绝对值:1.03×10^9/L↑;中性粒细胞绝对值:7.55×10^9/L↑;*红细胞:2.65×10^12/L↓;*血红蛋白:76g/L↓; 凝血纤溶六项：D-二聚体:950μg/L↑;纤维蛋白原降解产物:8.0mg/L↑;生化 36项：*葡萄糖:6.25mmol/L↑。尿常规化学+有形成分分析：尿蛋白:1+;白细胞:615.0/uL↑;白细胞(高倍视野):111.82/HP↑。患者肾功能不全，进行性加重，出现少尿，经与家属沟通后予以行肾替代疗法，予以患者透析治疗，后患者全身水肿较前好转。患者家属要求出院，告知患者家属患者目前病情尚不稳定及出院后相关风险，患者家属坚持出院，准予今日办理出院手续。" />
+        </attvalues>
+      </node>
+      <node id="出院情况_好转_马某某" label="出院情况_好转_马某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_status" />
+          <attvalue for="4" value="好转" />
+        </attvalues>
+      </node>
+      <node id="杨某某" label="杨某某">
+        <attvalues>
+          <attvalue for="0" value="patient" />
+        </attvalues>
+      </node>
+      <node id="性别_男_杨某某" label="性别_男_杨某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="性别" />
+          <attvalue for="2" value="男" />
+        </attvalues>
+      </node>
+      <node id="年龄_72_杨某某" label="年龄_72_杨某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="年龄" />
+          <attvalue for="2" value="72" />
+        </attvalues>
+      </node>
+      <node id="民族_汉族_杨某某" label="民族_汉族_杨某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="民族" />
+          <attvalue for="2" value="汉族" />
+        </attvalues>
+      </node>
+      <node id="职业_退休_杨某某" label="职业_退休_杨某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="职业" />
+          <attvalue for="2" value="退休" />
+        </attvalues>
+      </node>
+      <node id="婚姻状况_已婚_杨某某" label="婚姻状况_已婚_杨某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="婚姻状况" />
+          <attvalue for="2" value="已婚" />
+        </attvalues>
+      </node>
+      <node id="入院日期_2024-06-19_杨某某" label="入院日期_2024-06-19_杨某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="入院日期" />
+          <attvalue for="2" value="2024-06-19" />
+        </attvalues>
+      </node>
+      <node id="出院日期_2024-06-25_杨某某" label="出院日期_2024-06-25_杨某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="出院日期" />
+          <attvalue for="2" value="2024-06-25" />
+        </attvalues>
+      </node>
+      <node id="住院天数_6_杨某某" label="住院天数_6_杨某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="住院天数" />
+          <attvalue for="2" value="6" />
+        </attvalues>
+      </node>
+      <node id="主诉_左侧肢体无力 5天，加重 2天_杨某某" label="主诉_左侧肢体无力 5天，加重 2天_杨某某">
+        <attvalues>
+          <attvalue for="0" value="chief_complaint" />
+          <attvalue for="3" value="左侧肢体无力 5天，加重 2天" />
+        </attvalues>
+      </node>
+      <node id="现病史_2型糖尿病病史_杨某某" label="现病史_2型糖尿病病史_杨某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="2型糖尿病病史" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_脑梗死_杨某某" label="入院诊断_脑梗死_杨某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="脑梗死" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_2型糖尿病_杨某某" label="入院诊断_2型糖尿病_杨某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="2型糖尿病" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_高乳酸血症_杨某某" label="入院诊断_高乳酸血症_杨某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="高乳酸血症" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_脑梗死_杨某某" label="出院诊断_脑梗死_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="脑梗死" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_颈动脉硬化_杨某某" label="出院诊断_颈动脉硬化_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="颈动脉硬化" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_锁骨下动脉粥样硬化_杨某某" label="出院诊断_锁骨下动脉粥样硬化_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="锁骨下动脉粥样硬化" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_维生素 B12缺乏_杨某某" label="出院诊断_维生素 B12缺乏_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="维生素 B12缺乏" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_颈椎退行性病变_杨某某" label="出院诊断_颈椎退行性病变_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="颈椎退行性病变" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_下肢动脉粥样硬化_杨某某" label="出院诊断_下肢动脉粥样硬化_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="下肢动脉粥样硬化" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_前列腺增生_杨某某" label="出院诊断_前列腺增生_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="前列腺增生" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_高同型半胱氨酸血症_杨某某" label="出院诊断_高同型半胱氨酸血症_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="高同型半胱氨酸血症" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_2型糖尿病_杨某某" label="出院诊断_2型糖尿病_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="2型糖尿病" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_高乳酸血症_杨某某" label="出院诊断_高乳酸血症_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="高乳酸血症" />
+        </attvalues>
+      </node>
+      <node id="生命体征_体温_36.6℃_杨某某" label="生命体征_体温_36.6℃_杨某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="体温" />
+          <attvalue for="2" value="36.6℃" />
+        </attvalues>
+      </node>
+      <node id="生命体征_脉搏_67 次/分_杨某某" label="生命体征_脉搏_67 次/分_杨某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="脉搏" />
+          <attvalue for="2" value="67 次/分" />
+        </attvalues>
+      </node>
+      <node id="生命体征_呼吸_18 次/分_杨某某" label="生命体征_呼吸_18 次/分_杨某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="呼吸" />
+          <attvalue for="2" value="18 次/分" />
+        </attvalues>
+      </node>
+      <node id="生命体征_血压_126/88 mmHg_杨某某" label="生命体征_血压_126/88 mmHg_杨某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="血压" />
+          <attvalue for="2" value="126/88 mmHg" />
+        </attvalues>
+      </node>
+      <node id="生化指标_同型半胱氨酸_26.83 μmol/L_杨某某" label="生化指标_同型半胱氨酸_26.83 μmol/L_杨某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="同型半胱氨酸" />
+          <attvalue for="2" value="26.83 μmol/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_血小板最大聚集率_11.7%_杨某某" label="生化指标_血小板最大聚集率_11.7%_杨某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="血小板最大聚集率" />
+          <attvalue for="2" value="11.7%" />
+        </attvalues>
+      </node>
+      <node id="生化指标_血小板凝集实验_8.8%_杨某某" label="生化指标_血小板凝集实验_8.8%_杨某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="血小板凝集实验" />
+          <attvalue for="2" value="8.8%" />
+        </attvalues>
+      </node>
+      <node id="生化指标_血小板粘附率_4.6%_杨某某" label="生化指标_血小板粘附率_4.6%_杨某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="血小板粘附率" />
+          <attvalue for="2" value="4.6%" />
+        </attvalues>
+      </node>
+      <node id="生化指标_血小板有效抑制率_88.3%_杨某某" label="生化指标_血小板有效抑制率_88.3%_杨某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="血小板有效抑制率" />
+          <attvalue for="2" value="88.3%" />
+        </attvalues>
+      </node>
+      <node id="生化指标_维生素 B12_130.00 pg/mL_杨某某" label="生化指标_维生素 B12_130.00 pg/mL_杨某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="维生素 B12" />
+          <attvalue for="2" value="130.00 pg/mL" />
+        </attvalues>
+      </node>
+      <node id="生化指标_糖化血红蛋白_6.60%_杨某某" label="生化指标_糖化血红蛋白_6.60%_杨某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="糖化血红蛋白" />
+          <attvalue for="2" value="6.60%" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_平衡膳食，避免过多油脂摄入，注意补充新鲜水果蔬菜及优质蛋白_杨某某" label="出院医嘱_平衡膳食，避免过多油脂摄入，注意补充新鲜水果蔬菜及优质蛋白_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="平衡膳食，避免过多油脂摄入，注意补充新鲜水果蔬菜及优质蛋白" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_重视生活方式调整，严格戒烟、戒酒，避免二手烟、熬夜，注意休息，适当锻炼，避免运动过度，避免大汗、腹泻、劳累等诱发因素_杨某某" label="出院医嘱_重视生活方式调整，严格戒烟、戒酒，避免二手烟、熬夜，注意休息，适当锻炼，避免运动过度，避免大汗、腹泻、劳累等诱发因素_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="重视生活方式调整，严格戒烟、戒酒，避免二手烟、熬夜，注意休息，适当锻炼，避免运动过度，避免大汗、腹泻、劳累等诱发因素" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_定时监测血糖，调整饮食习惯，内分泌科就诊酌情药物使用_杨某某" label="出院医嘱_定时监测血糖，调整饮食习惯，内分泌科就诊酌情药物使用_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="定时监测血糖，调整饮食习惯，内分泌科就诊酌情药物使用" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_定时监测血压，避免血压过低或过高，心内科门诊随诊调整降压药物使用_杨某某" label="出院医嘱_定时监测血压，避免血压过低或过高，心内科门诊随诊调整降压药物使用_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="定时监测血压，避免血压过低或过高，心内科门诊随诊调整降压药物使用" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_遵嘱规律服用抗血小板、降脂及补充维生素药物，服用期间注意有无皮肤、粘膜出血/黄染或血尿、黑便、肌肉酸痛等情况，定期复查肝肾功、凝血、血常规、肌酶等实验室化验酌情调整药物使用_杨某某" label="出院医嘱_遵嘱规律服用抗血小板、降脂及补充维生素药物，服用期间注意有无皮肤、粘膜出血/黄染或血尿、黑便、肌肉酸痛等情况，定期复查肝肾功、凝血、血常规、肌酶等实验室化验酌情调整药物使用_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="遵嘱规律服用抗血小板、降脂及补充维生素药物，服用期间注意有无皮肤、粘膜出血/黄染或血尿、黑便、肌肉酸痛等情况，定期复查肝肾功、凝血、血常规、肌酶等实验室化验酌情调整药物使用" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_定期神经内科门诊复诊，如遇严重头晕、行走不稳、肢体运动及感觉障碍、明显呛咳、意识水平降低等特殊情况及时急诊就诊_杨某某" label="出院医嘱_定期神经内科门诊复诊，如遇严重头晕、行走不稳、肢体运动及感觉障碍、明显呛咳、意识水平降低等特殊情况及时急诊就诊_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="定期神经内科门诊复诊，如遇严重头晕、行走不稳、肢体运动及感觉障碍、明显呛咳、意识水平降低等特殊情况及时急诊就诊" />
+        </attvalues>
+      </node>
+      <node id="诊疗经过_杨某某" label="诊疗经过_杨某某">
+        <attvalues>
+          <attvalue for="0" value="treatment_course" />
+          <attvalue for="3" value="患者入院后完善相关实验室检验，结合患者症状、体征及相关检查结果，考虑脑梗死。给予抗血小板、降脂稳定斑块、改善循环等治疗后患者症状较前明显改善，请示上级医师后准予带药出院。门诊随诊。" />
+        </attvalues>
+      </node>
+      <node id="出院情况_好转_杨某某" label="出院情况_好转_杨某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_status" />
+          <attvalue for="4" value="好转" />
+        </attvalues>
+      </node>
+      <node id="周某某" label="周某某">
+        <attvalues>
+          <attvalue for="0" value="patient" />
+        </attvalues>
+      </node>
+      <node id="性别_女_周某某" label="性别_女_周某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="性别" />
+          <attvalue for="2" value="女" />
+        </attvalues>
+      </node>
+      <node id="年龄_69_周某某" label="年龄_69_周某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="年龄" />
+          <attvalue for="2" value="69" />
+        </attvalues>
+      </node>
+      <node id="民族_汉族_周某某" label="民族_汉族_周某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="民族" />
+          <attvalue for="2" value="汉族" />
+        </attvalues>
+      </node>
+      <node id="职业_无_周某某" label="职业_无_周某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="职业" />
+          <attvalue for="2" value="无" />
+        </attvalues>
+      </node>
+      <node id="婚姻状况_已婚_周某某" label="婚姻状况_已婚_周某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="婚姻状况" />
+          <attvalue for="2" value="已婚" />
+        </attvalues>
+      </node>
+      <node id="入院日期_2024-06-18_周某某" label="入院日期_2024-06-18_周某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="入院日期" />
+          <attvalue for="2" value="2024-06-18" />
+        </attvalues>
+      </node>
+      <node id="出院日期_2024-06-24_周某某" label="出院日期_2024-06-24_周某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="出院日期" />
+          <attvalue for="2" value="2024-06-24" />
+        </attvalues>
+      </node>
+      <node id="住院天数_6_周某某" label="住院天数_6_周某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="住院天数" />
+          <attvalue for="2" value="6" />
+        </attvalues>
+      </node>
+      <node id="主诉_头晕 4小时_周某某" label="主诉_头晕 4小时_周某某">
+        <attvalues>
+          <attvalue for="0" value="chief_complaint" />
+          <attvalue for="3" value="头晕 4小时" />
+        </attvalues>
+      </node>
+      <node id="现病史_高血压病史_周某某" label="现病史_高血压病史_周某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="高血压病史" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_脑血管供血不足_周某某" label="入院诊断_脑血管供血不足_周某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="脑血管供血不足" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_多发腔隙性脑梗死_周某某" label="入院诊断_多发腔隙性脑梗死_周某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="多发腔隙性脑梗死" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_高血压病_周某某" label="入院诊断_高血压病_周某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="高血压病" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_脑血管供血不足_周某某" label="出院诊断_脑血管供血不足_周某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="脑血管供血不足" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_多发腔隙性脑梗死_周某某" label="出院诊断_多发腔隙性脑梗死_周某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="多发腔隙性脑梗死" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_脑动脉粥样硬化_周某某" label="出院诊断_脑动脉粥样硬化_周某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="脑动脉粥样硬化" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_高血压病_周某某" label="出院诊断_高血压病_周某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="高血压病" />
+        </attvalues>
+      </node>
+      <node id="生命体征_体温_36.6℃_周某某" label="生命体征_体温_36.6℃_周某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="体温" />
+          <attvalue for="2" value="36.6℃" />
+        </attvalues>
+      </node>
+      <node id="生命体征_脉搏_76 次/分_周某某" label="生命体征_脉搏_76 次/分_周某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="脉搏" />
+          <attvalue for="2" value="76 次/分" />
+        </attvalues>
+      </node>
+      <node id="生命体征_呼吸_20 次/分_周某某" label="生命体征_呼吸_20 次/分_周某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="呼吸" />
+          <attvalue for="2" value="20 次/分" />
+        </attvalues>
+      </node>
+      <node id="生命体征_血压_126/86 mmHg_周某某" label="生命体征_血压_126/86 mmHg_周某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="血压" />
+          <attvalue for="2" value="126/86 mmHg" />
+        </attvalues>
+      </node>
+      <node id="生化指标_白细胞_3.76×10^9/L_周某某" label="生化指标_白细胞_3.76×10^9/L_周某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="白细胞" />
+          <attvalue for="2" value="3.76×10^9/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_血红蛋白_132 g/L_周某某" label="生化指标_血红蛋白_132 g/L_周某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="血红蛋白" />
+          <attvalue for="2" value="132 g/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_血小板_262×10^9/L_周某某" label="生化指标_血小板_262×10^9/L_周某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="血小板" />
+          <attvalue for="2" value="262×10^9/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_肌酐_65.2 μmol/L_周某某" label="生化指标_肌酐_65.2 μmol/L_周某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="肌酐" />
+          <attvalue for="2" value="65.2 μmol/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_D-二聚体_218 μg/L_周某某" label="生化指标_D-二聚体_218 μg/L_周某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="D-二聚体" />
+          <attvalue for="2" value="218 μg/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_凝血酶原活动度_120%_周某某" label="生化指标_凝血酶原活动度_120%_周某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="凝血酶原活动度" />
+          <attvalue for="2" value="120%" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_低盐低脂饮食，测血压，注意休息，避免劳累受凉感冒_周某某" label="出院医嘱_低盐低脂饮食，测血压，注意休息，避免劳累受凉感冒_周某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="低盐低脂饮食，测血压，注意休息，避免劳累受凉感冒" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_规律服药，定期血常规、肝肾功能指标，复查头颅影像检查_周某某" label="出院医嘱_规律服药，定期血常规、肝肾功能指标，复查头颅影像检查_周某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="规律服药，定期血常规、肝肾功能指标，复查头颅影像检查" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_神经科门诊随诊，不适情况及时来院_周某某" label="出院医嘱_神经科门诊随诊，不适情况及时来院_周某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="神经科门诊随诊，不适情况及时来院" />
+        </attvalues>
+      </node>
+      <node id="诊疗经过_周某某" label="诊疗经过_周某某">
+        <attvalues>
+          <attvalue for="0" value="treatment_course" />
+          <attvalue for="3" value="入院后根据患者发病特点考虑脑血管供血不足，给予对症止晕及改善循环药物治疗。查尿常规化学+有形成分分析：白细胞(高倍视野):7.27/HP↑;粪便常规+隐血试验：潜血试验(免疫法):阴性;凝血：凝血酶原活动度:120%;D-二聚体:218μg/L;肌酐:65.2μmol/L;血常规：白细胞:3.76×10^9/L;*血红蛋白:132g/L;*血小板:262×10^9/L;查眼震电图提示眼动系统（+），动态位置试验（+），TCD探及血管未见异常，脑电图无明显异常，查心脏超声提示静息状态下提示三尖瓣少量返流，左室舒张功能减低。查双侧颈动脉中内膜局限性增厚伴多发斑块形成，双侧椎动脉血流未见明显异常，右侧锁骨下动脉起始部斑块形成，左侧锁骨下动脉可视部分未见明显异常。焦虑量表9分，抑郁8分，MoCA22分，MMSE24分，外周动脉阻塞检查提示外周动脉检测未见异常。查头颅MRI提示多发腔隙性脑梗塞，脑白质脱髓鞘改变。查头颅MRA提示双侧颈内动脉走行迂曲，管腔粗细不均；椎动脉颅内段迂曲，未见明显狭窄或扩张；双侧大脑中动脉及其分枝走行迂曲，管腔粗细欠均匀，M2段显影淡，分支未见明显减少；双侧大脑前动脉及其分枝走行迂曲，A1-2段显影淡，分支未见明显减少；基底动脉局部轻度狭窄；双侧大脑后动脉及其分枝走行迂曲，分支显示欠佳，右侧胚胎型大脑后动脉。查动态心电图:1.主导节律为窦性:平均心室率62次/min。最快心室率86次/min;最慢心室率48次/min;2.房性早搏总数105次;3.完全性右束支阻滞；4.T波改变；查动态血压监测提示平均动脉压116/83mmHg。经治疗后患者头晕缓解，给予办理出院。" />
+        </attvalues>
+      </node>
+      <node id="出院情况_好转_周某某" label="出院情况_好转_周某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_status" />
+          <attvalue for="4" value="好转" />
+        </attvalues>
+      </node>
+      <node id="刘某某" label="刘某某">
+        <attvalues>
+          <attvalue for="0" value="patient" />
+        </attvalues>
+      </node>
+      <node id="性别_男_刘某某" label="性别_男_刘某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="性别" />
+          <attvalue for="2" value="男" />
+        </attvalues>
+      </node>
+      <node id="年龄_93_刘某某" label="年龄_93_刘某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="年龄" />
+          <attvalue for="2" value="93" />
+        </attvalues>
+      </node>
+      <node id="民族_汉族_刘某某" label="民族_汉族_刘某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="民族" />
+          <attvalue for="2" value="汉族" />
+        </attvalues>
+      </node>
+      <node id="职业_离休_刘某某" label="职业_离休_刘某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="职业" />
+          <attvalue for="2" value="离休" />
+        </attvalues>
+      </node>
+      <node id="婚姻状况_已婚_刘某某" label="婚姻状况_已婚_刘某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="婚姻状况" />
+          <attvalue for="2" value="已婚" />
+        </attvalues>
+      </node>
+      <node id="入院日期_2024-03-28_刘某某" label="入院日期_2024-03-28_刘某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="入院日期" />
+          <attvalue for="2" value="2024-03-28" />
+        </attvalues>
+      </node>
+      <node id="出院日期_2024-06-25_刘某某" label="出院日期_2024-06-25_刘某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="出院日期" />
+          <attvalue for="2" value="2024-06-25" />
+        </attvalues>
+      </node>
+      <node id="住院天数_89_刘某某" label="住院天数_89_刘某某">
+        <attvalues>
+          <attvalue for="0" value="basic_info" />
+          <attvalue for="1" value="住院天数" />
+          <attvalue for="2" value="89" />
+        </attvalues>
+      </node>
+      <node id="主诉_突发左侧肢体无力 4月余_刘某某" label="主诉_突发左侧肢体无力 4月余_刘某某">
+        <attvalues>
+          <attvalue for="0" value="chief_complaint" />
+          <attvalue for="3" value="突发左侧肢体无力 4月余" />
+        </attvalues>
+      </node>
+      <node id="现病史_左侧肢体无力_刘某某" label="现病史_左侧肢体无力_刘某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="左侧肢体无力" />
+        </attvalues>
+      </node>
+      <node id="现病史_高血压 20余年_刘某某" label="现病史_高血压 20余年_刘某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="高血压 20余年" />
+        </attvalues>
+      </node>
+      <node id="现病史_前列腺增生 20余年_刘某某" label="现病史_前列腺增生 20余年_刘某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="前列腺增生 20余年" />
+        </attvalues>
+      </node>
+      <node id="现病史_慢性胃炎 10余年_刘某某" label="现病史_慢性胃炎 10余年_刘某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="慢性胃炎 10余年" />
+        </attvalues>
+      </node>
+      <node id="现病史_慢性支气管炎，支气管扩张 10余年_刘某某" label="现病史_慢性支气管炎，支气管扩张 10余年_刘某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="慢性支气管炎，支气管扩张 10余年" />
+        </attvalues>
+      </node>
+      <node id="现病史_高脂血症 1月_刘某某" label="现病史_高脂血症 1月_刘某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="高脂血症 1月" />
+        </attvalues>
+      </node>
+      <node id="现病史_直肠癌手术史 40年前_刘某某" label="现病史_直肠癌手术史 40年前_刘某某">
+        <attvalues>
+          <attvalue for="0" value="present_illness" />
+          <attvalue for="3" value="直肠癌手术史 40年前" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_急性脑梗死_刘某某" label="入院诊断_急性脑梗死_刘某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="急性脑梗死" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_高血压 2级_刘某某" label="入院诊断_高血压 2级_刘某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="高血压 2级" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_前列腺增生_刘某某" label="入院诊断_前列腺增生_刘某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="前列腺增生" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_慢性胃炎_刘某某" label="入院诊断_慢性胃炎_刘某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="慢性胃炎" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_慢性支气管炎_刘某某" label="入院诊断_慢性支气管炎_刘某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="慢性支气管炎" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_支气管扩张_刘某某" label="入院诊断_支气管扩张_刘某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="支气管扩张" />
+        </attvalues>
+      </node>
+      <node id="入院诊断_高脂血症_刘某某" label="入院诊断_高脂血症_刘某某">
+        <attvalues>
+          <attvalue for="0" value="admission_diagnosis" />
+          <attvalue for="3" value="高脂血症" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_急性脑梗死_刘某某" label="出院诊断_急性脑梗死_刘某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="急性脑梗死" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_高血压 2级_刘某某" label="出院诊断_高血压 2级_刘某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="高血压 2级" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_前列腺增生_刘某某" label="出院诊断_前列腺增生_刘某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="前列腺增生" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_慢性胃炎_刘某某" label="出院诊断_慢性胃炎_刘某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="慢性胃炎" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_慢性支气管炎_刘某某" label="出院诊断_慢性支气管炎_刘某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="慢性支气管炎" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_支气管扩张_刘某某" label="出院诊断_支气管扩张_刘某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="支气管扩张" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_高脂血症_刘某某" label="出院诊断_高脂血症_刘某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="高脂血症" />
+        </attvalues>
+      </node>
+      <node id="出院诊断_心功能不全_刘某某" label="出院诊断_心功能不全_刘某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_diagnosis" />
+          <attvalue for="3" value="心功能不全" />
+        </attvalues>
+      </node>
+      <node id="生命体征_体温_36.4℃_刘某某" label="生命体征_体温_36.4℃_刘某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="体温" />
+          <attvalue for="2" value="36.4℃" />
+        </attvalues>
+      </node>
+      <node id="生命体征_脉搏_72 次/分_刘某某" label="生命体征_脉搏_72 次/分_刘某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="脉搏" />
+          <attvalue for="2" value="72 次/分" />
+        </attvalues>
+      </node>
+      <node id="生命体征_呼吸_16 次/分_刘某某" label="生命体征_呼吸_16 次/分_刘某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="呼吸" />
+          <attvalue for="2" value="16 次/分" />
+        </attvalues>
+      </node>
+      <node id="生命体征_血压_126/70 mmHg_刘某某" label="生命体征_血压_126/70 mmHg_刘某某">
+        <attvalues>
+          <attvalue for="0" value="vital_sign" />
+          <attvalue for="1" value="血压" />
+          <attvalue for="2" value="126/70 mmHg" />
+        </attvalues>
+      </node>
+      <node id="生化指标_B-型钠尿肽_181 pg/mL_刘某某" label="生化指标_B-型钠尿肽_181 pg/mL_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="B-型钠尿肽" />
+          <attvalue for="2" value="181 pg/mL" />
+        </attvalues>
+      </node>
+      <node id="生化指标_白细胞_5.70×10^9/L_刘某某" label="生化指标_白细胞_5.70×10^9/L_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="白细胞" />
+          <attvalue for="2" value="5.70×10^9/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_嗜酸细胞百分比_8.7%_刘某某" label="生化指标_嗜酸细胞百分比_8.7%_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="嗜酸细胞百分比" />
+          <attvalue for="2" value="8.7%" />
+        </attvalues>
+      </node>
+      <node id="生化指标_红细胞_3.17×10^12/L_刘某某" label="生化指标_红细胞_3.17×10^12/L_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="红细胞" />
+          <attvalue for="2" value="3.17×10^12/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_血红蛋白_95 g/L_刘某某" label="生化指标_血红蛋白_95 g/L_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="血红蛋白" />
+          <attvalue for="2" value="95 g/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_红细胞压积_28.3%_刘某某" label="生化指标_红细胞压积_28.3%_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="红细胞压积" />
+          <attvalue for="2" value="28.3%" />
+        </attvalues>
+      </node>
+      <node id="生化指标_国际标准化比值_1.11_刘某某" label="生化指标_国际标准化比值_1.11_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="国际标准化比值" />
+          <attvalue for="2" value="1.11" />
+        </attvalues>
+      </node>
+      <node id="生化指标_D-二聚体_600 μg/L_刘某某" label="生化指标_D-二聚体_600 μg/L_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="D-二聚体" />
+          <attvalue for="2" value="600 μg/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_阴离子间隙_7.3 mmol/L_刘某某" label="生化指标_阴离子间隙_7.3 mmol/L_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="阴离子间隙" />
+          <attvalue for="2" value="7.3 mmol/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_乳酸_2.71 mmol/L_刘某某" label="生化指标_乳酸_2.71 mmol/L_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="乳酸" />
+          <attvalue for="2" value="2.71 mmol/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_碱性磷酸酶_41.4 U/L_刘某某" label="生化指标_碱性磷酸酶_41.4 U/L_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="碱性磷酸酶" />
+          <attvalue for="2" value="41.4 U/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_总胆固醇_2.48 mmol/L_刘某某" label="生化指标_总胆固醇_2.48 mmol/L_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="总胆固醇" />
+          <attvalue for="2" value="2.48 mmol/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_低密度胆固醇_1.19 mmol/L_刘某某" label="生化指标_低密度胆固醇_1.19 mmol/L_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="低密度胆固醇" />
+          <attvalue for="2" value="1.19 mmol/L" />
+        </attvalues>
+      </node>
+      <node id="生化指标_尿白细胞_41.0/uL_刘某某" label="生化指标_尿白细胞_41.0/uL_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="尿白细胞" />
+          <attvalue for="2" value="41.0/uL" />
+        </attvalues>
+      </node>
+      <node id="生化指标_尿白细胞（高倍视野）_7.45/HP_刘某某" label="生化指标_尿白细胞（高倍视野）_7.45/HP_刘某某">
+        <attvalues>
+          <attvalue for="0" value="biochemical_test" />
+          <attvalue for="1" value="尿白细胞（高倍视野）" />
+          <attvalue for="2" value="7.45/HP" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_注意休息，低盐低脂饮食_刘某某" label="出院医嘱_注意休息，低盐低脂饮食_刘某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="注意休息，低盐低脂饮食" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_继续口服药物治疗_刘某某" label="出院医嘱_继续口服药物治疗_刘某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="继续口服药物治疗" />
+        </attvalues>
+      </node>
+      <node id="出院医嘱_病情变化及时就诊_刘某某" label="出院医嘱_病情变化及时就诊_刘某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_advice" />
+          <attvalue for="3" value="病情变化及时就诊" />
+        </attvalues>
+      </node>
+      <node id="诊疗经过_刘某某" label="诊疗经过_刘某某">
+        <attvalues>
+          <attvalue for="0" value="treatment_course" />
+          <attvalue for="3" value="入院后根据病史、体征和影像学检查，经上级医师查房，明确诊断为急性脑梗死，予以抗血小板聚集、改善循环等药物治疗，积极肢体康复锻炼，观察血压变化。后患者咳嗽，咳痰较前加重，查 B-型钠尿肽:181pg/mL↑;全血细胞计数+5分类^C-反应蛋白 ：*白细胞:5.70×10^9/L;嗜酸细胞百分比:8.7%↑;*红细胞:3.17×10^12/L↓;*血红蛋白:95g/L↓;*红细胞压积:28.3%↓;凝血纤溶六项：*国际标准化比值:1.11↑;D-二聚体:600μg/L↑;血生化：阴离子间隙:7.3mmol/L↓;乳酸:2.71mmol/L↑;*碱性磷酸酶:41.4U/L↓;*总胆固醇:2.48mmol/L↓;*低密度胆固醇:1.19mmol/L;尿常规化学+有形成分分析：白细胞:41.0/uL↑;白细胞(高倍视野):7.45/HP↑。患者间断头晕不适，查头颅 MRI示多发腔隙性脑梗死，脑白质脱髓鞘改变，双额颞部硬膜下积液，脑萎缩。腹部彩超示轻度脂肪肝，肝多发囊肿，胆囊息肉样病变，双肾多发囊肿及肾盂旁囊肿（不除外同时伴有局部肾盏积水），胰腺、脾脏未见明显异常。腹腔彩超示腹腔内未见腹水征象。经上述治疗后患者病情较前好转。" />
+        </attvalues>
+      </node>
+      <node id="出院情况_好转_刘某某" label="出院情况_好转_刘某某">
+        <attvalues>
+          <attvalue for="0" value="discharge_status" />
+          <attvalue for="4" value="好转" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge source="蒲某某" target="性别_女_蒲某某" id="0">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="年龄_86_蒲某某" id="1">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="民族_汉族_蒲某某" id="2">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="职业_离休_蒲某某" id="3">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="婚姻状况_已婚_蒲某某" id="4">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="入院日期_2024-06-16_蒲某某" id="5">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="出院日期_2024-06-22_蒲某某" id="6">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="住院天数_6_蒲某某" id="7">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="主诉_间断意识丧失 1个月_蒲某某" id="8">
+        <attvalues>
+          <attvalue for="5" value="complains_of" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="现病史_1个月前如厕时突发意识不清，伴有大汗、四肢无力_蒲某某" id="9">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="现病史_症状持续2分钟后自行缓解_蒲某某" id="10">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="现病史_今晨患者再次出现上述症状，伴有头晕、恶心、呕吐_蒲某某" id="11">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="现病史_既往哮喘 30年余，慢阻肺病史4年余，肠梗阻病史30余年_蒲某某" id="12">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="入院诊断_一过性意识丧失_蒲某某" id="13">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="入院诊断_慢性阻塞性肺疾病_蒲某某" id="14">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="入院诊断_支气管哮喘_蒲某某" id="15">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="出院诊断_脑血管供血不足_蒲某某" id="16">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="出院诊断_体位性低血压_蒲某某" id="17">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="出院诊断_慢性阻塞性肺疾病_蒲某某" id="18">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="出院诊断_支气管哮喘_蒲某某" id="19">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生命体征_体温_36.2℃_蒲某某" id="20">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生命体征_脉搏_70 次/分_蒲某某" id="21">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生命体征_呼吸_18 次/分_蒲某某" id="22">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生命体征_血压_130/80 mmHg_蒲某某" id="23">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_估算肾小球滤过率_71.37 mL/min/1.73m^2_蒲某某" id="24">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_乳酸_3.78 mmol/L_蒲某某" id="25">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_丙酸氨基转移酶_6.5 U/L_蒲某某" id="26">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_总蛋白_58.4 g/L_蒲某某" id="27">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_白蛋白_34.4 g/L_蒲某某" id="28">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_载脂蛋白 A1_0.94 g/L_蒲某某" id="29">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_肌酸激酶_18.3 U/L_蒲某某" id="30">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_三碘甲状腺原氨酸_0.87 nmol/L_蒲某某" id="31">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_白细胞_122.0/uL_蒲某某" id="32">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_白细胞（高倍视野）_22.18/HP_蒲某某" id="33">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_尿白细胞_1+_蒲某某" id="34">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_尿蛋白_1+_蒲某某" id="35">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_尿胆红素_1+_蒲某某" id="36">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_鳞状上皮细胞_107/uL_蒲某某" id="37">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_非鳞状上皮_8.0/uL_蒲某某" id="38">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="生化指标_粘液丝_4671/LP_蒲某某" id="39">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="出院医嘱_嘱其回家后注意休息_蒲某某" id="40">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="出院医嘱_按时口服药物_蒲某某" id="41">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="出院医嘱_有情况随诊_蒲某某" id="42">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="诊疗经过_蒲某某" id="43">
+        <attvalues>
+          <attvalue for="5" value="underwent_treatment" />
+        </attvalues>
+      </edge>
+      <edge source="蒲某某" target="出院情况_好转_蒲某某" id="44">
+        <attvalues>
+          <attvalue for="5" value="discharged_with_status" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="性别_男_马某某" id="45">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="年龄_93_马某某" id="46">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="民族_汉族_马某某" id="47">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="职业_离休_马某某" id="48">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="婚姻状况_已婚_马某某" id="49">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院日期_2024-05-21_马某某" id="50">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院日期_2024-06-24_马某某" id="51">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="住院天数_34_马某某" id="52">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="主诉_意识模糊 3天_马某某" id="53">
+        <attvalues>
+          <attvalue for="5" value="complains_of" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="现病史_意识模糊_马某某" id="54">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="现病史_发热_马某某" id="55">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="现病史_乏力_马某某" id="56">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="现病史_饮食呛咳_马某某" id="57">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="现病史_高血压病史 4 年_马某某" id="58">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="现病史_睡眠障碍 3 年_马某某" id="59">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="现病史_认知障碍 1 年_马某某" id="60">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="现病史_前列腺增生、尿频 1 年_马某某" id="61">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院诊断_多发性脑梗死_马某某" id="62">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院诊断_呼吸衰竭_马某某" id="63">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院诊断_意识障碍_马某某" id="64">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院诊断_细菌性肺炎_马某某" id="65">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院诊断_消化性溃疡伴出血_马某某" id="66">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院诊断_冠状动脉粥样硬化性心脏病_马某某" id="67">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院诊断_脑动脉硬化_马某某" id="68">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院诊断_高血压病 3 级（极高危险组）_马某某" id="69">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院诊断_睡眠障碍_马某某" id="70">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院诊断_前列腺增生_马某某" id="71">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院诊断_胃食管反流_马某某" id="72">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院诊断_认知障碍_马某某" id="73">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院诊断_肝功能异常_马某某" id="74">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="入院诊断_低蛋白血症_马某某" id="75">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_多发性脑梗死_马某某" id="76">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_呼吸衰竭_马某某" id="77">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_意识障碍_马某某" id="78">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_细菌性肺炎_马某某" id="79">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_消化性溃疡伴出血_马某某" id="80">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_冠状动脉粥样硬化性心脏病_马某某" id="81">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_脑动脉硬化_马某某" id="82">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_高血压病 3 级（极高危险组）_马某某" id="83">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_睡眠障碍_马某某" id="84">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_前列腺增生_马某某" id="85">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_胃食管反流_马某某" id="86">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_认知障碍_马某某" id="87">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_肝功能异常_马某某" id="88">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_低蛋白血症_马某某" id="89">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_泌尿系感染_马某某" id="90">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_营养性贫血_马某某" id="91">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_肾功能异常_马某某" id="92">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_喉头水肿_马某某" id="93">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院诊断_高尿酸血症_马某某" id="94">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生命体征_体温_36.5℃_马某某" id="95">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生命体征_脉搏_70 次/分_马某某" id="96">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生命体征_呼吸_18 次/分_马某某" id="97">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生命体征_血压_130/80 mmHg_马某某" id="98">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_C 反应蛋白_194.46 mg/L_马某某" id="99">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_白细胞_9.31×10^9/L_马某某" id="100">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_淋巴细胞百分比_7.1%_马某某" id="101">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_单核细胞百分比_3.2%_马某某" id="102">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_中性粒细胞百分比_89.5%_马某某" id="103">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_红细胞_3.16×10^12/L_马某某" id="104">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_血红蛋白_97 g/L_马某某" id="105">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_血小板_115×10^9/L_马某某" id="106">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_肌红蛋白_301.3 ng/mL_马某某" id="107">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_高敏肌钙蛋白 I_74.5 pg/mL_马某某" id="108">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_钙_2.01 mmol/L_马某某" id="109">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_尿素_38.1 mmol/L_马某某" id="110">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_肌酐_329.5 μmol/L_马某某" id="111">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_尿酸_543.2 μmol/L_马某某" id="112">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_估算肾小球滤过率_13.16 mL/min/1.73m^2_马某某" id="113">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_葡萄糖_6.92 mmol/L_马某某" id="114">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_胆碱酯酶_3945.8 U/L_马某某" id="115">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_乳酸_2.56 mmol/L_马某某" id="116">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_天冬氨酸氨基转移酶_80.6 U/L_马某某" id="117">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_总蛋白_55.1 g/L_马某某" id="118">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_白蛋白_30.1 g/L_马某某" id="119">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_前白蛋白_0.12 g/L_马某某" id="120">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_D-二聚体_950 μg/L_马某某" id="121">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_纤维蛋白原降解产物_8.0 mg/L_马某某" id="122">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_尿蛋白_1+_马某某" id="123">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_尿白细胞_615.0/uL_马某某" id="124">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="生化指标_尿白细胞（高倍视野）_111.82/HP_马某某" id="125">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院医嘱_低盐低脂饮食_马某某" id="126">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院医嘱_加强卧床护理_马某某" id="127">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院医嘱_遵嘱服药_马某某" id="128">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院医嘱_定期复查肺部 CT_马某某" id="129">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院医嘱_呼吸内科随诊_马某某" id="130">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院医嘱_不适时神经内科随诊_马某某" id="131">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="诊疗经过_马某某" id="132">
+        <attvalues>
+          <attvalue for="5" value="underwent_treatment" />
+        </attvalues>
+      </edge>
+      <edge source="马某某" target="出院情况_好转_马某某" id="133">
+        <attvalues>
+          <attvalue for="5" value="discharged_with_status" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="性别_男_杨某某" id="134">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="年龄_72_杨某某" id="135">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="民族_汉族_杨某某" id="136">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="职业_退休_杨某某" id="137">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="婚姻状况_已婚_杨某某" id="138">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="入院日期_2024-06-19_杨某某" id="139">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院日期_2024-06-25_杨某某" id="140">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="住院天数_6_杨某某" id="141">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="主诉_左侧肢体无力 5天，加重 2天_杨某某" id="142">
+        <attvalues>
+          <attvalue for="5" value="complains_of" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="现病史_2型糖尿病病史_杨某某" id="143">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="入院诊断_脑梗死_杨某某" id="144">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="入院诊断_2型糖尿病_杨某某" id="145">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="入院诊断_高乳酸血症_杨某某" id="146">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院诊断_脑梗死_杨某某" id="147">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院诊断_颈动脉硬化_杨某某" id="148">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院诊断_锁骨下动脉粥样硬化_杨某某" id="149">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院诊断_维生素 B12缺乏_杨某某" id="150">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院诊断_颈椎退行性病变_杨某某" id="151">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院诊断_下肢动脉粥样硬化_杨某某" id="152">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院诊断_前列腺增生_杨某某" id="153">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院诊断_高同型半胱氨酸血症_杨某某" id="154">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院诊断_2型糖尿病_杨某某" id="155">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院诊断_高乳酸血症_杨某某" id="156">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="生命体征_体温_36.6℃_杨某某" id="157">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="生命体征_脉搏_67 次/分_杨某某" id="158">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="生命体征_呼吸_18 次/分_杨某某" id="159">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="生命体征_血压_126/88 mmHg_杨某某" id="160">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="生化指标_同型半胱氨酸_26.83 μmol/L_杨某某" id="161">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="生化指标_血小板最大聚集率_11.7%_杨某某" id="162">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="生化指标_血小板凝集实验_8.8%_杨某某" id="163">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="生化指标_血小板粘附率_4.6%_杨某某" id="164">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="生化指标_血小板有效抑制率_88.3%_杨某某" id="165">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="生化指标_维生素 B12_130.00 pg/mL_杨某某" id="166">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="生化指标_糖化血红蛋白_6.60%_杨某某" id="167">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院医嘱_平衡膳食，避免过多油脂摄入，注意补充新鲜水果蔬菜及优质蛋白_杨某某" id="168">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院医嘱_重视生活方式调整，严格戒烟、戒酒，避免二手烟、熬夜，注意休息，适当锻炼，避免运动过度，避免大汗、腹泻、劳累等诱发因素_杨某某" id="169">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院医嘱_定时监测血糖，调整饮食习惯，内分泌科就诊酌情药物使用_杨某某" id="170">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院医嘱_定时监测血压，避免血压过低或过高，心内科门诊随诊调整降压药物使用_杨某某" id="171">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院医嘱_遵嘱规律服用抗血小板、降脂及补充维生素药物，服用期间注意有无皮肤、粘膜出血/黄染或血尿、黑便、肌肉酸痛等情况，定期复查肝肾功、凝血、血常规、肌酶等实验室化验酌情调整药物使用_杨某某" id="172">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院医嘱_定期神经内科门诊复诊，如遇严重头晕、行走不稳、肢体运动及感觉障碍、明显呛咳、意识水平降低等特殊情况及时急诊就诊_杨某某" id="173">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="诊疗经过_杨某某" id="174">
+        <attvalues>
+          <attvalue for="5" value="underwent_treatment" />
+        </attvalues>
+      </edge>
+      <edge source="杨某某" target="出院情况_好转_杨某某" id="175">
+        <attvalues>
+          <attvalue for="5" value="discharged_with_status" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="性别_女_周某某" id="176">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="年龄_69_周某某" id="177">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="民族_汉族_周某某" id="178">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="职业_无_周某某" id="179">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="婚姻状况_已婚_周某某" id="180">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="入院日期_2024-06-18_周某某" id="181">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="出院日期_2024-06-24_周某某" id="182">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="住院天数_6_周某某" id="183">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="主诉_头晕 4小时_周某某" id="184">
+        <attvalues>
+          <attvalue for="5" value="complains_of" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="现病史_高血压病史_周某某" id="185">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="入院诊断_脑血管供血不足_周某某" id="186">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="入院诊断_多发腔隙性脑梗死_周某某" id="187">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="入院诊断_高血压病_周某某" id="188">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="出院诊断_脑血管供血不足_周某某" id="189">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="出院诊断_多发腔隙性脑梗死_周某某" id="190">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="出院诊断_脑动脉粥样硬化_周某某" id="191">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="出院诊断_高血压病_周某某" id="192">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="生命体征_体温_36.6℃_周某某" id="193">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="生命体征_脉搏_76 次/分_周某某" id="194">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="生命体征_呼吸_20 次/分_周某某" id="195">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="生命体征_血压_126/86 mmHg_周某某" id="196">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="生化指标_白细胞_3.76×10^9/L_周某某" id="197">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="生化指标_血红蛋白_132 g/L_周某某" id="198">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="生化指标_血小板_262×10^9/L_周某某" id="199">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="生化指标_肌酐_65.2 μmol/L_周某某" id="200">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="生化指标_D-二聚体_218 μg/L_周某某" id="201">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="生化指标_凝血酶原活动度_120%_周某某" id="202">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="出院医嘱_低盐低脂饮食，测血压，注意休息，避免劳累受凉感冒_周某某" id="203">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="出院医嘱_规律服药，定期血常规、肝肾功能指标，复查头颅影像检查_周某某" id="204">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="出院医嘱_神经科门诊随诊，不适情况及时来院_周某某" id="205">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="诊疗经过_周某某" id="206">
+        <attvalues>
+          <attvalue for="5" value="underwent_treatment" />
+        </attvalues>
+      </edge>
+      <edge source="周某某" target="出院情况_好转_周某某" id="207">
+        <attvalues>
+          <attvalue for="5" value="discharged_with_status" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="性别_男_刘某某" id="208">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="年龄_93_刘某某" id="209">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="民族_汉族_刘某某" id="210">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="职业_离休_刘某某" id="211">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="婚姻状况_已婚_刘某某" id="212">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="入院日期_2024-03-28_刘某某" id="213">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="出院日期_2024-06-25_刘某某" id="214">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="住院天数_89_刘某某" id="215">
+        <attvalues>
+          <attvalue for="5" value="has_info" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="主诉_突发左侧肢体无力 4月余_刘某某" id="216">
+        <attvalues>
+          <attvalue for="5" value="complains_of" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="现病史_左侧肢体无力_刘某某" id="217">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="现病史_高血压 20余年_刘某某" id="218">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="现病史_前列腺增生 20余年_刘某某" id="219">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="现病史_慢性胃炎 10余年_刘某某" id="220">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="现病史_慢性支气管炎，支气管扩张 10余年_刘某某" id="221">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="现病史_高脂血症 1月_刘某某" id="222">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="现病史_直肠癌手术史 40年前_刘某某" id="223">
+        <attvalues>
+          <attvalue for="5" value="has_history" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="入院诊断_急性脑梗死_刘某某" id="224">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="入院诊断_高血压 2级_刘某某" id="225">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="入院诊断_前列腺增生_刘某某" id="226">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="入院诊断_慢性胃炎_刘某某" id="227">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="入院诊断_慢性支气管炎_刘某某" id="228">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="入院诊断_支气管扩张_刘某某" id="229">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="入院诊断_高脂血症_刘某某" id="230">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_admission" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="出院诊断_急性脑梗死_刘某某" id="231">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="出院诊断_高血压 2级_刘某某" id="232">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="出院诊断_前列腺增生_刘某某" id="233">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="出院诊断_慢性胃炎_刘某某" id="234">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="出院诊断_慢性支气管炎_刘某某" id="235">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="出院诊断_支气管扩张_刘某某" id="236">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="出院诊断_高脂血症_刘某某" id="237">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="出院诊断_心功能不全_刘某某" id="238">
+        <attvalues>
+          <attvalue for="5" value="diagnosed_with_on_discharge" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生命体征_体温_36.4℃_刘某某" id="239">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生命体征_脉搏_72 次/分_刘某某" id="240">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生命体征_呼吸_16 次/分_刘某某" id="241">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生命体征_血压_126/70 mmHg_刘某某" id="242">
+        <attvalues>
+          <attvalue for="5" value="has_vital_sign" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_B-型钠尿肽_181 pg/mL_刘某某" id="243">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_白细胞_5.70×10^9/L_刘某某" id="244">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_嗜酸细胞百分比_8.7%_刘某某" id="245">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_红细胞_3.17×10^12/L_刘某某" id="246">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_血红蛋白_95 g/L_刘某某" id="247">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_红细胞压积_28.3%_刘某某" id="248">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_国际标准化比值_1.11_刘某某" id="249">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_D-二聚体_600 μg/L_刘某某" id="250">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_阴离子间隙_7.3 mmol/L_刘某某" id="251">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_乳酸_2.71 mmol/L_刘某某" id="252">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_碱性磷酸酶_41.4 U/L_刘某某" id="253">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_总胆固醇_2.48 mmol/L_刘某某" id="254">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_低密度胆固醇_1.19 mmol/L_刘某某" id="255">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_尿白细胞_41.0/uL_刘某某" id="256">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="生化指标_尿白细胞（高倍视野）_7.45/HP_刘某某" id="257">
+        <attvalues>
+          <attvalue for="5" value="has_test_result" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="出院医嘱_注意休息，低盐低脂饮食_刘某某" id="258">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="出院医嘱_继续口服药物治疗_刘某某" id="259">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="出院医嘱_病情变化及时就诊_刘某某" id="260">
+        <attvalues>
+          <attvalue for="5" value="advised_with" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="诊疗经过_刘某某" id="261">
+        <attvalues>
+          <attvalue for="5" value="underwent_treatment" />
+        </attvalues>
+      </edge>
+      <edge source="刘某某" target="出院情况_好转_刘某某" id="262">
+        <attvalues>
+          <attvalue for="5" value="discharged_with_status" />
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>
