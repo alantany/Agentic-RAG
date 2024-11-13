@@ -106,7 +106,7 @@ def setup_sqlite():
         conn.close()
         return True
     except Exception as e:
-        print(f"SQLite设置错误: {str(e)}")
+        print(f"SQLite设置错��: {str(e)}")
         return False
 
 def setup_graph():

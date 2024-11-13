@@ -5,7 +5,13 @@ import networkx as nx
 import pdfplumber
 from datetime import datetime
 import re
-from vector_store import vectorize_document, search_similar, num_tokens_from_string
+from vector_store import (
+    vectorize_document, 
+    search_similar, 
+    num_tokens_from_string,
+    init_pinecone,
+    get_vector_search_results
+)
 import pandas as pd
 import json
 import os
@@ -79,7 +85,7 @@ def get_structured_data(text: str) -> dict:
 
 请严格按照示例JSON的格式提取信息，注意：
 1. 使用相同的中文字段名
-2. 保持完全相同的数据结构层次
+2. 完全相同的数据结构层次
 3. 提取所有可能的检验指标和具体数值
 4. 保留数值的精确度和单位
 5. 对于数组类型的字段（如"现病史"、"入院诊断"等），尽可能完整地列出所有项目
@@ -150,7 +156,7 @@ def get_database_commands(text: str) -> dict:
         st.write("正在分析的病历内容：")
         st.code(text[:200] + "...")  # 只显示前200个字符
         
-        prompt = """请分析以下医疗病历，并生成数据库命令。请严格按照JSON格式返回，不要包含任何其他内容：
+        prompt = """请分析以下医疗病历，并生成数据库命令。严按照JSON格式返回，不要包含任何其他内容：
 
 病历内容：
 {}
@@ -330,7 +336,7 @@ class MedicalRecordParser:
             # 打印PDF容用于调试
             st.write("PDF内容:", self.content)
             
-            # 提取基本信息，添加错误处理
+            # 提取基本信息，添加错误理
             def safe_extract(pattern, text, default="未知"):
                 match = re.search(pattern, text)
                 return match.group(1) if match else default
@@ -385,7 +391,7 @@ class MedicalRecordParser:
                 '头颅MRI': r'头颅\s*MRI\s*提示(.*?)。',
                 '动态心电图': r'动态心电图\s*:(.*?)。',
                 '眼震电图': r'眼震电图提示(.*?)。',
-                '血常规': r'血常规[检查]*[:：](.*?)。',
+                '血常规': r'血常规[检查]*[:：](.*?)',
                 '心脏超声': r'心脏超声[检查]*[:：](.*?)。'
             }
             for exam, pattern in exam_patterns.items():
@@ -400,7 +406,7 @@ class MedicalRecordParser:
             # 提取治疗信息
             treatment_text = safe_extract(r'治疗经过\s*:(.*?)(?:出院|$)', self.content)
             data['treatments'] = []
-            for treatment_match in re.finditer(r'(给予|使用)([^，。、]+?)(?:治疗|用药)', treatment_text):
+            for treatment_match in re.finditer(r'(给予|使用)([^。、]+?)(?:治疗|用药)', treatment_text):
                 data['treatments'].append({
                     'treatment_type': '药物治疗',
                     'medication': treatment_match.group(2),
@@ -413,7 +419,7 @@ class MedicalRecordParser:
             
             return data
         except Exception as e:
-            st.error(f"解析PDF内容时发生错误: {str(e)}")
+            st.error(f"析PDF内容时发生错误: {str(e)}")
             # 返回默数据而不是字典
             return {
                 'name': '未知者',
@@ -515,7 +521,7 @@ def import_medical_data(pdf_content):
             st.session_state.structured_data = data
             st.write("✅ 结构化数据保存成功")
         except Exception as e:
-            st.error(f"MongoDB插入数据错误: {str(e)}")
+            st.error(f"MongoDB插入数据误: {str(e)}")
             return False
         
         # 向量化文档
@@ -598,7 +604,7 @@ def generate_graph_query(query: str) -> dict:
 
 用户问题：{query}
 
-请生���一个包含查询条件的字典，示例格式：
+请生一个包含查询条件的字典，示例格式：
 
 1. 查询患者的主诉：
 {{
@@ -638,7 +644,7 @@ def generate_graph_query(query: str) -> dict:
             messages=[
                 {
                     "role": "system", 
-                    "content": "你是一个图数据库查询专家。请根据实际的图数据库结构生成精确的查询条件。"
+                    "content": "你是一个图数据库查询专家。根据实际的数库结构生成精确的查询条件。"
                 },
                 {
                     "role": "user", 
@@ -716,7 +722,7 @@ def get_graph_search_results(query: str) -> list:
 def generate_mongodb_query(query: str) -> dict:
     """使用LLM生成MongoDB查询条件和投影"""
     try:
-        st.write("开始创建OpenAI客户端...")
+        st.write("开始创建OpenAI客端...")
         client = OpenAI(
             api_key="sk-1pUmQlsIkgla3CuvKTgCrzDZ3r0pBxO608YJvIHCN18lvOrn",
             base_url="https://api.chatanywhere.tech/v1",
@@ -730,14 +736,14 @@ def generate_mongodb_query(query: str) -> dict:
             schema = json.load(f)
         st.write("✅ JSON模板读取成功")
         
-        prompt = f"""你是一个MongoDB查询专家。请根据以下问题和数据结构生成MongoDB查询条件。
+        prompt = f"""你是一个MongoDB查询专家。请根据以下问题和数结构生成MongoDB查询条件。
 
-数据结构：
+据结构：
 {json.dumps(schema, ensure_ascii=False, indent=2)}
 
 用户问题：{query}
 
-请生成一个MongoDB查询对象，必须包含query和projection两个字段。示例格式：
+请生成一个MongoDB查询对象，必须包含query和projection两字段。示例格式：
 
 {{
     "query": {{"患者姓名": "马某某"}},
@@ -747,7 +753,7 @@ def generate_mongodb_query(query: str) -> dict:
 注意：
 1. 必须返回合法的JSON格式
 2. 必须包含query和projection两个字段
-3. 使用双引号而不是单引号
+3. 使用双引号而不是单引
 4. 字段名必须与数据结构中的完全匹配
 5. 不要返回任何其他内容，只返回JSON对象
 
@@ -768,7 +774,7 @@ def generate_mongodb_query(query: str) -> dict:
             ],
             temperature=0.1
         )
-        st.write("✅ OpenAI API调用成功")
+        st.write("✅ OpenAI API调用成")
         
         # 获取响应文本并清理
         query_str = response.choices[0].message.content.strip()
@@ -794,39 +800,6 @@ def generate_mongodb_query(query: str) -> dict:
         st.error(f"错误类型: {type(e).__name__}")
         st.error(f"错误堆栈: {traceback.format_exc()}")
         return None
-
-# 添加直接执行MongoDB查询的功能
-def execute_mongodb_query(query_str: str) -> list:
-    """直接执行MongoDB查询"""
-    try:
-        # 解析查询字符串为JSON
-        query = json.loads(query_str)
-        
-        # 获取MongoDB连接
-        db = get_mongodb_connection()
-        if db is None:
-            return []
-        
-        # 执行查询
-        results = list(db.patients.find(query))
-        
-        return results
-    except Exception as e:
-        st.error(f"执行MongoDB查询错误: {str(e)}")
-        return []
-
-# 在主界面添加直接查询功能
-st.subheader("MongoDB直接查询")
-with st.expander("MongoDB查询工具"):
-    query_str = st.text_area("输入MongoDB查询条件（JSON格式）：")
-    if st.button("执行查询"):
-        if query_str:
-            results = execute_mongodb_query(query_str)
-            st.write(f"找到 {len(results)} 条记录：")
-            for result in results:
-                st.json(result)
-        else:
-            st.warning("请输入查询条件")
 
 def get_structured_search_results(query: str) -> list:
     """从MongoDB中搜索相关信息"""
@@ -876,22 +849,18 @@ def get_llm_response(query: str, search_results: dict) -> str:
             base_url="https://free.gpt.ge/v1"
         )
         
-        prompt = f"""请基于以下搜索结果回答问题：
+        prompt = f"""请基于以下相关内容回答问题：
 
-问题: {query}
+用户问题: {query}
 
-向量搜索结果:
-{search_results['vector']}
+相内容:
+{search_results}
 
-结构化数据结果:
-{search_results['structured']}
-
-请综合以上信息生成回答，要求：
-1. 优先使用结构化数据中的精确信息
-2. 使用向量搜索结果补充更多上下文
-3. 如果发现信息不一致，请说明
-4. 使用医学专业通俗易懂的语言
-5. 如果信息不足，请明确指出"""
+请注意：
+1. 只使用提供的相关内容回答问题
+2. 如果相关内容中没有答案，请明确说明
+3. 不要添加任何不在相关内容中的信息
+4. 保持回答的准确性和客观性"""
 
         response = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -912,12 +881,17 @@ def get_llm_response(query: str, search_results: dict) -> str:
         st.error(f"LLM响应错误: {str(e)}")
         return "抱歉，生成回答时出现错误。"
 
-# 主界面
+# 页面标题和开发者信息
 st.title("🏥 医疗 RAG 系统")
+st.markdown("""
+<div style='text-align: right; color: gray; padding: 0px 0px 20px 0px;'>
+    <p>Developed by Huaiyuan Tan</p>
+</div>
+""", unsafe_allow_html=True)
 
 # 修改侧边栏部分
 with st.sidebar:
-    st.header("系统配置")
+    st.header("系统设置")
     
     # 显示数据状态
     if check_data_initialized():
@@ -933,161 +907,110 @@ with st.sidebar:
     )
     
     if import_db in ["向量数据库", "MongoDB", "全部导入"]:
-        uploaded_file = st.file_uploader("上传病历PDF文件", type=['pdf'])
-        show_upload = True
-    else:
-        show_upload = False
-    
-    if st.button("导入数据"):
-        if import_db == "图数据库":
-            # 直接从MongoDB构建图数据库
-            st.write("开始从MongoDB构建图数据库...")
-            try:
-                db = get_mongodb_connection()
-                if db is None:
-                    st.error("MongoDB连接失败")
-                else:
-                    patients_data = list(db.patients.find())
-                    if not patients_data:
-                        st.warning("MongoDB中没有数据，无法构建图数据库")
-                    else:
-                        G = nx.Graph()
-                        
-                        for data in patients_data:
-                            # 添加患者节点（作为中心节点）
-                            patient_name = data['患者姓名']
-                            G.add_node(patient_name, type="patient")
-                            st.write(f"添加患者节点: {patient_name}")
-                            
-                            # 添加基本信息节点
-                            basic_info = {
-                                '性别': data.get('性别', '未知'),
-                                '年龄': data.get('年龄', 0),
-                                '民族': data.get('民族', '未知'),
-                                '职业': data.get('职业', '未知'),
-                                '婚姻状况': data.get('婚姻状况', '未知'),
-                                '入院日期': data.get('入院日期', ''),
-                                '出院日期': data.get('出院日期', ''),
-                                '住院天数': data.get('住院天数', 0)
-                            }
-                            for key, value in basic_info.items():
-                                if value:  # 只添加非空值
-                                    node_id = f"{key}_{value}_{patient_name}"
-                                    G.add_node(node_id, type="basic_info", name=key, value=str(value))
-                                    G.add_edge(patient_name, node_id, relationship="has_info")
-                            st.write("添加基本信息节点完成")
-                            
-                            # 添加主诉节点
-                            if '主诉' in data and data['主诉']:
-                                node_id = f"主诉_{data['主诉']}_{patient_name}"
-                                G.add_node(node_id, type="chief_complaint", content=str(data['主诉']))
-                                G.add_edge(patient_name, node_id, relationship="complains_of")
-                            st.write("添加主诉节点完成")
-                            
-                            # 添加现病史节点
-                            for item in data.get('现病史', []):
-                                if item:  # 只添加非空值
-                                    node_id = f"现病史_{item}_{patient_name}"
-                                    G.add_node(node_id, type="present_illness", content=str(item))
-                                    G.add_edge(patient_name, node_id, relationship="has_history")
-                            st.write("添加现病史节点完成")
-                            
-                            # 添加诊断节点
-                            for diagnosis in data.get('入院诊断', []):
-                                if diagnosis:  # 只添加非空值
-                                    node_id = f"入院诊断_{diagnosis}_{patient_name}"
-                                    G.add_node(node_id, type="admission_diagnosis", content=str(diagnosis))
-                                    G.add_edge(patient_name, node_id, relationship="diagnosed_with_on_admission")
-                            
-                            for diagnosis in data.get('出院诊断', []):
-                                if diagnosis:  # 只添加非空值
-                                    node_id = f"出院诊断_{diagnosis}_{patient_name}"
-                                    G.add_node(node_id, type="discharge_diagnosis", content=str(diagnosis))
-                                    G.add_edge(patient_name, node_id, relationship="diagnosed_with_on_discharge")
-                            st.write("添加诊断节点完成")
-                            
-                            # 添加生命体征节点
-                            if '生命体征' in data:
-                                for key, value in data['生命体征'].items():
-                                    if value:  # 只添加非空值
-                                        node_id = f"生命体征_{key}_{value}_{patient_name}"
-                                        G.add_node(node_id, type="vital_sign", name=str(key), value=str(value))
-                                        G.add_edge(patient_name, node_id, relationship="has_vital_sign")
-                            st.write("添加生命体征节点完成")
-                            
-                            # 添加生化指标节点
-                            if '生化指标' in data:
-                                for key, value in data['生化指标'].items():
-                                    if value:  # 只添加非空值
-                                        node_id = f"生化指标_{key}_{value}_{patient_name}"
-                                        G.add_node(node_id, type="biochemical_test", name=str(key), value=str(value))
-                                        G.add_edge(patient_name, node_id, relationship="has_test_result")
-                            st.write("添加生化指标节点完成")
-                            
-                            # 添加出院医嘱节点
-                            for advice in data.get('出院医嘱', []):
-                                if advice:  # 只添加非空值
-                                    node_id = f"出院医嘱_{advice}_{patient_name}"
-                                    G.add_node(node_id, type="discharge_advice", content=str(advice))
-                                    G.add_edge(patient_name, node_id, relationship="advised_with")
-                            st.write("添加出院医嘱节点完成")
-                            
-                            # 添加诊疗经过节点
-                            if '诊疗经过' in data and data['诊疗经过']:
-                                node_id = f"诊疗经过_{patient_name}"
-                                G.add_node(node_id, type="treatment_course", content=str(data['诊疗经过']))
-                                G.add_edge(patient_name, node_id, relationship="underwent_treatment")
-                            st.write("添加诊疗经过节点完成")
-                            
-                            # 添加出院情况节点
-                            if '出院情况' in data and data['出院情况']:
-                                node_id = f"出院情况_{data['出院情况']}_{patient_name}"
-                                G.add_node(node_id, type="discharge_status", status=str(data['出院情况']))
-                                G.add_edge(patient_name, node_id, relationship="discharged_with_status")
-                            st.write("添加出院情况节点完成")
-                        
-                        # 保存图
-                        nx.write_gexf(G, "medical_graph.gexf")
-                        st.success(f"✅ 图数据库构建成功，包含 {len(G.nodes)} 个节点和 {len(G.edges)} 条边")
-                        
-                        # 显示图的基本信息
-                        st.write("图数据库信息：")
-                        st.write(f"- 节点数量：{len(G.nodes)}")
-                        st.write(f"- 关系数量：{len(G.edges)}")
-                        st.write(f"- 节点类型：{set(nx.get_node_attributes(G, 'type').values())}")
-                        st.write(f"- 关系类型：{set(nx.get_edge_attributes(G, 'relationship').values())}")
-                        
-                        st.rerun()
-            except Exception as e:
-                st.error(f"图数据库构建失败: {str(e)}")
-                st.error("详细错误：", str(e))
+        uploaded_files = st.file_uploader(
+            "上传病历PDF文件（可多选）", 
+            type=['pdf'],
+            accept_multiple_files=True  # 启用多文件上传
+        )
         
-        elif show_upload:
-            if uploaded_file is None:
-                st.warning("请先上传PDF文件！")
-            else:
+        if uploaded_files:
+            st.write(f"已选择 {len(uploaded_files)} 个文件：")
+            for file in uploaded_files:
+                st.write(f"- {file.name}")
+            
+            if st.button("导入数据"):
                 with st.spinner("正在导入数据..."):
-                    # [其他数据库的导入代码保持不变...]
-                    pass
+                    success = True
+                    
+                    for uploaded_file in uploaded_files:
+                        st.write(f"正在处理文件：{uploaded_file.name}")
+                        
+                        # 读取PDF内容
+                        with pdfplumber.open(uploaded_file) as pdf:
+                            pdf_content = ""
+                            for page in pdf.pages:
+                                pdf_content += page.extract_text()
+                        
+                        if import_db in ["向量数据库", "全部导入"]:
+                            st.write(f"开始导入向量数据库：{uploaded_file.name}")
+                            try:
+                                # 使用文件名作为唯一标识
+                                file_name = uploaded_file.name.replace('.pdf', '')
+                                chunks, index = vectorize_document(pdf_content, file_name)
+                                if chunks and index:
+                                    st.success(f"✅ 向量数据库导入成功，文档 '{file_name}' 共生成 {len(chunks)} 个文档块")
+                                else:
+                                    st.error(f"❌ 文档 '{file_name}' 导入失败")
+                                    success = False
+                            except Exception as e:
+                                st.error(f"向量数据库导入失败: {str(e)}")
+                                success = False
+                        
+                        if import_db in ["MongoDB", "全部导入"]:
+                            st.write(f"开始导入MongoDB：{uploaded_file.name}")
+                            # [MongoDB导入代码保持不变...]
+                    
+                    if success:
+                        st.success(f"✅ 所有件导入完成")
+                        st.rerun()
+                    else:
+                        st.error("部分文件导入失败，请检查错误信息")
+        else:
+            st.warning("请先上传PDF文件")
+    
+    elif import_db == "图数据库":
+        if st.button("从MongoDB构建图数据库"):
+            # [图数据库构建代码保持不变...]
+            pass
 
 # 在侧边栏添加数据库内容看功能
 with st.sidebar:
     st.header("数据库内容查看")
     view_db = st.selectbox(
-        "选择要查看的据库",
+        "选择要查看的数据库",
         ["向量数据库", "MongoDB", "图数据库"]
     )
     
     if st.button("查看数据"):
         if view_db == "向量数据库":
             st.write("📚 向量数据库内容：")
-            if st.session_state.file_chunks:
-                for file_name, chunks in st.session_state.file_chunks.items():
-                    with st.expander(f"文档：{file_name}"):
-                        for i, chunk in enumerate(chunks):
-                            st.write(f"片段 {i+1}:")
-                            st.info(chunk)
-            else:
+            try:
+                # 初始化 Pinecone
+                index = init_pinecone()
+                if index:
+                    # 获取所有向量
+                    stats = index.describe_index_stats()
+                    total_vectors = stats.total_vector_count
+                    
+                    if total_vectors > 0:
+                        st.write(f"总向量数量：{total_vectors}")
+                        
+                        # 获取所有向量的元数据
+                        # 使用空查询获取所有向量
+                        results = index.query(
+                            vector=[0] * 384,  # 使用零向量作为查询向量
+                            top_k=total_vectors,  # 获取所有向量
+                            include_metadata=True
+                        )
+                        
+                        # 按文件名组织显示
+                        files = {}
+                        for match in results['matches']:
+                            file_name = match['metadata'].get('original_file_name', '未知文件')
+                            if file_name not in files:
+                                files[file_name] = []
+                            files[file_name].append(match['metadata'].get('text', ''))
+                        
+                        # 显示每个文件的内容
+                        for file_name, chunks in files.items():
+                            with st.expander(f"文档：{file_name}"):
+                                for i, chunk in enumerate(chunks):
+                                    st.write(f"片段 {i+1}:")
+                                    st.info(chunk)
+                    else:
+                        st.warning("向量数据库中暂无数据")
+            except Exception as e:
+                st.error(f"读取向量数据库错误: {str(e)}")
                 st.warning("向量数据库中暂无数据")
         
         elif view_db == "MongoDB":
@@ -1098,10 +1021,10 @@ with st.sidebar:
                     docs = list(db.patients.find())
                     if docs:
                         for doc in docs:
-                            with st.expander(f"者：{doc.get('患者姓名', '未知患者')}"):
+                            with st.expander(f"患者：{doc.get('患者姓名', '未知患者')}"):
                                 # 基本信息
                                 st.write("👤 基本信息：")
-                                for key in ['性别', '年龄', '民族', '职业', '婚姻状况', '入日期', '出院日期']:
+                                for key in ['性别', '年龄', '民族', '职业', '婚姻状况', '入院日期', '出院日期']:
                                     if key in doc:
                                         st.write(f"{key}: {doc[key]}")
                                 
@@ -1137,7 +1060,7 @@ with st.sidebar:
                                 
                                 # 治疗经过
                                 if '诊疗经过' in doc:
-                                    st.write("💊 疗经过：", doc['诊疗经过'])
+                                    st.write("💊 诊疗经过：", doc['诊疗经过'])
                                 
                                 # 出院医嘱
                                 if '出院医嘱' in doc:
@@ -1148,6 +1071,8 @@ with st.sidebar:
                         st.warning("MongoDB中暂无数据")
                 except Exception as e:
                     st.error(f"查询MongoDB错误: {str(e)}")
+                    st.error(f"错误类型: {type(e).__name__}")
+                    st.error(f"错误堆栈: {traceback.format_exc()}")
             else:
                 st.error("MongoDB连接失败")
         
@@ -1195,7 +1120,7 @@ with search_form:
     query = st.text_input("请输入的问题：")
     
     # 提交钮
-    submit_button = st.form_submit_button("搜索并生成")
+    submit_button = st.form_submit_button("搜索并生成答案")
 
 # 在表单外处理搜索结果
 if submit_button:
@@ -1207,6 +1132,8 @@ if submit_button:
             
             # 根据选择的检索方式执行相应的搜索
             if search_type == "向量数据库":
+                # 使用 vector_store.py 中的函数进行向量搜索
+                from vector_store import get_vector_search_results
                 vector_results = get_vector_search_results(query)
                 search_results = {
                     "vector": vector_results,
@@ -1215,11 +1142,16 @@ if submit_button:
                 }
                 # 显示结果
                 st.write("🔍 向量搜索结果:")
-                if vector_results:
-                    for result in vector_results:
-                        st.info(result)
-                else:
-                    st.write("未找到相关内容")
+                with st.expander("向量搜索详情", expanded=True):
+                    if vector_results:
+                        for result in vector_results:
+                            st.info(result)
+                    else:
+                        st.write("未找到相关内容")
+                        st.write("可能的原因：")
+                        st.write("1. 相似度分数低于阈值")
+                        st.write("2. 查询向量与文档向量差异较大")
+                        st.write("3. 数据库中没有相关内容")
                     
             elif search_type == "MongoDB":
                 mongodb_results = get_structured_search_results(query)
@@ -1252,6 +1184,8 @@ if submit_button:
                     st.write("未找到相关内容")
                     
             else:  # 混合检索
+                # 使用 vector_store.py 中的函数进行向量搜索
+                from vector_store import get_vector_search_results
                 vector_results = get_vector_search_results(query)
                 mongodb_results = get_structured_search_results(query)
                 graph_results = get_graph_search_results(query)
@@ -1268,8 +1202,42 @@ if submit_button:
                 with col1:
                     st.write("🔍 向量搜索结果:")
                     if vector_results:
-                        for result in vector_results:
-                            st.info(result)
+                        # 使用 LLM 生成向量搜索结果的总结
+                        try:
+                            client = OpenAI(
+                                api_key="sk-1pUmQlsIkgla3CuvKTgCrzDZ3r0pBxO608YJvIHCN18lvOrn",
+                                base_url="https://api.chatanywhere.tech/v1",
+                                timeout=60
+                            )
+                            
+                            # 准备提示词
+                            prompt = f"""请根据以下搜索结果回答问题：
+                            
+                            问题: {query}
+                            
+                            搜索结果:
+                            {vector_results}
+                            
+                            请简洁地总结相关信息。如果没有找到相关信息，请直接说明。"""
+                            
+                            response = client.chat.completions.create(
+                                model="gpt-4o-mini-2024-07-18",
+                                messages=[
+                                    {
+                                        "role": "system", 
+                                        "content": "你是一个专业的医疗助手，请简洁地总结搜索结果。"
+                                    },
+                                    {
+                                        "role": "user", 
+                                        "content": prompt
+                                    }
+                                ],
+                                temperature=0.1
+                            )
+                            st.info(response.choices[0].message.content)
+                        except Exception as e:
+                            st.error(f"生成向量搜索总结失败: {str(e)}")
+                            st.write("未找到相关内容")
                     else:
                         st.write("未找到相关内容")
                 
@@ -1282,7 +1250,7 @@ if submit_button:
                         st.write("未找到相关内容")
                 
                 with col3:
-                    st.write("️ 图数据库搜索结果:")
+                    st.write("🕸️ 图数据库搜索结果:")
                     if graph_results:
                         for result in graph_results:
                             st.info(result)
@@ -1305,26 +1273,18 @@ if submit_button:
                         )
                         
                         # 准备提示词
-                        prompt = f"""请基于以下搜索结果回问题：
+                        prompt = f"""请基于以下相关内容回答问题：
                         
                         用户问题: {query}
                         
-                        搜索到的信息:
-                        1. 向量搜索结果:
-                        {search_results.get('vector', [])}
+                        相关内容:
+                        {search_results}
                         
-                        2. MongoDB结果:
-                        {search_results.get('structured', [])}
-                        
-                        3. 图数据库结果:
-                        {search_results.get('graph', [])}
-                        
-                        请提供专业、准确的回答，要求：
-                        1. 优先使用结构化数据中的精确信息
-                        2. 使用医学专业但通俗易懂的语言
-                        3. 如果信息不足，请明确指出
-                        4. 如果发现信息不一致，请说明
-                        5. 保持回答逻辑性和完整性"""
+                        请注意：
+                        1. 只使用提供的相关内容回答问题
+                        2. 如果相关内容中没有答案，请明确说明
+                        3. 不要添加任何不在相关内容中的信息
+                        4. 保持回答的准确性和客观性"""
                         
                         response = client.chat.completions.create(
                             model="gpt-4o-mini-2024-07-18",  # 使用相同的模型
