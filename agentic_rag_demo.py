@@ -237,7 +237,7 @@ def get_database_commands(text: str) -> dict:
             
             # 验证JSON结构
             if not isinstance(commands, dict):
-                raise ValueError("返回的不是有效的JSON对象")
+                raise ValueError("��回的不是有效的JSON对象")
             if "relational_db" not in commands or "graph_db" not in commands:
                 raise ValueError("JSON缺少必要的键")
             
@@ -392,7 +392,7 @@ class MedicalRecordParser:
                 '动态心电图': r'动态心电图\s*:(.*?)。',
                 '眼震电图': r'眼震电图提示(.*?)。',
                 '血常规': r'血常规[检查]*[:：](.*?)',
-                '心脏超声': r'心脏超声[检查]*[:：](.*?)。'
+                '心脏超���': r'心脏超声[检查]*[:：](.*?)。'
             }
             for exam, pattern in exam_patterns.items():
                 if match := re.search(pattern, self.content):
@@ -604,7 +604,7 @@ def generate_graph_query(query: str) -> dict:
 
 用户问题：{query}
 
-请生一个包含查询条件的字典，示例格式：
+请���一个包含查询条件的字典，示例格式：
 
 1. 查询患者的主诉：
 {{
@@ -682,6 +682,11 @@ def generate_graph_query(query: str) -> dict:
 def get_graph_search_results(query: str) -> list:
     """从图数据库中搜索相关信息"""
     try:
+        # 检查图数据库文件是否存在
+        if not os.path.exists("medical_graph.gexf"):
+            st.warning("图数据库文件不存在，请先导入数据")
+            return []
+            
         # 使用LLM生成查询条件
         query_obj = generate_graph_query(query)
         if not query_obj:
@@ -813,6 +818,9 @@ def get_structured_search_results(query: str) -> list:
         if not query_obj:
             return []
         
+        # 确保投影中包含患者姓名字段
+        query_obj["projection"]["患者姓名"] = 1
+        
         # 执行查询，使用生成的查询条件和投影
         docs = list(db.patients.find(query_obj["query"], query_obj["projection"]))
         st.write(f"找到 {len(docs)} 条记录")
@@ -834,7 +842,7 @@ def get_structured_search_results(query: str) -> list:
                             results.append(f"- {k}: {v}")
                     else:
                         # 处理普通字段
-                        results.append(f"患者 {doc.get('患姓名', '未知')} 的{field}是: {value}")
+                        results.append(f"患者 {doc.get('患者姓名', '未知')} 的{field}是: {value}")
         
         return results
     except Exception as e:
@@ -1021,10 +1029,10 @@ with st.sidebar:
                     docs = list(db.patients.find())
                     if docs:
                         for doc in docs:
-                            with st.expander(f"患者：{doc.get('患者姓名', '未知患者')}"):
+                            with st.expander(f"患者：{doc.get('患姓名', '未知患者')}"):
                                 # 基本信息
                                 st.write("👤 基本信息：")
-                                for key in ['性别', '年龄', '民族', '职业', '婚姻状况', '入院日期', '出院日期']:
+                                for key in ['��别', '年龄', '民族', '职业', '婚姻状况', '入院日期', '出院日期']:
                                     if key in doc:
                                         st.write(f"{key}: {doc[key]}")
                                 
