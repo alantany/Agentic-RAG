@@ -23,6 +23,7 @@ from config import (
     get_openai_client, 
     get_mongodb_config, 
     get_system_config,
+    get_graph_database_config,
     ENV_CONFIG
 )
 
@@ -620,20 +621,84 @@ def get_rdb_search_results(query: str) -> list:
         st.error(f"据库搜索错误: {str(e)}")
         return []
 
+def generate_simple_graph_query(query: str) -> dict:
+    """生成简化的图查询条件（不依赖LLM）"""
+    try:
+        import re
+        
+        # 简单的关键词匹配
+        query_lower = query.lower()
+        
+        # 提取患者姓名
+        common_surnames = "李王张刘陈杨黄周吴马蒲赵钱孙朱胡郭何高林罗郑梁谢宋唐许邓冯韩曹曾彭萧蔡潘田董袁于余叶蒋杜苏魏程吕丁沈任姚卢傅钟姜崔谭廖范汪陆金石戴贾韦夏邱方侯邹熊孟秦白江阎薛尹段雷黎史龙陶贺顾毛郝龚邵万钱严覃武戴莫孔向汤"
+        pattern = f'([{common_surnames}])某某'
+        patient_match = re.search(pattern, query)
+        patient_name = patient_match.group(0) if patient_match else "周某某"  # 默认患者
+        
+        # 根据关键词确定查询类型
+        if any(word in query_lower for word in ['主诉', '症状', '不适']):
+            return {
+                "start_node": {"type": "patient", "name": patient_name},
+                "relationship": "has_complaint",
+                "end_node": {"type": "chief_complaint"},
+                "return": ["end_node.content"]
+            }
+        elif any(word in query_lower for word in ['诊断', '病情', '疾病']):
+            return {
+                "start_node": {"type": "patient", "name": patient_name},
+                "relationship": "has_diagnosis", 
+                "end_node": {"type": "diagnosis"},
+                "return": ["end_node.content"]
+            }
+        elif any(word in query_lower for word in ['治疗', '药物', '方案']):
+            return {
+                "start_node": {"type": "patient", "name": patient_name},
+                "relationship": "has_treatment",
+                "end_node": {"type": "treatment"},
+                "return": ["end_node.content"]
+            }
+        elif any(word in query_lower for word in ['生化', '指标', '检查', '化验']):
+            return {
+                "start_node": {"type": "patient", "name": patient_name},
+                "relationship": "has_lab_result",
+                "end_node": {"type": "lab_result"},
+                "return": ["end_node.indicator_name", "end_node.indicator_value"]
+            }
+        else:
+            # 默认查询基本信息
+            return {
+                "start_node": {"type": "patient", "name": patient_name},
+                "relationship": "has_basic_info",
+                "end_node": {"type": "basic_info"},
+                "return": ["end_node.field_name", "end_node.field_value"]
+            }
+    except Exception as e:
+        st.error(f"生成简化查询条件错误: {str(e)}")
+        return None
+
 def generate_graph_query(query: str) -> dict:
     """使用LLM生成图数据库查询条件"""
     try:
         st.write("开始创建OpenAI客户端...")
+        
+        # 首先测试API连接
+        from config import test_openai_client
+        api_working, api_message = test_openai_client()
+        if not api_working:
+            st.error(f"API连接测试失败: {api_message}")
+            st.warning("将使用简化的图查询方式")
+            return generate_simple_graph_query(query)
+        
+        st.write(f"✅ API连接测试成功: {api_message}")
         client, model, temperature = get_openai_client()
-        st.write("✅ OpenAI客户端创建成功")
         
         # 读取图数据库的结构信息
         G = nx.read_gexf("medical_graph.gexf")
         
         # 获取图的基本信息
         graph_info = {
-            "node_types": list(set(nx.get_node_attributes(G, 'type').values())),
-            "relationships": list(set(nx.get_edge_attributes(G, 'relationship').values())),
+            "node_types": list(set(nx.get_node_attributes(G, 'node_type').values())),
+            "relationships": list(set(nx.get_edge_attributes(G, 'edge_type').values())),
             "nodes_sample": {
                 node: data for node, data in list(G.nodes(data=True))[:5]
             },
@@ -687,9 +752,10 @@ def generate_graph_query(query: str) -> dict:
 请直接返回查询条件的JSON字符串，不要包含任何其他内容。"""
 
         st.write("🔄 正在调用OpenAI API...")
-        response = client.chat.completions.create(
-            model=model,
-            messages=[
+        from config import make_api_request
+        response = make_api_request(
+            client, model,
+            [
                 {
                     "role": "system", 
                     "content": "你是一个图数据库查询专家。根据实际的数库结构生成精确的查询条件。"
@@ -699,7 +765,7 @@ def generate_graph_query(query: str) -> dict:
                     "content": prompt
                 }
             ],
-            temperature=temperature
+            temperature
         )
         st.write("✅ OpenAI API调用成功")
         
@@ -745,7 +811,7 @@ def get_graph_search_results(query: str) -> list:
         
         # 根据查询条件执行搜索
         start_nodes = [node for node, data in G.nodes(data=True)
-                      if data.get('type') == query_obj["start_node"]["type"] and 
+                      if data.get('node_type') == query_obj["start_node"]["type"] and 
                          node == query_obj["start_node"]["name"]]
         
         for start_node in start_nodes:
@@ -755,22 +821,181 @@ def get_graph_search_results(query: str) -> list:
                 neighbor_data = G.nodes[neighbor]
                 
                 # 检查关系类型和终点节点类型是否匹配
-                if (edge_data.get("relationship") == query_obj["relationship"] and
-                    neighbor_data.get('type') == query_obj["end_node"]["type"]):
+                if (edge_data.get("edge_type") == query_obj["relationship"] and
+                    neighbor_data.get('node_type') == query_obj["end_node"]["type"]):
                     
                     # 构建结果
                     result = []
                     for attr in query_obj["return"]:
                         node_type, attr_name = attr.split(".")
                         if node_type == "end_node":
-                            result.append(f"{attr_name}: {neighbor_data.get(attr_name, '')}")
+                            # 根据节点类型优先查找相应的属性
+                            if neighbor_data.get('node_type') == 'lab_result':
+                                # 实验室结果：优先indicator_name和indicator_value
+                                if attr_name == 'field_name':
+                                    value = neighbor_data.get('indicator_name', '')
+                                elif attr_name == 'field_value':
+                                    value = neighbor_data.get('indicator_value', '')
+                                else:
+                                    value = (neighbor_data.get('indicator_name') or 
+                                           neighbor_data.get('indicator_value') or 
+                                           neighbor_data.get(attr_name) or '')
+                            elif neighbor_data.get('node_type') == 'basic_info':
+                                # 基本信息：使用field_name和field_value
+                                value = (neighbor_data.get('field_value') or 
+                                       neighbor_data.get('field_name') or 
+                                       neighbor_data.get(attr_name) or '')
+                            else:
+                                # 其他类型：优先content属性
+                                value = (neighbor_data.get('content') or 
+                                       neighbor_data.get('field_value') or 
+                                       neighbor_data.get('indicator_value') or
+                                       neighbor_data.get(attr_name) or '')
+                            result.append(f"{attr_name}: {value}")
                     
-                    results.append(f"{start_node} -> {edge_data.get('relationship')} -> {' | '.join(result)}")
+                    results.append(f"{start_node} -> {edge_data.get('edge_type')} -> {' | '.join(result)}")
         
         return results
     except Exception as e:
         st.error(f"图数据库搜索错误: {str(e)}")
         return []
+
+def build_graph_from_mongodb():
+    """从MongoDB数据构建图数据库"""
+    try:
+        # 连接MongoDB
+        st.write("连接MongoDB...")
+        db = get_mongodb_connection()
+        if db is None:
+            st.error("MongoDB连接失败")
+            return False
+        
+        # 获取所有患者数据
+        st.write("获取患者数据...")
+        docs = list(db.patients.find())
+        if not docs:
+            st.warning("MongoDB中没有患者数据，请先导入数据")
+            return False
+        
+        st.write(f"找到 {len(docs)} 个患者记录")
+        
+        # 创建图
+        G = nx.Graph()
+        
+        for doc in docs:
+            try:
+                patient_name = doc.get('患者姓名', '未知患者')
+                st.write(f"处理患者: {patient_name}")
+                
+                # 添加患者节点
+                G.add_node(patient_name, node_type="patient")
+                
+                # 添加基本信息节点
+                try:
+                    basic_info_fields = ['性别', '年龄', '民族', '职业', '婚姻状况']
+                    for field in basic_info_fields:
+                        if field in doc and doc[field]:
+                            node_id = f"{field}_{doc[field]}_{patient_name}"
+                            G.add_node(node_id, 
+                                      node_type="basic_info",
+                                      field_name=field, 
+                                      field_value=str(doc[field]))
+                            G.add_edge(patient_name, node_id, edge_type="has_basic_info")
+                except Exception as basic_error:
+                    st.warning(f"处理患者 {patient_name} 的基本信息时出错: {str(basic_error)}")
+                
+                # 添加诊断节点
+                try:
+                    if '诊断' in doc and doc['诊断']:
+                        diagnosis_node = f"诊断_{doc['诊断']}_{patient_name}"
+                        G.add_node(diagnosis_node,
+                                  node_type="diagnosis", 
+                                  content=str(doc['诊断']))
+                        G.add_edge(patient_name, diagnosis_node, edge_type="has_diagnosis")
+                except Exception as diag_error:
+                    st.warning(f"处理患者 {patient_name} 的诊断时出错: {str(diag_error)}")
+                
+                # 添加主诉节点
+                try:
+                    if '主诉' in doc and doc['主诉']:
+                        complaint_node = f"主诉_{patient_name}"
+                        G.add_node(complaint_node,
+                                  node_type="chief_complaint",
+                                  content=str(doc['主诉']))
+                        G.add_edge(patient_name, complaint_node, edge_type="has_complaint")
+                except Exception as complaint_error:
+                    st.warning(f"处理患者 {patient_name} 的主诉时出错: {str(complaint_error)}")
+                
+                # 添加现病史节点
+                try:
+                    if '现病史' in doc and doc['现病史']:
+                        history_node = f"现病史_{patient_name}"
+                        G.add_node(history_node,
+                                  node_type="present_illness",
+                                  content=str(doc['现病史']))
+                        G.add_edge(patient_name, history_node, edge_type="has_present_illness")
+                except Exception as history_error:
+                    st.warning(f"处理患者 {patient_name} 的现病史时出错: {str(history_error)}")
+                
+                # 添加生化指标节点
+                try:
+                    if '生化指标' in doc and doc['生化指标']:
+                        lab_data = doc['生化指标']
+                        st.write(f"生化指标数据类型: {type(lab_data)}")
+                        if isinstance(lab_data, dict):
+                            for indicator, value in lab_data.items():
+                                if value:
+                                    indicator_node = f"生化指标_{indicator}_{value}_{patient_name}"
+                                    G.add_node(indicator_node,
+                                              node_type="lab_result",
+                                              indicator_name=str(indicator),
+                                              indicator_value=str(value))
+                                    G.add_edge(patient_name, indicator_node, edge_type="has_lab_result")
+                        elif isinstance(lab_data, list):
+                            for i, item in enumerate(lab_data):
+                                if isinstance(item, dict):
+                                    for indicator, value in item.items():
+                                        if value:
+                                            indicator_node = f"生化指标_{indicator}_{value}_{patient_name}_{i}"
+                                            G.add_node(indicator_node,
+                                                      node_type="lab_result",
+                                                      indicator_name=str(indicator),
+                                                      indicator_value=str(value))
+                                            G.add_edge(patient_name, indicator_node, edge_type="has_lab_result")
+                        else:
+                            st.warning(f"患者 {patient_name} 的生化指标数据格式不支持: {type(lab_data)}")
+                except Exception as lab_error:
+                    st.warning(f"处理患者 {patient_name} 的生化指标时出错: {str(lab_error)}")
+                    st.write(f"生化指标数据: {doc.get('生化指标', 'N/A')}")
+                
+                # 添加治疗方案节点
+                try:
+                    if '治疗方案' in doc and doc['治疗方案']:
+                        treatment_node = f"治疗方案_{patient_name}"
+                        G.add_node(treatment_node,
+                                  node_type="treatment",
+                                  content=str(doc['治疗方案']))
+                        G.add_edge(patient_name, treatment_node, edge_type="has_treatment")
+                except Exception as treatment_error:
+                    st.warning(f"处理患者 {patient_name} 的治疗方案时出错: {str(treatment_error)}")
+            
+            except Exception as patient_error:
+                st.error(f"处理患者数据时出错: {str(patient_error)}")
+                st.write(f"患者数据: {doc}")
+                continue
+        
+        # 保存图数据库
+        st.write("保存图数据库...")
+        graph_config = get_graph_database_config()
+        nx.write_gexf(G, graph_config["graph_file"])
+        
+        st.success(f"✅ 图数据库构建成功！包含 {len(G.nodes)} 个节点和 {len(G.edges)} 条边")
+        return True
+        
+    except Exception as e:
+        st.error(f"构建图数据库失败: {str(e)}")
+        st.error(f"错误详情: {traceback.format_exc()}")
+        return False
 
 def generate_mongodb_query(query: str) -> dict:
     """使用LLM生成MongoDB查询条件和投影"""
@@ -944,6 +1169,28 @@ st.markdown("""
 with st.sidebar:
     st.header("系统设置")
     
+    # API使用统计
+    st.subheader("📊 API使用统计")
+    try:
+        from config import api_manager
+        stats = api_manager.get_stats()
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("本分钟请求", f"{stats['requests_this_minute']}/{stats['max_requests_per_minute']}")
+        with col2:
+            st.metric("请求间隔", f"{stats['request_interval']}秒")
+        
+        if stats['time_since_last_request'] > 0:
+            st.info(f"⏰ 上次请求: {stats['time_since_last_request']:.1f}秒前")
+        
+        # 显示限制信息
+        st.caption(f"💡 免费账户限制: {stats['max_requests_per_minute']}请求/分钟")
+    except Exception as e:
+        st.error(f"API统计获取失败: {str(e)}")
+    
+    st.divider()
+    
     # 显示数据状态
     if check_data_initialized():
         st.success("✅ 数据库中已有数据")
@@ -1021,8 +1268,15 @@ with st.sidebar:
     
     elif import_db == "图数据库":
         if st.button("从MongoDB构建图数据库"):
-            # [图数据库构建代码保持不变...]
-            pass
+            try:
+                success = build_graph_from_mongodb()
+                if success:
+                    st.success("✅ 图数据库构建成功！")
+                    st.rerun()
+                else:
+                    st.error("❌ 图数据库构建失败")
+            except Exception as e:
+                st.error(f"图数据库构建错误: {str(e)}")
 
 # 在侧边栏添加数据库内容看功能
 with st.sidebar:
@@ -1151,33 +1405,111 @@ with st.sidebar:
         
         elif view_db == "图数据库":
             st.write("🕸️ 图数据库内容：")
-            try:
-                G = nx.read_gexf("medical_graph.gexf")
-                
-                # 显示节点信息
-                with st.expander("节点信息"):
-                    st.write("总节点数：", len(G.nodes))
-                    for node, data in G.nodes(data=True):
-                        st.write(f"节点：{node}")
-                        st.write(f"类型：{data.get('type', '未知')}")
-                        for key, value in data.items():
-                            if key != 'type':
-                                st.write(f"{key}: {value}")
-                        st.write("---")
-                
-                # 显示关系信息
-                with st.expander("关系信息"):
-                    st.write("总关系数：", len(G.edges))
-                    for u, v, data in G.edges(data=True):
-                        st.write(f"关系：{u} -> {v}")
-                        st.write(f"类型：{data.get('relationship', '未知')}")
-                        for key, value in data.items():
-                            if key != 'relationship':
-                                st.write(f"{key}: {value}")
-                        st.write("---")
-            except Exception as e:
-                st.error(f"读取图数据库错误: {str(e)}")
-                st.warning("图数据库中暂无数据")
+            # 优先显示本地 GEXF 文件，如果没有再尝试 Neo4j
+            import os
+            from config import get_neo4j_driver, get_graph_database_config
+            graph_cfg = get_graph_database_config()
+            
+            # 首先检查本地是否有GEXF文件
+            if os.path.exists(graph_cfg["graph_file"]):
+                try:
+                    G = nx.read_gexf(graph_cfg["graph_file"])
+                    st.info("ℹ️ 使用本地GEXF文件")
+                    st.success(f"📊 本地图数据库 | 节点: {len(G.nodes)} | 关系: {len(G.edges)}")
+                    
+                    # 显示节点信息
+                    with st.expander("节点信息"):
+                        st.write("总节点数：", len(G.nodes))
+                        displayed_nodes = 0
+                        for node, data in G.nodes(data=True):
+                            if displayed_nodes >= 10:  # 限制显示数量
+                                st.write("... (更多节点)")
+                                break
+                            st.write(f"节点：{node}")
+                            st.write(f"类型：{data.get('node_type', '未知')}")
+                            for key, value in data.items():
+                                if key != 'node_type':
+                                    st.write(f"{key}: {value}")
+                            st.write("---")
+                            displayed_nodes += 1
+                    
+                    # 显示关系信息
+                    with st.expander("关系信息"):
+                        st.write("总关系数：", len(G.edges))
+                        displayed_edges = 0
+                        for u, v, data in G.edges(data=True):
+                            if displayed_edges >= 10:  # 限制显示数量
+                                st.write("... (更多关系)")
+                                break
+                            st.write(f"关系：{u} -> {v}")
+                            st.write(f"类型：{data.get('edge_type', '未知')}")
+                            for key, value in data.items():
+                                if key != 'edge_type':
+                                    st.write(f"{key}: {value}")
+                            st.write("---")
+                            displayed_edges += 1
+                            
+                    # 同时显示Neo4j连接状态（作为附加信息）
+                    try:
+                        driver = get_neo4j_driver()
+                        if driver is not None:
+                            with driver.session(database=None) as session:
+                                node_count = session.run("MATCH (n) RETURN count(n) AS c").single()["c"]
+                                rel_count = session.run("MATCH ()-[r]->() RETURN count(r) AS c").single()["c"]
+                                st.info(f"🔗 Neo4j 连接状态：已连接 | 节点: {node_count} | 关系: {rel_count}")
+                            driver.close()
+                        else:
+                            st.warning("🔗 Neo4j 连接状态：无法连接")
+                    except Exception:
+                        st.warning("🔗 Neo4j 连接状态：连接失败")
+                        
+                except Exception as e:
+                    st.error(f"读取本地图数据库错误: {str(e)}")
+                    # 本地文件读取失败，尝试Neo4j
+                    try:
+                        driver = get_neo4j_driver()
+                        if driver is not None:
+                            with driver.session(database=None) as session:
+                                node_count = session.run("MATCH (n) RETURN count(n) AS c").single()["c"]
+                                rel_count = session.run("MATCH ()-[r]->() RETURN count(r) AS c").single()["c"]
+                                st.success(f"✅ 已连接到 Neo4j | 节点: {node_count} | 关系: {rel_count}")
+
+                                # 展示部分节点与关系示例
+                                with st.expander("部分节点示例"):
+                                    for record in session.run("MATCH (n) RETURN n LIMIT 15"):
+                                        st.write(record[0])
+                                with st.expander("部分关系示例"):
+                                    for record in session.run("MATCH (a)-[r]->(b) RETURN a,r,b LIMIT 15"):
+                                        st.write(record[0], record[1].type, record[2])
+                            driver.close()
+                        else:
+                            st.warning("图数据库中暂无数据")
+                    except Exception as neo_error:
+                        st.error(f"Neo4j连接错误: {str(neo_error)}")
+                        st.warning("图数据库中暂无数据")
+            else:
+                # 没有本地文件，尝试Neo4j
+                try:
+                    driver = get_neo4j_driver()
+                    if driver is not None:
+                        with driver.session(database=None) as session:
+                            node_count = session.run("MATCH (n) RETURN count(n) AS c").single()["c"]
+                            rel_count = session.run("MATCH ()-[r]->() RETURN count(r) AS c").single()["c"]
+                            st.success(f"✅ 已连接到 Neo4j | 节点: {node_count} | 关系: {rel_count}")
+
+                            # 展示部分节点与关系示例
+                            with st.expander("部分节点示例"):
+                                for record in session.run("MATCH (n) RETURN n LIMIT 15"):
+                                    st.write(record[0])
+                            with st.expander("部分关系示例"):
+                                for record in session.run("MATCH (a)-[r]->(b) RETURN a,r,b LIMIT 15"):
+                                    st.write(record[0], record[1].type, record[2])
+                        driver.close()
+                    else:
+                        st.warning("无法连接到图数据库")
+                except Exception as e:
+                    st.error(f"图数据库连接错误: {str(e)}")
+                    st.warning("图数据库中暂无数据")
 
 # 使用表单包装搜索部分
 search_form = st.form(key="search_form", clear_on_submit=False)
@@ -1524,8 +1856,9 @@ def clean_mongodb_data():
 def clean_graph_data():
     """清理图数据库"""
     try:
-        if os.path.exists("medical_graph.gexf"):
-            os.remove("medical_graph.gexf")
+        graph_config = get_graph_database_config()
+        if os.path.exists(graph_config["graph_file"]):
+            os.remove(graph_config["graph_file"])
         st.success("✅ 图数据库已清空")
         return True
     except Exception as e:
