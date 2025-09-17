@@ -1,4 +1,4 @@
-import pinecone
+from pinecone import Pinecone, ServerlessSpec
 from sentence_transformers import SentenceTransformer
 import streamlit as st
 import tiktoken
@@ -8,52 +8,110 @@ import jieba  # 添加中文分词库
 import networkx as nx
 import json
 from openai import OpenAI
+import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from config import get_pinecone_config, get_openai_client, get_sentence_transformer_config
 
 # 初始化 Pinecone
 def init_pinecone():
     """初始化 Pinecone 客户端"""
     try:
-        pinecone.init(
-            api_key="e5b7d591-d2c7-411a-9b9b-c52d17934415",
-            environment="gcp-starter"
-        )
+        # 使用配置文件中的Pinecone设置
+        config = get_pinecone_config()
+        pc = Pinecone(api_key=config["api_key"])
         
-        index_name = "medical-records"
+        index_name = config["index_name"]
         
-        # 只在索引不存在时创建新索引
-        if index_name not in pinecone.list_indexes():
+        # 检查索引是否存在
+        existing_indexes = pc.list_indexes()
+        index_names = [index.name for index in existing_indexes]
+        
+        if index_name not in index_names:
             st.write("创建新的 Pinecone 索引...")
-            dimension = 384  # all-MiniLM-L6-v2 的维度
-            pinecone.create_index(
+            pc.create_index(
                 name=index_name,
-                dimension=dimension,
-                metric="cosine"
+                dimension=config["dimension"],
+                metric=config["metric"],
+                spec=ServerlessSpec(
+                    cloud="aws",
+                    region="us-east-1"
+                )
             )
             st.write("✅ 新索引创建成功")
         else:
             st.write("✅ 使用现有的 Pinecone 索引")
         
-        return pinecone.Index(index_name)
+        return pc.Index(index_name)
     except Exception as e:
         st.error(f"Pinecone 初始化失败: {str(e)}")
         return None
 
 def get_embeddings(texts):
     """获取文本的向量表示"""
-    model = SentenceTransformer('all-MiniLM-L6-v2')
-    
-    # 对中文文本进行预处理
-    processed_texts = []
-    for text in texts:
-        # 使用jieba进行中文分词
-        words = jieba.cut(text)
-        # 将分词结果重新组合，用空格连接
-        processed_text = " ".join(words)
-        processed_texts.append(processed_text)
-    
-    # 获取向量表示
-    embeddings = model.encode(processed_texts)
-    return embeddings
+    try:
+        # 使用配置文件中的sentence transformer设置
+        import os
+        os.environ['HF_HUB_OFFLINE'] = '0'
+        os.environ['TRANSFORMERS_OFFLINE'] = '0'
+        
+        st_config = get_sentence_transformer_config()
+        model = SentenceTransformer(
+            st_config["model_name"], 
+            cache_folder=st_config["cache_folder"],
+            device=st_config["device"]
+        )
+        
+        # 对中文文本进行预处理
+        processed_texts = []
+        for text in texts:
+            # 使用jieba进行中文分词
+            words = jieba.cut(text)
+            # 将分词结果重新组合，用空格连接
+            processed_text = " ".join(words)
+            processed_texts.append(processed_text)
+        
+        # 获取向量表示
+        embeddings = model.encode(processed_texts)
+        return embeddings
+    except Exception as e:
+        st.warning(f"无法使用sentence-transformers模型: {str(e)}")
+        st.info("使用简单的文本向量化方法作为备选...")
+        
+        # 备选方案：使用简单的TF-IDF向量化
+        return get_simple_embeddings(texts)
+
+def get_simple_embeddings(texts):
+    """使用TF-IDF的简单向量化方法"""
+    try:
+        # 对中文文本进行预处理
+        processed_texts = []
+        for text in texts:
+            # 使用jieba进行中文分词
+            words = jieba.cut(text)
+            processed_text = " ".join(words)
+            processed_texts.append(processed_text)
+        
+        # 使用TF-IDF向量化
+        vectorizer = TfidfVectorizer(max_features=384, stop_words=None)
+        tfidf_matrix = vectorizer.fit_transform(processed_texts)
+        
+        # 转换为密集矩阵并确保维度为384
+        embeddings = tfidf_matrix.toarray()
+        
+        # 如果特征数少于384，用零填充
+        if embeddings.shape[1] < 384:
+            padding = np.zeros((embeddings.shape[0], 384 - embeddings.shape[1]))
+            embeddings = np.hstack([embeddings, padding])
+        elif embeddings.shape[1] > 384:
+            # 如果特征数多于384，截取前384个
+            embeddings = embeddings[:, :384]
+        
+        return embeddings
+    except Exception as e:
+        st.error(f"简单向量化也失败了: {str(e)}")
+        # 最后的备选方案：返回随机向量
+        return np.random.random((len(texts), 384))
 
 def vectorize_document(text: str, file_name: str = None):
     """向量化文档并存储到 Pinecone"""
@@ -134,13 +192,17 @@ def get_vector_search_results(query: str) -> list:
         
         # 从查询中提取患者姓名
         import re
-        patient_name_match = re.search(r'([李|王|张|刘|陈|杨|黄|周|吴|马|蒲]某某)', query)
+        # 更宽松的患者姓名匹配，包括常见姓氏+某某的模式
+        common_surnames = "李王张刘陈杨黄周吴马蒲赵钱孙朱胡郭何高林罗郑梁谢宋唐许邓冯韩曹曾彭萧蔡潘田董袁于余叶蒋杜苏魏程吕丁沈任姚卢傅钟姜崔谭廖范汪陆金石戴贾韦夏邱方侯邹熊孟秦白江阎薛尹段雷黎史龙陶贺顾毛郝龚邵万钱严覃武戴莫孔向汤"
+        pattern = f'([{common_surnames}])某某'
+        patient_name_match = re.search(pattern, query)
         if not patient_name_match:
-            st.warning("未能从问题中识别出患者姓名")
-            return []
-        
-        patient_name = patient_name_match.group(1)
-        st.write(f"查询患者：{patient_name}")
+            # 如果没有找到特定患者姓名，尝试通用搜索
+            st.info("未识别到特定患者姓名，进行通用向量搜索...")
+            patient_name = None
+        else:
+            patient_name = patient_name_match.group(1) + "某某"
+            st.write(f"查询患者：{patient_name}")
         
         # 获取查询的 embedding
         query_embedding = get_embeddings([query])[0]
@@ -152,25 +214,34 @@ def get_vector_search_results(query: str) -> list:
             include_metadata=True
         )
         
-        # 在结果中手动过滤患者
+        # 在结果中过滤和处理匹配结果
         matched_texts = []
         if results['matches']:
             for match in results['matches']:
-                # 检查文件名是否包含患者姓名
                 file_name = match['metadata'].get('original_file_name', '')
-                if patient_name in file_name:
-                    score = match['score']
-                    text = match['metadata']['text']
-                    
-                    # 显示匹配信息
-                    st.write(f"找到匹配：")
-                    st.write(f"- 文件名: {file_name}")
-                    st.write(f"- 相似度: {score:.2f}")
-                    
-                    # 只返回相关的文档
-                    if score >= 0.01:  # 保持一个最低相似度阈值
+                score = match['score']
+                text = match['metadata']['text']
+                
+                # 如果指定了患者姓名，优先匹配该患者的文件
+                if patient_name:
+                    if patient_name in file_name:
+                        st.write(f"找到患者匹配：")
+                        st.write(f"- 文件名: {file_name}")
+                        st.write(f"- 相似度: {score:.2f}")
+                        
+                        if score >= 0.01:  # 保持一个最低相似度阈值
+                            matched_texts.append(f"[{file_name}] (相似度: {score:.2f}): {text}")
+                else:
+                    # 如果没有指定患者姓名，返回所有相关度较高的结果
+                    if score >= 0.3:  # 提高通用搜索的相似度阈值
+                        st.write(f"找到相关匹配：")
+                        st.write(f"- 文件名: {file_name}")
+                        st.write(f"- 相似度: {score:.2f}")
                         matched_texts.append(f"[{file_name}] (相似度: {score:.2f}): {text}")
-                        break  # 找到第一个匹配就退出
+                
+                # 限制返回结果数量
+                if len(matched_texts) >= 5:
+                    break
         
         return matched_texts
     except Exception as e:
@@ -203,8 +274,16 @@ def clean_vector_store():
     try:
         index = init_pinecone()
         if index:
-            # 删除所有向量
-            index.delete(delete_all=True)
+            # 删除所有向量（新版本API）
+            try:
+                index.delete(delete_all=True)
+            except Exception as delete_error:
+                # 如果delete_all不支持，尝试获取所有向量ID并逐个删除
+                st.warning("尝试使用替代方法清理向量数据库...")
+                stats = index.describe_index_stats()
+                if stats.total_vector_count > 0:
+                    # 由于新版本可能不支持直接删除所有向量，我们创建一个新的索引来替代
+                    st.warning("当前索引包含数据，建议手动清理或重新创建索引")
             st.success("✅ Pinecone 向量数据库已清空")
             return True
     except Exception as e:

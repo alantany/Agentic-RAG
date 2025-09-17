@@ -19,20 +19,47 @@ from pymongo import MongoClient
 from bson import json_util
 import time
 import traceback
+from config import (
+    get_openai_client, 
+    get_mongodb_config, 
+    get_system_config,
+    ENV_CONFIG
+)
 
 def check_data_initialized():
     """检查是否已有数据"""
+    has_data = False
+    
+    # 检查MongoDB数据
     try:
         db = get_mongodb_connection()
-        if db is None:
-            return False
-        
-        # 检查是否有数据
-        count = db.patients.count_documents({})
-        return count > 0
+        if db is not None:
+            count = db.patients.count_documents({})
+            if count > 0:
+                has_data = True
     except Exception as e:
-        st.error(f"检查数据初始化状态错误: {str(e)}")
-        return False
+        pass  # MongoDB检查失败不影响其他检查
+    
+    # 检查Pinecone向量数据库
+    try:
+        index = init_pinecone()
+        if index:
+            stats = index.describe_index_stats()
+            if stats.total_vector_count > 0:
+                has_data = True
+    except Exception as e:
+        pass  # Pinecone检查失败不影响其他检查
+    
+    # 检查session state中的数据（本地向量数据）
+    try:
+        if ('file_chunks' in st.session_state and 
+            st.session_state.file_chunks and 
+            len(st.session_state.file_chunks) > 0):
+            has_data = True
+    except Exception as e:
+        pass
+    
+    return has_data
 
 def get_mongodb_connection():
     """获取MongoDB连接并测试连接"""
@@ -41,13 +68,14 @@ def get_mongodb_connection():
         return st.session_state.mongodb_connection
     
     try:
+        mongo_config = get_mongodb_config()
         client = MongoClient(
-            "mongodb+srv://alantany:Mikeno01@airss.ykc1h.mongodb.net/ai-news?retryWrites=true&w=majority&appName=MedicalRAG",
-            tlsAllowInvalidCertificates=True
+            mongo_config["connection_string"],
+            tlsAllowInvalidCertificates=mongo_config["tls_allow_invalid_certificates"]
         )
         # 测试连接
         client.server_info()
-        db = client['medical_records']
+        db = client[mongo_config["database_name"]]
         st.write("✅ MongoDB连接成功")
         # 保存连接到session_state
         st.session_state.mongodb_connection = db
@@ -59,17 +87,8 @@ def get_mongodb_connection():
 def get_structured_data(text: str) -> dict:
     """使用LLM提取医疗相关的结构化数据"""
     try:
-        # 旧的配置
-        # client = OpenAI(
-        #     api_key="sk-2D0EZSwcWUcD4c2K59353b7214854bBd8f35Ac131564EfBa",
-        #     base_url="https://free.gpt.ge/v1"
-        # )
-        
-        # 新的配置
-        client = OpenAI(
-            api_key="sk-1pUmQlsIkgla3CuvKTgCrzDZ3r0pBxO608YJvIHCN18lvOrn",
-            base_url="https://api.chatanywhere.tech/v1"
-        )
+        # 使用配置文件中的设置
+        client, model, temperature = get_openai_client()
         
         # 读取示例JSON
         with open('get_inf.json', 'r', encoding='utf-8') as f:
@@ -102,7 +121,7 @@ def get_structured_data(text: str) -> dict:
         )
 
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=model,
             messages=[
                 {
                     "role": "system", 
@@ -113,7 +132,7 @@ def get_structured_data(text: str) -> dict:
                     "content": prompt
                 }
             ],
-            temperature=0.1
+            temperature=temperature
         )
         
         # 获取并解析JSON响应
@@ -147,10 +166,7 @@ def get_structured_data(text: str) -> dict:
 def get_database_commands(text: str) -> dict:
     """使用LLM分析病历内容并生成数据库命令"""
     try:
-        client = OpenAI(
-            api_key="sk-1pUmQlsIkgla3CuvKTgCrzDZ3r0pBxO608YJvIHCN18lvOrn",
-            base_url="https://api.chatanywhere.tech/v1"
-        )
+        client, model, temperature = get_openai_client()
         
         # 显示正在处理的文本
         st.write("正在分析的病历内容：")
@@ -203,7 +219,7 @@ def get_database_commands(text: str) -> dict:
         st.code(prompt[:200] + "...")  # 只显示前200个字符
         
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=model,
             messages=[
                 {
                     "role": "system", 
@@ -214,7 +230,7 @@ def get_database_commands(text: str) -> dict:
                     "content": prompt
                 }
             ],
-            temperature=0.1  # 降低随机性
+            temperature=temperature
         )
         
         # 获取响应文本
@@ -475,6 +491,53 @@ def clear_all_data():
         st.error(f"清理数据时出错: {str(e)}")
         return False
 
+# 专门用于MongoDB导入的函数
+def import_to_mongodb_only(pdf_content, filename):
+    """专门用于MongoDB导入，不清理其他数据"""
+    try:
+        # 测试MongoDB连接
+        st.write("测试MongoDB连接...")
+        db = get_mongodb_connection()
+        if db is None:
+            st.error("MongoDB连接失败，终止导入")
+            return False
+        
+        # 使用LLM提取结构化数据
+        st.write("使用AI提取结构化数据...")
+        data = get_structured_data(pdf_content)
+        if not data:
+            st.error("结构化数据提取失败")
+            return False
+        
+        # 添加元数据
+        data['metadata'] = {
+            'import_time': datetime.now().isoformat(),
+            'source_type': 'pdf',
+            'source_filename': filename,
+            'last_updated': datetime.now().isoformat()
+        }
+        
+        # 保存到MongoDB
+        st.write("保存结构化数据到MongoDB...")
+        try:
+            # 保存到patients集合
+            result = db.patients.insert_one(data)
+            st.write(f"✅ 数据保存到MongoDB (ID: {result.inserted_id})")
+            
+            # 保存ID到session state以便后续查询
+            if 'mongodb_records' not in st.session_state:
+                st.session_state.mongodb_records = []
+            st.session_state.mongodb_records.append(str(result.inserted_id))
+            
+            return True
+        except Exception as e:
+            st.error(f"MongoDB插入数据错误: {str(e)}")
+            return False
+            
+    except Exception as e:
+        st.error(f"MongoDB导入过程错误: {str(e)}")
+        return False
+
 # 修改数据导入函数
 def import_medical_data(pdf_content):
     try:
@@ -538,18 +601,7 @@ def import_medical_data(pdf_content):
         st.error(f"数据导入误: {str(e)}")
         return False
 
-# 搜索数
-def get_vector_search_results(query: str) -> list:
-    try:
-        results = []
-        for file_name, chunks in st.session_state.file_chunks.items():
-            index = st.session_state.file_indices[file_name]
-            chunk_results = search_similar(query, index, chunks)
-            results.extend([f"{file_name}: {chunk}" for chunk in chunk_results])
-        return results
-    except Exception as e:
-        st.error(f"向量搜索错误: {str(e)}")
-        return []
+# 注释：get_vector_search_results函数现在在vector_store.py中定义，使用Pinecone进行搜索
 
 def get_rdb_search_results(query: str) -> list:
     try:
@@ -572,11 +624,7 @@ def generate_graph_query(query: str) -> dict:
     """使用LLM生成图数据库查询条件"""
     try:
         st.write("开始创建OpenAI客户端...")
-        client = OpenAI(
-            api_key="sk-1pUmQlsIkgla3CuvKTgCrzDZ3r0pBxO608YJvIHCN18lvOrn",
-            base_url="https://api.chatanywhere.tech/v1",
-            timeout=60
-        )
+        client, model, temperature = get_openai_client()
         st.write("✅ OpenAI客户端创建成功")
         
         # 读取图数据库的结构信息
@@ -640,7 +688,7 @@ def generate_graph_query(query: str) -> dict:
 
         st.write("🔄 正在调用OpenAI API...")
         response = client.chat.completions.create(
-            model="gpt-4o-mini-2024-07-18",
+            model=model,
             messages=[
                 {
                     "role": "system", 
@@ -651,7 +699,7 @@ def generate_graph_query(query: str) -> dict:
                     "content": prompt
                 }
             ],
-            temperature=0.1
+            temperature=temperature
         )
         st.write("✅ OpenAI API调用成功")
         
@@ -728,11 +776,7 @@ def generate_mongodb_query(query: str) -> dict:
     """使用LLM生成MongoDB查询条件和投影"""
     try:
         st.write("开始创建OpenAI客端...")
-        client = OpenAI(
-            api_key="sk-1pUmQlsIkgla3CuvKTgCrzDZ3r0pBxO608YJvIHCN18lvOrn",
-            base_url="https://api.chatanywhere.tech/v1",
-            timeout=60
-        )
+        client, model, temperature = get_openai_client()
         st.write("✅ OpenAI客户端创建成功")
         
         # 读取示例JSON结构
@@ -768,7 +812,7 @@ def generate_mongodb_query(query: str) -> dict:
 
         st.write("🔄 正在调用OpenAI API...")
         response = client.chat.completions.create(
-            model="gpt-4o-mini-2024-07-18",  # 修改这里
+            model=model,
             messages=[
                 {
                     "role": "system", 
@@ -779,7 +823,7 @@ def generate_mongodb_query(query: str) -> dict:
                     "content": prompt
                 }
             ],
-            temperature=0.1
+            temperature=temperature
         )
         st.write("✅ OpenAI API调用成")
         
@@ -854,10 +898,7 @@ def get_structured_search_results(query: str) -> list:
 # 修LLM响应函数
 def get_llm_response(query: str, search_results: dict) -> str:
     try:
-        client = OpenAI(
-            api_key="sk-2D0EZSwcWUcD4c2K59353b7214854bBd8f35Ac131564EfBa",
-            base_url="https://free.gpt.ge/v1"
-        )
+        client, model, temperature = get_openai_client()
         
         prompt = f"""请基于以下相关内容回答问题：
 
@@ -873,7 +914,7 @@ def get_llm_response(query: str, search_results: dict) -> str:
 4. 保持回答的准确性和客观性"""
 
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=model,
             messages=[
                 {
                     "role": "system", 
@@ -884,7 +925,7 @@ def get_llm_response(query: str, search_results: dict) -> str:
                     "content": prompt
                 }
             ],
-            temperature=0.1
+            temperature=temperature
         )
         return response.choices[0].message.content
     except Exception as e:
@@ -958,7 +999,17 @@ with st.sidebar:
                         
                         if import_db in ["MongoDB", "全部导入"]:
                             st.write(f"开始导入MongoDB：{uploaded_file.name}")
-                            # [MongoDB导入代码保持不变...]
+                            try:
+                                # 调用专门的MongoDB导入函数
+                                mongodb_success = import_to_mongodb_only(pdf_content, uploaded_file.name)
+                                if not mongodb_success:
+                                    st.error(f"MongoDB导入失败: {uploaded_file.name}")
+                                    success = False
+                                else:
+                                    st.success(f"✅ MongoDB导入成功: {uploaded_file.name}")
+                            except Exception as e:
+                                st.error(f"MongoDB导入失败: {str(e)}")
+                                success = False
                     
                     if success:
                         st.success(f"✅ 所有件导入完成")
@@ -1028,6 +1079,18 @@ with st.sidebar:
             db = get_mongodb_connection()
             if db is not None:
                 try:
+                    # 添加调试信息
+                    st.write("🔍 调试信息：")
+                    st.write(f"数据库名称: {db.name}")
+                    
+                    # 检查集合是否存在
+                    collections = db.list_collection_names()
+                    st.write(f"可用集合: {collections}")
+                    
+                    # 检查patients集合中的文档数量
+                    count = db.patients.count_documents({})
+                    st.write(f"patients集合中的文档数量: {count}")
+                    
                     docs = list(db.patients.find())
                     if docs:
                         for doc in docs:
@@ -1214,11 +1277,7 @@ if submit_button:
                     if vector_results:
                         # 使用 LLM 生成向量搜索结果的总结
                         try:
-                            client = OpenAI(
-                                api_key="sk-1pUmQlsIkgla3CuvKTgCrzDZ3r0pBxO608YJvIHCN18lvOrn",
-                                base_url="https://api.chatanywhere.tech/v1",
-                                timeout=60
-                            )
+                            client, model, temperature = get_openai_client()
                             
                             # 准备提示词
                             prompt = f"""请根据以下搜索结果回答问题：
@@ -1231,7 +1290,7 @@ if submit_button:
                             请简洁地总结相关信息。如果没有找到相关信息，请直接说明。"""
                             
                             response = client.chat.completions.create(
-                                model="gpt-4o-mini-2024-07-18",
+                                model=model,
                                 messages=[
                                     {
                                         "role": "system", 
@@ -1242,7 +1301,7 @@ if submit_button:
                                         "content": prompt
                                     }
                                 ],
-                                temperature=0.1
+                                temperature=temperature
                             )
                             st.info(response.choices[0].message.content)
                         except Exception as e:
@@ -1275,12 +1334,8 @@ if submit_button:
                 
                 while retry_count < max_retries:
                     try:
-                        # 创建OpenAI客户端，使用新的配置
-                        client = OpenAI(
-                            api_key="sk-1pUmQlsIkgla3CuvKTgCrzDZ3r0pBxO608YJvIHCN18lvOrn",
-                            base_url="https://api.chatanywhere.tech/v1",
-                            timeout=60  # 增加超时时间
-                        )
+                        # 创建OpenAI客户端，使用配置文件设置
+                        client, model, temperature = get_openai_client()
                         
                         # 准备提示词
                         prompt = f"""请基于以下相关内容回答问题：
@@ -1297,7 +1352,7 @@ if submit_button:
                         4. 保持回答的准确性和客观性"""
                         
                         response = client.chat.completions.create(
-                            model="gpt-4o-mini-2024-07-18",  # 使用相同的模型
+                            model=model,
                             messages=[
                                 {
                                     "role": "system", 
@@ -1308,7 +1363,7 @@ if submit_button:
                                     "content": prompt
                                 }
                             ],
-                            temperature=0.1
+                            temperature=temperature
                         )
                         
                         answer = response.choices[0].message.content
