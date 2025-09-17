@@ -10,9 +10,9 @@ import json
 
 # Oracle 23ai 数据库配置
 ORACLE_23AI_CONFIG = {
-    "username": "AGENTIC_RAG",
-    "password": "your_password_here",  # 需要用户提供
-    "dsn": "localhost:1521/FREEPDB1",  # 本地Oracle 23ai Free
+    "username": "vector",
+    "password": "vector",
+    "dsn": "localhost:1521/FREEpdb1",  # 本地Oracle 23ai Free
     # "dsn": "your_cloud_instance.oraclecloud.com:1521/your_service",  # Oracle Cloud
     "config_dir": "./oracle_config",  # Oracle客户端配置目录
     "wallet_location": "./oracle_wallet",  # 钱包位置（云端连接）
