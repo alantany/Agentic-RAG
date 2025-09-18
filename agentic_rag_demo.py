@@ -1857,12 +1857,26 @@ def setup_graph(parser):
 def clean_vector_store():
     """清理向量数据库"""
     try:
+        # 导入vector_store模块中的清理函数
+        from vector_store import clean_vector_store as clean_pinecone
+        
+        # 清理Pinecone中的所有向量数据
+        st.write("清理Pinecone向量数据库...")
+        if not clean_pinecone():
+            st.error("Pinecone清理失败")
+            return False
+        
+        # 清理session state中的向量数据
+        st.write("清理本地缓存数据...")
         st.session_state.file_chunks = {}
         st.session_state.file_indices = {}
-        st.success("✅ 向量数据库已清空")
+        
+        st.success("✅ 向量数据库已完全清空")
         return True
     except Exception as e:
         st.error(f"清理向量数据库错误: {str(e)}")
+        st.error(f"错误类型: {type(e).__name__}")
+        st.error(f"错误堆栈: {traceback.format_exc()}")
         return False
 
 def clean_mongodb_data():
