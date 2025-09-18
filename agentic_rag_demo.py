@@ -1910,6 +1910,124 @@ def clean_graph_data():
         st.error(f"清理图数据库错误: {str(e)}")
         return False
 
+def import_graph_to_neo4j():
+    """将本地图数据导入到Neo4j云端数据库"""
+    try:
+        # 检查本地图文件是否存在
+        graph_config = get_graph_database_config()
+        if not os.path.exists(graph_config["graph_file"]):
+            st.error("本地图数据文件不存在，请先构建图数据库")
+            return False
+        
+        # 读取本地图数据
+        st.write("读取本地图数据...")
+        G = nx.read_gexf(graph_config["graph_file"])
+        st.write(f"本地图包含 {len(G.nodes)} 个节点和 {len(G.edges)} 条边")
+        
+        # 连接Neo4j
+        from config import get_neo4j_driver
+        st.write("连接Neo4j数据库...")
+        driver = get_neo4j_driver()
+        if driver is None:
+            st.error("无法连接到Neo4j数据库，请检查配置")
+            return False
+        
+        with driver.session() as session:
+            # 清空Neo4j中的现有数据
+            st.write("清空Neo4j中的现有数据...")
+            session.run("MATCH (n) DETACH DELETE n")
+            
+            # 导入节点
+            st.write("导入节点到Neo4j...")
+            node_count = 0
+            for node_id, node_data in G.nodes(data=True):
+                # 构建节点标签（使用node_type或默认为Entity）
+                label = node_data.get('node_type', 'Entity').replace('_', '')  # 移除下划线
+                
+                # 构建节点属性
+                properties = {}
+                for key, value in node_data.items():
+                    if key != 'node_type':
+                        # 确保属性值是字符串或数字
+                        if isinstance(value, (str, int, float, bool)):
+                            properties[key] = value
+                        else:
+                            properties[key] = str(value)
+                
+                # 添加节点ID作为属性
+                properties['id'] = str(node_id)
+                
+                # 创建Cypher查询
+                cypher_query = f"CREATE (n:{label} $props)"
+                session.run(cypher_query, props=properties)
+                node_count += 1
+                
+                if node_count % 10 == 0:  # 每10个节点显示一次进度
+                    st.write(f"已导入 {node_count} 个节点...")
+            
+            st.write(f"✅ 成功导入 {node_count} 个节点")
+            
+            # 导入边
+            st.write("导入关系到Neo4j...")
+            edge_count = 0
+            for source, target, edge_data in G.edges(data=True):
+                # 构建关系类型
+                rel_type = edge_data.get('edge_type', 'RELATED').upper().replace(' ', '_')
+                
+                # 构建关系属性
+                rel_properties = {}
+                for key, value in edge_data.items():
+                    if key != 'edge_type':
+                        if isinstance(value, (str, int, float, bool)):
+                            rel_properties[key] = value
+                        else:
+                            rel_properties[key] = str(value)
+                
+                # 创建关系的Cypher查询
+                if rel_properties:
+                    cypher_query = f"""
+                    MATCH (a {{id: $source_id}}), (b {{id: $target_id}})
+                    CREATE (a)-[r:{rel_type} $props]->(b)
+                    """
+                    session.run(cypher_query, 
+                               source_id=str(source), 
+                               target_id=str(target), 
+                               props=rel_properties)
+                else:
+                    cypher_query = f"""
+                    MATCH (a {{id: $source_id}}), (b {{id: $target_id}})
+                    CREATE (a)-[r:{rel_type}]->(b)
+                    """
+                    session.run(cypher_query, 
+                               source_id=str(source), 
+                               target_id=str(target))
+                
+                edge_count += 1
+                
+                if edge_count % 10 == 0:  # 每10条关系显示一次进度
+                    st.write(f"已导入 {edge_count} 条关系...")
+            
+            st.write(f"✅ 成功导入 {edge_count} 条关系")
+            
+            # 验证导入结果
+            st.write("验证导入结果...")
+            result = session.run("MATCH (n) RETURN count(n) as node_count")
+            neo4j_node_count = result.single()["node_count"]
+            
+            result = session.run("MATCH ()-[r]->() RETURN count(r) as edge_count")
+            neo4j_edge_count = result.single()["edge_count"]
+            
+            st.success(f"✅ Neo4j导入完成！节点: {neo4j_node_count}, 关系: {neo4j_edge_count}")
+            
+        driver.close()
+        return True
+        
+    except Exception as e:
+        st.error(f"导入图数据到Neo4j失败: {str(e)}")
+        st.error(f"错误类型: {type(e).__name__}")
+        st.error(f"错误堆栈: {traceback.format_exc()}")
+        return False
+
 # 在侧边栏添加清理按钮
 with st.sidebar:
     # 选择要清空的数据库
@@ -1942,3 +2060,46 @@ with st.sidebar:
                 st.rerun()
             else:
                 st.error("部分数库清空失败！")
+    
+    # 添加图数据库云端同步功能
+    st.divider()
+    st.subheader("🕸️ 图数据库云端同步")
+    
+    # 检查本地图文件是否存在
+    graph_config = get_graph_database_config()
+    if os.path.exists(graph_config["graph_file"]):
+        try:
+            G = nx.read_gexf(graph_config["graph_file"])
+            st.info(f"📊 本地图数据：{len(G.nodes)} 个节点，{len(G.edges)} 条边")
+        except:
+            st.warning("本地图数据文件存在但无法读取")
+    else:
+        st.warning("⚠️ 本地图数据文件不存在")
+    
+    # 导入到Neo4j按钮
+    if st.button("🚀 导入图数据到Neo4j", 
+                 help="将本地GEXF文件中的图数据导入到云端Neo4j数据库",
+                 disabled=not os.path.exists(graph_config["graph_file"])):
+        with st.spinner("正在导入图数据到Neo4j..."):
+            if import_graph_to_neo4j():
+                st.success("✅ 图数据已成功导入到Neo4j！")
+                st.rerun()
+            else:
+                st.error("❌ 图数据导入失败！")
+    
+    # Neo4j连接状态显示
+    try:
+        from config import get_neo4j_driver
+        driver = get_neo4j_driver()
+        if driver is not None:
+            with driver.session() as session:
+                result = session.run("MATCH (n) RETURN count(n) as node_count")
+                neo4j_node_count = result.single()["node_count"]
+                result = session.run("MATCH ()-[r]->() RETURN count(r) as edge_count")
+                neo4j_edge_count = result.single()["edge_count"]
+                st.success(f"☁️ Neo4j连接正常：{neo4j_node_count} 节点，{neo4j_edge_count} 关系")
+            driver.close()
+        else:
+            st.error("❌ Neo4j连接失败")
+    except Exception as e:
+        st.error(f"❌ Neo4j连接错误: {str(e)}")
