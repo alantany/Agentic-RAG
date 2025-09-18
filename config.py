@@ -2,22 +2,29 @@
 """
 Agentic RAG 系统配置文件
 统一管理所有API密钥和模型配置
+⚠️  敏感信息已移至.env文件，请确保.env文件不被提交到版本控制
 """
+
+import os
+from dotenv import load_dotenv
+
+# 加载环境变量
+load_dotenv()
 
 # OpenAI API 配置 (使用OpenRouter)
 OPENAI_CONFIG = {
-    "api_key": "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",
-    "base_url": "https://openrouter.ai/api/v1",  # OpenRouter API端点
-    "model": "deepseek/deepseek-chat",  # OpenRouter上的DeepSeek模型
+    "api_key": os.getenv("OPENAI_API_KEY", ""),
+    "base_url": os.getenv("OPENAI_BASE_URL", "https://openrouter.ai/api/v1"),
+    "model": os.getenv("OPENAI_MODEL", "deepseek/deepseek-chat"),
     "timeout": 60,
     "temperature": 0.1,
-    "max_requests_per_minute": 10,  # 免费账户限制
-    "request_interval": 6  # 每次请求间隔6秒
+    "max_requests_per_minute": int(os.getenv("MAX_REQUESTS_PER_MINUTE", "10")),
+    "request_interval": int(os.getenv("REQUEST_INTERVAL", "6"))
 }
 
 # 备用API配置（如果主API失败时使用）
 BACKUP_OPENAI_CONFIG = {
-    "api_key": "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",
+    "api_key": os.getenv("BACKUP_OPENAI_API_KEY", ""),
     "base_url": "https://api.chatanywhere.tech/v1",
     "model": "gpt-4o-mini-2024-07-18",
     "timeout": 60,
@@ -26,7 +33,7 @@ BACKUP_OPENAI_CONFIG = {
 
 # Pinecone 向量数据库配置
 PINECONE_CONFIG = {
-    "api_key": "e5b7d591-d2c7-411a-9b9b-c52d17934415",
+    "api_key": os.getenv("PINECONE_API_KEY", ""),
     "environment": "gcp-starter",
     "index_name": "medical-records",
     "dimension": 384,  # all-MiniLM-L6-v2 的维度
@@ -35,7 +42,7 @@ PINECONE_CONFIG = {
 
 # MongoDB 配置
 MONGODB_CONFIG = {
-    "connection_string": "mongodb+srv://alantany:Mikeno01@airss.ykc1h.mongodb.net/ai-news?retryWrites=true&w=majority&appName=MedicalRAG",
+    "connection_string": os.getenv("MONGODB_CONNECTION_STRING", ""),
     "database_name": "medical_records",
     "collection_name": "patients",
     "tls_allow_invalid_certificates": True
@@ -73,9 +80,9 @@ GRAPH_DATABASE_CONFIG = {
 
 # Neo4j 图数据库（Aura）连接配置
 NEO4J_CONFIG = {
-    "uri": "neo4j+s://fe69c89f.databases.neo4j.io",
-    "username": "neo4j",
-    "password": "8dLlGuOvaRmdjPgtCrGkupnSFBjqVVCaO8D81CnKpPc",
+    "uri": os.getenv("NEO4J_URI", ""),
+    "username": os.getenv("NEO4J_USERNAME", "neo4j"),
+    "password": os.getenv("NEO4J_PASSWORD", ""),
     "database": "neo4j",
     "aura_instance_id": "fe69c89f",
     "aura_instance_name": "Instance01",

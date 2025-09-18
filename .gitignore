@@ -31,14 +31,25 @@ MANIFEST
 # pyenv
 .python-version
 
-# Environment variables
+# Environment variables and sensitive files
 .env
+.env.local
+.env.*.local
 .venv
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+
+# API keys and secrets
+*api_key*
+*secret*
+*password*
+*token*
+*.pem
+*.key
+*.crt
 
 # Streamlit
 .streamlit/
