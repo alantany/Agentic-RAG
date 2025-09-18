@@ -17,6 +17,20 @@ class OracleGraphStore:
         self.config = get_graph_config()
         self.connection = None
     
+    def _safe_json_parse(self, data):
+        """安全解析JSON数据"""
+        if not data:
+            return {}
+        if isinstance(data, str):
+            try:
+                return json.loads(data)
+            except (json.JSONDecodeError, TypeError):
+                return {}
+        elif isinstance(data, dict):
+            return data
+        else:
+            return {}
+    
     def get_connection(self):
         """获取数据库连接"""
         if not self.connection:
@@ -61,7 +75,7 @@ class OracleGraphStore:
             return None
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
     
     def create_edge(self, source_vertex_id: int, target_vertex_id: int,
@@ -110,7 +124,7 @@ class OracleGraphStore:
             return None
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
     
     def find_vertices(self, vertex_type: str = None, vertex_label: str = None,
@@ -163,7 +177,7 @@ class OracleGraphStore:
                     'vertex_id': row[0],
                     'vertex_type': row[1],
                     'vertex_label': row[2],
-                    'properties': json.loads(row[3]) if row[3] else {},
+                    'properties': self._safe_json_parse(row[3]),
                     'created_date': row[4]
                 }
                 vertices.append(vertex)
@@ -175,7 +189,7 @@ class OracleGraphStore:
             return []
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
     
     def find_edges(self, source_vertex_id: int = None, target_vertex_id: int = None,
@@ -231,7 +245,7 @@ class OracleGraphStore:
                     'target_vertex_id': row[2],
                     'edge_type': row[3],
                     'edge_label': row[4],
-                    'properties': json.loads(row[5]) if row[5] else {},
+                    'properties': self._safe_json_parse(row[5]),
                     'created_date': row[6],
                     'source_label': row[7],
                     'target_label': row[8]
@@ -245,7 +259,7 @@ class OracleGraphStore:
             return []
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
     
     def graph_traversal(self, start_vertex_id: int, edge_types: List[str] = None,
@@ -306,7 +320,7 @@ class OracleGraphStore:
                     'vertex_id': row[0],
                     'vertex_label': row[1],
                     'vertex_type': row[2],
-                    'properties': json.loads(row[3]) if row[3] else {},
+                    'properties': self._safe_json_parse(row[3]),
                     'path': row[4],
                     'depth': row[5]
                 }
@@ -322,7 +336,7 @@ class OracleGraphStore:
             return {}
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
     
     def build_graph_from_json_data(self, json_documents: List[Dict[str, Any]]) -> bool:
@@ -561,7 +575,7 @@ class OracleGraphStore:
             return {}
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
     
     def clear_all_graph_data(self) -> bool:
@@ -590,7 +604,7 @@ class OracleGraphStore:
             return False
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
 
 # 全局图存储实例

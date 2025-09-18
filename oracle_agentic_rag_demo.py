@@ -206,11 +206,14 @@ def import_to_oracle_all_databases(pdf_content: str, filename: str) -> bool:
                         })
                         patient_names.append(patient_name)
         
+        st.write(f"准备导入 {len(texts)} 条向量数据...")
         vector_success = import_to_oracle_vectors(texts, metadatas, patient_names)
         
         if not vector_success:
             st.error("向量数据导入失败")
             return False
+        else:
+            st.success(f"✅ 向量数据导入成功：{len(texts)} 条记录")
         
         # 4. 构建图数据库
         st.write("🕸️ 构建Oracle图数据库...")
@@ -221,11 +224,14 @@ def import_to_oracle_all_databases(pdf_content: str, filename: str) -> bool:
             'document': structured_data
         }]
         
+        st.write(f"准备构建图数据库，包含 {len(json_documents)} 个文档...")
         graph_success = build_oracle_graph_from_json(json_documents)
         
         if not graph_success:
             st.error("图数据库构建失败")
             return False
+        else:
+            st.success("✅ 图数据库构建成功")
         
         st.success("✅ 数据成功导入到Oracle 23ai融合数据库！")
         return True
@@ -242,7 +248,9 @@ def perform_oracle_search(query: str, search_type: str = "混合检索"):
         
         if search_type == "向量搜索":
             # 纯向量搜索
+            st.write(f"🔍 正在向量搜索: '{query}'")
             vector_results = get_oracle_vector_search_results(query)
+            st.write(f"📊 向量搜索返回了 {len(vector_results) if vector_results else 0} 个结果")
             
             st.write("🔍 Oracle向量搜索结果:")
             if vector_results:
@@ -254,7 +262,9 @@ def perform_oracle_search(query: str, search_type: str = "混合检索"):
         
         elif search_type == "文档搜索":
             # 纯JSON文档搜索
+            st.write(f"📄 正在JSON文档搜索: '{query}'")
             json_results = get_oracle_json_search_results(query)
+            st.write(f"📊 JSON搜索返回了 {len(json_results) if json_results else 0} 个结果")
             
             st.write("📄 Oracle JSON文档搜索结果:")
             if json_results:
@@ -276,9 +286,16 @@ def perform_oracle_search(query: str, search_type: str = "混合检索"):
         
         else:  # 混合检索
             # 并行执行所有搜索
+            st.write(f"🔍 正在执行混合搜索: '{query}'")
+            
             vector_results = get_oracle_vector_search_results(query)
+            st.write(f"📊 向量搜索返回: {len(vector_results) if vector_results else 0} 个结果")
+            
             json_results = get_oracle_json_search_results(query)
+            st.write(f"📊 JSON搜索返回: {len(json_results) if json_results else 0} 个结果")
+            
             graph_results = get_oracle_graph_search_results(query)
+            st.write(f"📊 图搜索返回: {len(graph_results) if graph_results else 0} 个结果")
             
             # 使用列布局显示结果
             col1, col2, col3 = st.columns(3)
@@ -478,15 +495,84 @@ with st.sidebar:
     except Exception as e:
         st.error(f"统计信息获取失败: {str(e)}")
     
+    # 数据查看（调试用）
+    st.subheader("🔍 数据查看")
+    if st.button("查看向量数据样本", type="secondary"):
+        try:
+            connection = oracle_manager.get_connection()
+            if connection:
+                cursor = connection.cursor()
+                cursor.execute(f"SELECT patient_name, content, embedding, metadata_json FROM MEDICAL_VECTORS WHERE ROWNUM <= 3")
+                results = cursor.fetchall()
+                st.write("📊 向量数据样本:")
+                for i, row in enumerate(results, 1):
+                    st.write(f"{i}. 患者: {row[0]}")
+                    st.write(f"   内容: {row[1][:100]}...")
+                    st.write(f"   向量类型: {type(row[2])}")
+                    st.write(f"   向量内容: {str(row[2])[:100]}...")
+                    st.write(f"   元数据: {row[3][:100] if row[3] else 'None'}...")
+                cursor.close()
+                connection.close()
+        except Exception as e:
+            st.error(f"查看向量数据失败: {str(e)}")
+    
+    if st.button("查看JSON数据样本", type="secondary"):
+        try:
+            connection = oracle_manager.get_connection()
+            if connection:
+                cursor = connection.cursor()
+                
+                # 先检查总数
+                cursor.execute(f"SELECT COUNT(*) FROM MEDICAL_DOCUMENTS")
+                total_count = cursor.fetchone()[0]
+                st.write(f"📄 JSON表总记录数: {total_count}")
+                
+                if total_count > 0:
+                    cursor.execute(f"SELECT patient_id, DOC_DATA FROM MEDICAL_DOCUMENTS WHERE ROWNUM <= 3")
+                    results = cursor.fetchall()
+                    st.write("📄 JSON数据样本:")
+                    for i, row in enumerate(results, 1):
+                        st.write(f"{i}. 患者ID: {row[0]}")
+                        doc_data = row[1]
+                        if isinstance(doc_data, dict):
+                            st.write(f"   文档keys: {list(doc_data.keys())}")
+                        else:
+                            st.write(f"   文档: {str(doc_data)[:200]}...")
+                else:
+                    st.warning("JSON表中没有数据！请先导入数据。")
+                    
+                cursor.close()
+                connection.close()
+        except Exception as e:
+            st.error(f"查看JSON数据失败: {str(e)}")
+    
     # 数据清理
     st.subheader("🗑️ 数据管理")
+    
+    # 使用会话状态来管理确认对话
+    if 'confirm_clear' not in st.session_state:
+        st.session_state.confirm_clear = False
+    
     if st.button("清空所有数据", type="secondary"):
-        if st.confirm("确定要清空Oracle 23ai中的所有数据吗？"):
-            with st.spinner("正在清空数据..."):
-                clear_oracle_vectors()
-                clear_oracle_json()
-                clear_oracle_graph()
-                st.success("✅ 数据清空完成")
+        st.session_state.confirm_clear = True
+    
+    if st.session_state.confirm_clear:
+        st.warning("⚠️ 确定要清空Oracle 23ai中的所有数据吗？此操作不可撤销！")
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            if st.button("✅ 确认清空", type="primary"):
+                with st.spinner("正在清空数据..."):
+                    clear_oracle_vectors()
+                    clear_oracle_json()
+                    clear_oracle_graph()
+                    st.success("✅ 所有数据已清空")
+                    st.session_state.confirm_clear = False
+                    st.rerun()
+        
+        with col2:
+            if st.button("❌ 取消"):
+                st.session_state.confirm_clear = False
                 st.rerun()
 
 # 主界面 - 搜索功能

@@ -6,9 +6,9 @@ Agentic RAG 系统配置文件
 
 # OpenAI API 配置 (使用OpenRouter)
 OPENAI_CONFIG = {
-    "api_key": "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",
+    "api_key": "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",
     "base_url": "https://openrouter.ai/api/v1",  # OpenRouter API端点
-    "model": "deepseek/deepseek-chat",  # OpenRouter上的DeepSeek模型
+    "model": "deepseek/deepseek-chat-v3.1:free",  # OpenRouter上的免费DeepSeek模型
     "timeout": 60,
     "temperature": 0.1,
     "max_requests_per_minute": 10,  # 免费账户限制

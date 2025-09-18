@@ -71,32 +71,36 @@ class OracleVectorStore:
             
             cursor = connection.cursor()
             
-            # 准备插入语句
+            # 逐条插入向量数据（使用Oracle 23ai原生VECTOR类型）
             insert_sql = f"""
             INSERT INTO {self.config["table_name"]} 
             (patient_name, content, {self.config["embedding_column"]}, {self.config["metadata_column"]})
             VALUES (:patient_name, :content, :vector_data, :metadata)
             """
             
-            # 批量插入
-            batch_data = []
+            # 逐条插入
             for i, (text, metadata, embedding) in enumerate(zip(texts, metadatas, embeddings)):
                 patient_name = patient_names[i] if patient_names else metadata.get('patient_name', 'Unknown')
                 
-                # 将numpy数组转换为Oracle向量格式
-                vector_array = embedding.tolist()
+                # 使用TO_VECTOR函数和参数绑定
+                vector_str = '[' + ','.join(map(str, embedding.tolist())) + ']'
                 
-                batch_data.append({
+                # 使用TO_VECTOR函数避免字符串长度限制
+                insert_sql_with_to_vector = f"""
+                INSERT INTO {self.config["table_name"]} 
+                (patient_name, content, {self.config["embedding_column"]}, {self.config["metadata_column"]})
+                VALUES (:patient_name, :content, TO_VECTOR(:vector_data), :metadata)
+                """
+                
+                cursor.execute(insert_sql_with_to_vector, {
                     'patient_name': patient_name,
                     'content': text,
-                    'vector_data': vector_array,
+                    'vector_data': vector_str,
                     'metadata': json.dumps(metadata, ensure_ascii=False)
                 })
-            
-            cursor.executemany(insert_sql, batch_data)
             connection.commit()
             
-            st.write(f"✅ 成功插入 {len(batch_data)} 条向量记录")
+            st.write(f"✅ 成功插入 {len(texts)} 条向量记录")
             return True
             
         except Exception as e:
@@ -106,7 +110,7 @@ class OracleVectorStore:
             return False
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
     
     def search_similar_vectors(self, query_text: str, top_k: int = 5, 
@@ -122,45 +126,83 @@ class OracleVectorStore:
             
             cursor = connection.cursor()
             
-            # 构建搜索SQL
+            # 使用Oracle 23ai原生向量搜索 - 使用TO_VECTOR函数
+            # 将查询向量转换为字符串，然后用TO_VECTOR函数转换
+            vector_str = '[' + ','.join(map(str, query_embedding.tolist())) + ']'
+            
             base_sql = f"""
-            SELECT id, patient_name, content, {self.config["metadata_column"]},
-                   VECTOR_DISTANCE({self.config["embedding_column"]}, :query_vector, {self.config["distance_metric"]}) as distance
+            SELECT id, patient_name, content, {self.config["embedding_column"]}, {self.config["metadata_column"]},
+                   COSINE_DISTANCE({self.config["embedding_column"]}, TO_VECTOR(:query_vector)) as distance
             FROM {self.config["table_name"]}
             """
             
             # 添加患者过滤条件
             where_clause = ""
-            params = {'query_vector': query_embedding.tolist()}
+            params = {'query_vector': vector_str}
             
             if patient_filter:
                 where_clause = " WHERE patient_name = :patient_name"
                 params['patient_name'] = patient_filter
             
-            # 完整SQL
-            search_sql = f"""
-            {base_sql} {where_clause}
-            ORDER BY VECTOR_DISTANCE({self.config["embedding_column"]}, :query_vector, {self.config["distance_metric"]})
-            FETCH FIRST :top_k ROWS ONLY
-            """
+            # 添加排序和限制
+            order_clause = f" ORDER BY COSINE_DISTANCE({self.config['embedding_column']}, TO_VECTOR(:query_vector)) FETCH FIRST {top_k} ROWS ONLY"
             
-            params['top_k'] = top_k
+            # 完整SQL
+            search_sql = f"{base_sql} {where_clause} {order_clause}"
+            
+            st.write(f"🔍 生成的SQL: {search_sql[:200]}...")  # 显示SQL调试信息
+            st.write(f"🔍 向量字符串长度: {len(vector_str)}")  # 显示向量字符串长度
             
             cursor.execute(search_sql, params)
             results = cursor.fetchall()
             
-            # 格式化结果
+            st.write(f"🔍 数据库查询返回了 {len(results)} 行数据")
+            
+            # Oracle 23ai已经计算了距离，直接使用结果
             formatted_results = []
-            for row in results:
-                result = {
-                    'id': row[0],
-                    'patient_name': row[1],
-                    'content': row[2],
-                    'metadata': json.loads(row[3]) if row[3] else {},
-                    'distance': float(row[4]),
-                    'similarity': 1 - float(row[4])  # 转换为相似度分数
-                }
-                formatted_results.append(result)
+            for i, row in enumerate(results):
+                try:
+                    # Oracle 23ai原生向量搜索结果
+                    distance = float(row[5])  # Oracle计算的距离
+                    similarity = 1 - distance  # 将距离转换为相似度
+                    
+                    # 处理元数据 - Oracle可能返回已解析的字典或JSON字符串
+                    metadata_raw = row[4]
+                    if isinstance(metadata_raw, dict):
+                        # 如果已经是字典，直接使用
+                        metadata = metadata_raw
+                    elif isinstance(metadata_raw, str):
+                        # 如果是字符串，尝试解析
+                        metadata = json.loads(metadata_raw)
+                    else:
+                        # 其他情况，使用空字典
+                        metadata = {}
+                    
+                    # 处理CLOB字段
+                    content = row[2]
+                    if hasattr(content, 'read'):
+                        # 如果是CLOB对象，读取内容
+                        content = content.read()
+                    
+                    result = {
+                        'id': row[0],
+                        'patient_name': row[1],
+                        'content': content,
+                        'metadata': metadata,
+                        'similarity': float(similarity),
+                        'distance': float(distance)
+                    }
+                    formatted_results.append(result)
+                    
+                    # 调试：显示前几个结果的相似度
+                    if i < 3:
+                        content_preview = content[:50] + "..." if len(content) > 50 else content
+                        st.write(f"🔍 第{i+1}条: 患者={row[1]}, 距离={distance:.4f}, 相似度={similarity:.4f}, 内容={content_preview}")
+                        st.write(f"🔍 元数据类型: {type(metadata_raw)}, 内容类型: {type(row[2])}")
+                        
+                except Exception as e:
+                    st.write(f"⚠️ 第{i+1}条结果处理失败: {str(e)}")
+                    continue
             
             return formatted_results
             
@@ -169,7 +211,7 @@ class OracleVectorStore:
             return []
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
     
     def get_stats(self) -> Dict[str, Any]:
@@ -206,7 +248,7 @@ class OracleVectorStore:
             return {}
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
     
     def clear_all_vectors(self) -> bool:
@@ -230,7 +272,7 @@ class OracleVectorStore:
             return False
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
 
 # 全局向量存储实例
@@ -243,20 +285,34 @@ def init_oracle_vector_store():
 def get_oracle_vector_search_results(query: str, top_k: int = 5) -> List[Dict[str, Any]]:
     """Oracle向量搜索结果"""
     import re
+    import streamlit as st
     
-    # 提取患者姓名
+    # 提取患者姓名（更灵活的匹配）
     common_surnames = "李王张刘陈杨黄周吴马蒲赵钱孙朱胡郭何高林罗郑梁谢宋唐许邓冯韩曹曾彭萧蔡潘田董袁于余叶蒋杜苏魏程吕丁沈任姚卢傅钟姜崔谭廖范汪陆金石戴贾韦夏邱方侯邹熊孟秦白江阎薛尹段雷黎史龙陶贺顾毛郝龚邵万钱严覃武戴莫孔向汤"
     pattern = f'([{common_surnames}])某某'
     patient_match = re.search(pattern, query)
     patient_filter = patient_match.group(0) if patient_match else None
     
-    # 执行搜索
+    # 调试信息
+    st.write(f"🔍 向量搜索调试: 查询='{query}', 患者过滤='{patient_filter}'")
+    
+    # 首先尝试带患者过滤的搜索
     results = oracle_vector_store.search_similar_vectors(
         query_text=query,
         top_k=top_k,
         patient_filter=patient_filter
     )
     
+    # 如果没有结果且有患者过滤，尝试不过滤的搜索
+    if not results and patient_filter:
+        st.write("🔍 患者过滤搜索无结果，尝试通用搜索...")
+        results = oracle_vector_store.search_similar_vectors(
+            query_text=query,
+            top_k=top_k,
+            patient_filter=None
+        )
+    
+    st.write(f"🔍 向量搜索最终返回: {len(results)} 个结果")
     return results
 
 def import_to_oracle_vectors(texts: List[str], metadatas: List[Dict[str, Any]], 

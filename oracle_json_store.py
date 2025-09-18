@@ -63,11 +63,11 @@ class OracleJSONStore:
             return False
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
     
     def find_documents(self, query_conditions: Dict[str, Any] = None, 
-                      patient_id: str = None) -> List[Dict[str, Any]]:
+                      patient_id: str = None, query_text: str = None) -> List[Dict[str, Any]]:
         """查找JSON文档"""
         try:
             connection = self.get_connection()
@@ -75,6 +75,11 @@ class OracleJSONStore:
                 return []
             
             cursor = connection.cursor()
+            
+            # 首先检查表中是否有数据
+            cursor.execute(f"SELECT COUNT(*) FROM {self.config['table_name']}")
+            total_count = cursor.fetchone()[0]
+            st.write(f"📄 JSON表中总记录数: {total_count}")
             
             # 构建查询SQL
             base_sql = f"""
@@ -86,12 +91,42 @@ class OracleJSONStore:
             where_conditions = []
             params = {}
             
-            # 添加患者ID过滤
+            # 添加患者ID过滤 - 使用LIKE进行模糊匹配
             if patient_id:
-                where_conditions.append("patient_id = :patient_id")
-                params['patient_id'] = patient_id
+                where_conditions.append("patient_id LIKE :patient_id")
+                params['patient_id'] = f"%{patient_id}%"
             
-            # 添加JSON查询条件
+            # 简化关键词搜索 - 先测试基本搜索
+            if query_text and query_text.strip():
+                # 提取查询中的关键词
+                keywords = []
+                if '主诉' in query_text:
+                    keywords.append('主诉')
+                if '现病史' in query_text:
+                    keywords.append('现病史')
+                if '头晕' in query_text:
+                    keywords.append('头晕')
+                if '症状' in query_text:
+                    keywords.append('症状')
+                
+                st.write(f"📄 提取的关键词: {keywords}")
+                
+                # 为每个关键词添加LIKE条件（使用OR连接，更宽松）
+                if keywords:
+                    keyword_conditions = []
+                    for i, keyword in enumerate(keywords):
+                        condition_name = f"keyword_{i}"
+                        keyword_conditions.append(f"UPPER({self.config['json_column']}) LIKE UPPER(:{condition_name})")
+                        params[condition_name] = f"%{keyword}%"
+                    
+                    # 使用OR连接关键词条件
+                    if keyword_conditions:
+                        where_conditions.append(f"({' OR '.join(keyword_conditions)})")
+                else:
+                    # 如果没有特定关键词，搜索所有记录
+                    st.write(f"📄 没有找到特定关键词，将返回所有匹配患者的记录")
+            
+            # 添加JSON查询条件（保留原有逻辑）
             if query_conditions:
                 for key, value in query_conditions.items():
                     condition_name = f"condition_{len(params)}"
@@ -107,21 +142,58 @@ class OracleJSONStore:
             else:
                 query_sql = base_sql
             
+            st.write(f"📄 执行SQL: {query_sql}")
+            st.write(f"📄 参数: {params}")
+            
+            # 先测试简单查询，看看能否获取数据
+            cursor.execute(f"SELECT COUNT(*) FROM {self.config['table_name']} WHERE patient_id LIKE '%周某某%'")
+            patient_count = cursor.fetchone()[0]
+            st.write(f"📄 患者'周某某'相关记录数: {patient_count}")
+            
             cursor.execute(query_sql, params)
             results = cursor.fetchall()
             
-            # 格式化结果
+            st.write(f"📄 原始查询返回 {len(results)} 行")
+            
+            # 格式化结果 - 安全处理JSON数据
             documents = []
             for row in results:
+                # 安全地处理DOC_DATA
+                doc_data = row[2]
+                if isinstance(doc_data, dict):
+                    document = doc_data
+                elif isinstance(doc_data, str):
+                    try:
+                        document = json.loads(doc_data)
+                    except:
+                        document = {'raw_content': doc_data}
+                else:
+                    document = {'raw_content': str(doc_data)}
+                
+                # 安全地处理DOC_METADATA
+                metadata_data = row[3]
+                if isinstance(metadata_data, dict):
+                    metadata = metadata_data
+                elif isinstance(metadata_data, str):
+                    try:
+                        metadata = json.loads(metadata_data)
+                    except:
+                        metadata = {}
+                else:
+                    metadata = {}
+                
                 doc = {
                     'id': row[0],
                     'patient_id': row[1],
-                    'document': json.loads(row[2]) if row[2] else {},
-                    'metadata': json.loads(row[3]) if row[3] else {},
+                    'document': document,
+                    'metadata': metadata,
                     'created_date': row[4],
                     'updated_date': row[5]
                 }
                 documents.append(doc)
+                
+                # 调试信息
+                st.write(f"📄 成功解析文档: 患者={row[1]}, keys={list(document.keys())}")
             
             return documents
             
@@ -130,7 +202,7 @@ class OracleJSONStore:
             return []
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
     
     def search_documents(self, search_text: str, patient_id: str = None) -> List[Dict[str, Any]]:
@@ -146,12 +218,12 @@ class OracleJSONStore:
             base_sql = f"""
             SELECT id, patient_id, {self.config["json_column"]}, 
                    {self.config["metadata_column"]}, created_date, updated_date,
-                   SCORE(1) as relevance_score
+                   1.0 as relevance_score
             FROM {self.config["table_name"]}
-            WHERE CONTAINS({self.config["json_column"]}, :search_text, 1) > 0
+            WHERE {self.config["json_column"]} LIKE :search_text
             """
             
-            params = {'search_text': search_text}
+            params = {'search_text': f'%{search_text}%'}
             
             # 添加患者过滤
             if patient_id:
@@ -160,7 +232,7 @@ class OracleJSONStore:
             else:
                 search_sql = base_sql
             
-            search_sql += " ORDER BY SCORE(1) DESC"
+            search_sql += " ORDER BY created_date DESC"
             
             cursor.execute(search_sql, params)
             results = cursor.fetchall()
@@ -187,7 +259,7 @@ class OracleJSONStore:
             return self._simple_search(search_text, patient_id)
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
     
     def _simple_search(self, search_text: str, patient_id: str = None) -> List[Dict[str, Any]]:
@@ -237,7 +309,7 @@ class OracleJSONStore:
             return []
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
     
     def get_patient_info(self, patient_name: str) -> Dict[str, Any]:
@@ -294,7 +366,7 @@ class OracleJSONStore:
             return {}
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
     
     def clear_all_documents(self) -> bool:
@@ -318,7 +390,7 @@ class OracleJSONStore:
             return False
         
         finally:
-            if cursor:
+            if 'cursor' in locals() and cursor:
                 cursor.close()
 
 # 全局JSON存储实例
@@ -341,6 +413,7 @@ def import_to_oracle_json(document: Dict[str, Any], patient_name: str) -> bool:
 def get_oracle_json_search_results(query: str) -> List[str]:
     """Oracle JSON搜索结果"""
     try:
+        import streamlit as st
         # 提取患者姓名
         import re
         common_surnames = "李王张刘陈杨黄周吴马蒲赵钱孙朱胡郭何高林罗郑梁谢宋唐许邓冯韩曹曾彭萧蔡潘田董袁于余叶蒋杜苏魏程吕丁沈任姚卢傅钟姜崔谭廖范汪陆金石戴贾韦夏邱方侯邹熊孟秦白江阎薛尹段雷黎史龙陶贺顾毛郝龚邵万钱严覃武戴莫孔向汤"
@@ -348,8 +421,27 @@ def get_oracle_json_search_results(query: str) -> List[str]:
         patient_match = re.search(pattern, query)
         patient_filter = patient_match.group(0) if patient_match else None
         
-        # 搜索文档
-        docs = oracle_json_store.search_documents(query, patient_filter)
+        # 调试信息
+        st.write(f"📄 JSON搜索调试: 查询='{query}', 患者过滤='{patient_filter}'")
+        
+        # 搜索文档 - 直接使用最简单的搜索方法
+        try:
+            # 先尝试按患者搜索
+            docs = oracle_json_store.find_documents(patient_id=patient_filter, query_text=query)
+            st.write(f"📄 按患者搜索找到 {len(docs)} 个文档")
+            
+            # 如果没找到，尝试搜索所有文档
+            if len(docs) == 0:
+                st.write(f"📄 患者搜索无结果，尝试全表搜索...")
+                docs = oracle_json_store.find_documents(query_text=query)
+                st.write(f"📄 全表搜索找到 {len(docs)} 个文档")
+        except Exception as e:
+            st.write(f"📄 搜索出错: {str(e)}")
+            docs = []
+        
+        # 显示文档样本（调试用）
+        for i, doc in enumerate(docs[:2]):
+            st.write(f"📄 文档{i+1}: 患者={doc['patient_id']}, 文档keys={list(doc['document'].keys())}")
         
         results = []
         for doc in docs:
