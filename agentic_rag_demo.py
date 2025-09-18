@@ -1658,9 +1658,32 @@ if submit_button:
                     else:
                         st.write("未找到相关内容")
             
-            # 使用LLM生成最终答案
-            st.write("🤖 AI 分析与回答:")
-            with st.spinner("AI正在分析搜索结果..."):
+            # 使用LLM生成最终答案 - 添加动态分析效果
+            analysis_placeholder = st.empty()
+            progress_placeholder = st.empty()
+            
+            # 显示分析进度
+            with analysis_placeholder:
+                st.markdown("### 🤖 AI正在分析最终结果...")
+                
+            with progress_placeholder:
+                progress_bar = st.progress(0)
+                status_text = st.empty()
+                
+                import time
+                # 模拟分析进度
+                steps = [
+                    (20, "🔍 整合向量搜索结果..."),
+                    (40, "📄 分析MongoDB文档数据..."),
+                    (60, "🕸️ 解析图数据库关系..."),
+                    (80, "🧠 AI深度理解与推理..."),
+                    (100, "✨ 生成智能答案...")
+                ]
+                
+                for progress, message in steps:
+                    progress_bar.progress(progress)
+                    status_text.text(message)
+                    time.sleep(0.3)  # 每步延迟0.3秒
                 max_retries = 3  # 最大重试次数
                 retry_count = 0
                 
@@ -1699,6 +1722,11 @@ if submit_button:
                         )
                         
                         answer = response.choices[0].message.content
+                        
+                        # 清除分析中的提示，显示最终结果
+                        analysis_placeholder.empty()
+                        progress_placeholder.empty()
+                        st.markdown("### 🎯 AI智能分析结果")
                         st.success(answer)
                         
                         # 更新对话历史
@@ -1714,6 +1742,9 @@ if submit_button:
                     except Exception as e:
                         retry_count += 1
                         if retry_count == max_retries:
+                            # 清除分析中的提示
+                            analysis_placeholder.empty()
+                            progress_placeholder.empty()
                             st.error(f"生成回答失败，已重试 {max_retries} 次")
                             st.error(f"错误类型: {type(e).__name__}")
                             st.error(f"错误信息: {str(e)}")
