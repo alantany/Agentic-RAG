@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic RAG 系统架构对比</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .architecture-section {
+            padding: 40px;
+        }
+        
+        .architecture-title {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .main-branch {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+        
+        .oracle-branch {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+        
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .component {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #3498db;
+            transition: transform 0.3s ease;
+        }
+        
+        .component:hover {
+            transform: translateY(-5px);
+        }
+        
+        .component-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .component-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        .component-details {
+            margin: 10px 0;
+        }
+        
+        .component-details strong {
+            color: #e74c3c;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .tech-tag {
+            background: #3498db;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        
+        .cloud-service {
+            border-left-color: #e74c3c;
+        }
+        
+        .local-service {
+            border-left-color: #27ae60;
+        }
+        
+        .flow-diagram {
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .flow-step {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 15px 25px;
+            margin: 5px;
+            border-radius: 25px;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .flow-step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5em;
+            color: #3498db;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table th {
+            background: #34495e;
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .comparison-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .advantage {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .disadvantage {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .neutral {
+            color: #f39c12;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .architecture-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .flow-step {
+                display: block;
+                margin: 10px 0;
+            }
+            
+            .flow-step::after {
+                content: '↓';
+                right: 50%;
+                top: 100%;
+                transform: translateX(50%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏗️ Agentic RAG 系统架构对比</h1>
+            <p>多数据库云服务架构 vs Oracle 23ai 融合数据库架构</p>
+        </div>
+
+        <!-- 主分支架构 -->
+        <div class="architecture-section main-branch">
+            <div class="architecture-title">🌐 主分支：分布式多云服务架构</div>
+            
+            <div class="architecture-grid">
+                <div class="component cloud-service">
+                    <div class="component-title">
+                        <span class="component-icon">🔍</span>
+                        向量搜索引擎
+                    </div>
+                    <div class="component-details">
+                        <strong>服务:</strong> Pinecone<br>
+                        <strong>类型:</strong> 云端向量数据库<br>
+                        <strong>环境:</strong> GCP Starter (免费版)<br>
+                        <strong>索引:</strong> medical-records<br>
+                        <strong>维度:</strong> 384维<br>
+                        <strong>距离:</strong> 余弦相似度
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Pinecone API</span>
+                        <span class="tech-tag">Serverless</span>
+                        <span class="tech-tag">GCP</span>
+                    </div>
+                </div>
+
+                <div class="component cloud-service">
+                    <div class="component-title">
+                        <span class="component-icon">📄</span>
+                        文档数据库
+                    </div>
+                    <div class="component-details">
+                        <strong>服务:</strong> MongoDB Atlas<br>
+                        <strong>类型:</strong> 云端文档数据库<br>
+                        <strong>集群:</strong> 免费版 M0<br>
+                        <strong>数据库:</strong> medical_records<br>
+                        <strong>集合:</strong> patients<br>
+                        <strong>连接:</strong> SSL/TLS
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">MongoDB</span>
+                        <span class="tech-tag">Atlas</span>
+                        <span class="tech-tag">JSON</span>
+                    </div>
+                </div>
+
+                <div class="component cloud-service">
+                    <div class="component-title">
+                        <span class="component-icon">🕸️</span>
+                        图数据库
+                    </div>
+                    <div class="component-details">
+                        <strong>服务:</strong> Neo4j AuraDB<br>
+                        <strong>类型:</strong> 云端图数据库<br>
+                        <strong>实例:</strong> fe69c89f.databases.neo4j.io<br>
+                        <strong>查询语言:</strong> Cypher<br>
+                        <strong>连接:</strong> neo4j+s://协议<br>
+                        <strong>备份:</strong> NetworkX (本地)
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Neo4j</span>
+                        <span class="tech-tag">AuraDB</span>
+                        <span class="tech-tag">Cypher</span>
+                        <span class="tech-tag">NetworkX</span>
+                    </div>
+                </div>
+
+                <div class="component local-service">
+                    <div class="component-title">
+                        <span class="component-icon">🗃️</span>
+                        关系数据库
+                    </div>
+                    <div class="component-details">
+                        <strong>服务:</strong> SQLite<br>
+                        <strong>类型:</strong> 本地文件数据库<br>
+                        <strong>文件:</strong> medical_records.db<br>
+                        <strong>用途:</strong> 结构化数据存储<br>
+                        <strong>特点:</strong> 轻量级、无服务器<br>
+                        <strong>连接:</strong> 本地文件访问
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">SQLite</span>
+                        <span class="tech-tag">本地存储</span>
+                        <span class="tech-tag">SQL</span>
+                    </div>
+                </div>
+
+                <div class="component local-service">
+                    <div class="component-title">
+                        <span class="component-icon">🤖</span>
+                        AI模型服务
+                    </div>
+                    <div class="component-details">
+                        <strong>Embedding:</strong> all-MiniLM-L6-v2<br>
+                        <strong>LLM:</strong> DeepSeek Chat v3.1<br>
+                        <strong>API:</strong> OpenRouter (免费版)<br>
+                        <strong>缓存:</strong> ./models/ (本地)<br>
+                        <strong>设备:</strong> CPU<br>
+                        <strong>维度:</strong> 384维向量
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">SentenceTransformers</span>
+                        <span class="tech-tag">OpenRouter</span>
+                        <span class="tech-tag">DeepSeek</span>
+                    </div>
+                </div>
+
+                <div class="component local-service">
+                    <div class="component-title">
+                        <span class="component-icon">🖥️</span>
+                        应用前端
+                    </div>
+                    <div class="component-details">
+                        <strong>框架:</strong> Streamlit<br>
+                        <strong>端口:</strong> 8501<br>
+                        <strong>功能:</strong> 交互式Web界面<br>
+                        <strong>特性:</strong> 实时查询、多数据源整合<br>
+                        <strong>部署:</strong> 本地开发服务器<br>
+                        <strong>语言:</strong> Python
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Streamlit</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Web UI</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-diagram">
+                <div class="flow-step">用户查询</div>
+                <div class="flow-step">向量化</div>
+                <div class="flow-step">Pinecone检索</div>
+                <div class="flow-step">MongoDB查询</div>
+                <div class="flow-step">Neo4j图谱</div>
+                <div class="flow-step">结果融合</div>
+                <div class="flow-step">AI生成答案</div>
+            </div>
+        </div>
+
+        <!-- Oracle分支架构 -->
+        <div class="architecture-section oracle-branch">
+            <div class="architecture-title">🏛️ Oracle分支：融合数据库架构</div>
+            
+            <div class="architecture-grid">
+                <div class="component local-service">
+                    <div class="component-title">
+                        <span class="component-icon">🔍</span>
+                        AI向量搜索
+                    </div>
+                    <div class="component-details">
+                        <strong>服务:</strong> Oracle AI Vector Search<br>
+                        <strong>类型:</strong> 原生向量数据库<br>
+                        <strong>表:</strong> MEDICAL_VECTORS<br>
+                        <strong>列类型:</strong> VECTOR(384, FLOAT32)<br>
+                        <strong>函数:</strong> COSINE_DISTANCE, TO_VECTOR<br>
+                        <strong>索引:</strong> 向量索引优化
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Oracle VECTOR</span>
+                        <span class="tech-tag">原生计算</span>
+                        <span class="tech-tag">本地部署</span>
+                    </div>
+                </div>
+
+                <div class="component local-service">
+                    <div class="component-title">
+                        <span class="component-icon">📄</span>
+                        JSON文档存储
+                    </div>
+                    <div class="component-details">
+                        <strong>服务:</strong> Oracle JSON Document Store<br>
+                        <strong>类型:</strong> 原生JSON数据库<br>
+                        <strong>表:</strong> MEDICAL_DOCUMENTS<br>
+                        <strong>列类型:</strong> JSON<br>
+                        <strong>查询:</strong> JSON_VALUE, JSON_QUERY<br>
+                        <strong>索引:</strong> JSON搜索索引
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Oracle JSON</span>
+                        <span class="tech-tag">原生解析</span>
+                        <span class="tech-tag">灵活模式</span>
+                    </div>
+                </div>
+
+                <div class="component local-service">
+                    <div class="component-title">
+                        <span class="component-icon">🕸️</span>
+                        图数据库
+                    </div>
+                    <div class="component-details">
+                        <strong>服务:</strong> Oracle Graph Database<br>
+                        <strong>类型:</strong> 原生图数据库<br>
+                        <strong>表:</strong> MEDICAL_GRAPH_VERTICES/EDGES<br>
+                        <strong>查询语言:</strong> PGQL<br>
+                        <strong>存储:</strong> JSON属性<br>
+                        <strong>遍历:</strong> 关系路径查询
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Oracle Graph</span>
+                        <span class="tech-tag">PGQL</span>
+                        <span class="tech-tag">原生图计算</span>
+                    </div>
+                </div>
+
+                <div class="component local-service">
+                    <div class="component-title">
+                        <span class="component-icon">🏛️</span>
+                        融合数据库核心
+                    </div>
+                    <div class="component-details">
+                        <strong>版本:</strong> Oracle 23ai<br>
+                        <strong>连接:</strong> vector/vector@localhost:1521/FREEpdb1<br>
+                        <strong>容器:</strong> Docker部署<br>
+                        <strong>特性:</strong> AI Vector + JSON + Graph<br>
+                        <strong>优势:</strong> 单一实例，统一管理<br>
+                        <strong>性能:</strong> 本地计算，无网络延迟
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Oracle 23ai</span>
+                        <span class="tech-tag">融合架构</span>
+                        <span class="tech-tag">Docker</span>
+                    </div>
+                </div>
+
+                <div class="component local-service">
+                    <div class="component-title">
+                        <span class="component-icon">🤖</span>
+                        AI模型服务
+                    </div>
+                    <div class="component-details">
+                        <strong>Embedding:</strong> all-MiniLM-L6-v2<br>
+                        <strong>LLM:</strong> DeepSeek Chat v3.1<br>
+                        <strong>API:</strong> OpenRouter (免费版)<br>
+                        <strong>缓存:</strong> ./models/ (本地)<br>
+                        <strong>设备:</strong> CPU<br>
+                        <strong>一致性:</strong> 与主分支相同
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">SentenceTransformers</span>
+                        <span class="tech-tag">OpenRouter</span>
+                        <span class="tech-tag">DeepSeek</span>
+                    </div>
+                </div>
+
+                <div class="component local-service">
+                    <div class="component-title">
+                        <span class="component-icon">🖥️</span>
+                        应用前端
+                    </div>
+                    <div class="component-details">
+                        <strong>框架:</strong> Streamlit<br>
+                        <strong>端口:</strong> 8501<br>
+                        <strong>功能:</strong> 交互式Web界面<br>
+                        <strong>特性:</strong> 实时调试、统一数据源<br>
+                        <strong>部署:</strong> 本地开发服务器<br>
+                        <strong>增强:</strong> 详细的调试信息
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Streamlit</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">调试增强</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-diagram">
+                <div class="flow-step">用户查询</div>
+                <div class="flow-step">向量化</div>
+                <div class="flow-step">Oracle统一检索</div>
+                <div class="flow-step">多模态融合</div>
+                <div class="flow-step">AI生成答案</div>
+            </div>
+        </div>
+
+        <!-- 对比表格 -->
+        <div class="architecture-section">
+            <div class="architecture-title">📊 架构对比分析</div>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>对比维度</th>
+                        <th>主分支 (多云服务)</th>
+                        <th>Oracle分支 (融合数据库)</th>
+                        <th>优势分析</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>部署复杂度</strong></td>
+                        <td class="disadvantage">高 (4个云服务)</td>
+                        <td class="advantage">低 (单一数据库)</td>
+                        <td class="advantage">Oracle 简化部署</td>
+                    </tr>
+                    <tr>
+                        <td><strong>网络延迟</strong></td>
+                        <td class="disadvantage">高 (多次网络调用)</td>
+                        <td class="advantage">无 (本地计算)</td>
+                        <td class="advantage">Oracle 性能优势</td>
+                    </tr>
+                    <tr>
+                        <td><strong>数据一致性</strong></td>
+                        <td class="disadvantage">分布式一致性挑战</td>
+                        <td class="advantage">ACID事务保证</td>
+                        <td class="advantage">Oracle 数据完整性</td>
+                    </tr>
+                    <tr>
+                        <td><strong>成本结构</strong></td>
+                        <td class="neutral">多服务费用累加</td>
+                        <td class="advantage">单一许可证</td>
+                        <td class="advantage">Oracle 成本可控</td>
+                    </tr>
+                    <tr>
+                        <td><strong>扩展性</strong></td>
+                        <td class="advantage">云服务自动扩展</td>
+                        <td class="neutral">需要规划容量</td>
+                        <td class="advantage">主分支 弹性扩展</td>
+                    </tr>
+                    <tr>
+                        <td><strong>数据安全</strong></td>
+                        <td class="disadvantage">多点风险</td>
+                        <td class="advantage">集中控制</td>
+                        <td class="advantage">Oracle 安全集中</td>
+                    </tr>
+                    <tr>
+                        <td><strong>运维复杂度</strong></td>
+                        <td class="disadvantage">多系统监控</td>
+                        <td class="advantage">统一管理</td>
+                        <td class="advantage">Oracle 运维简化</td>
+                    </tr>
+                    <tr>
+                        <td><strong>查询性能</strong></td>
+                        <td class="disadvantage">网络IO瓶颈</td>
+                        <td class="advantage">内存计算</td>
+                        <td class="advantage">Oracle 计算优势</td>
+                    </tr>
+                    <tr>
+                        <td><strong>技术栈统一</strong></td>
+                        <td class="disadvantage">多技术栈</td>
+                        <td class="advantage">单一技术栈</td>
+                        <td class="advantage">Oracle 技术统一</td>
+                    </tr>
+                    <tr>
+                        <td><strong>开发学习成本</strong></td>
+                        <td class="disadvantage">多API学习</td>
+                        <td class="advantage">单一SQL接口</td>
+                        <td class="advantage">Oracle 学习成本低</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 总结 -->
+        <div class="architecture-section">
+            <div class="architecture-title">🎯 架构选择建议</div>
+            
+            <div class="architecture-grid">
+                <div class="component">
+                    <div class="component-title">
+                        <span class="component-icon">🌐</span>
+                        主分支适用场景
+                    </div>
+                    <div class="component-details">
+                        ✅ <strong>原型验证:</strong> 快速验证概念<br>
+                        ✅ <strong>云原生环境:</strong> 完全云端部署<br>
+                        ✅ <strong>弹性需求:</strong> 不确定的负载<br>
+                        ✅ <strong>多团队协作:</strong> 服务解耦<br>
+                        ✅ <strong>预算有限:</strong> 免费版本足够
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-title">
+                        <span class="component-icon">🏛️</span>
+                        Oracle分支适用场景
+                    </div>
+                    <div class="component-details">
+                        ✅ <strong>生产环境:</strong> 稳定可靠的系统<br>
+                        ✅ <strong>企业部署:</strong> 本地化数据要求<br>
+                        ✅ <strong>高性能需求:</strong> 低延迟要求<br>
+                        ✅ <strong>统一管理:</strong> 简化运维需求<br>
+                        ✅ <strong>数据安全:</strong> 严格的安全要求
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
