@@ -248,6 +248,9 @@ def perform_oracle_search(query: str, search_type: str = "混合检索"):
         
         if search_type == "向量搜索":
             # 纯向量搜索
+            st.markdown("### 🔍 向量搜索模式")
+            st.info("仅使用向量相似度搜索，基于语义理解查找相关内容")
+            
             st.write(f"🔍 正在向量搜索: '{query}'")
             vector_results = get_oracle_vector_search_results(query)
             st.write(f"📊 向量搜索返回了 {len(vector_results) if vector_results else 0} 个结果")
@@ -255,37 +258,62 @@ def perform_oracle_search(query: str, search_type: str = "混合检索"):
             st.write("🔍 Oracle向量搜索结果:")
             if vector_results:
                 for i, result in enumerate(vector_results[:5], 1):
-                    st.info(f"{i}. 患者: {result['patient_name']} | 相似度: {result['similarity']:.3f}")
-                    st.write(f"内容: {result['content'][:200]}...")
+                    st.success(f"**结果 {i}**: 患者: {result['patient_name']} | 相似度: {result['similarity']:.3f}")
+                    st.write(f"📄 内容: {result['content'][:200]}...")
+                    if i < len(vector_results):
+                        st.markdown("---")
             else:
-                st.write("未找到相关向量内容")
+                st.warning("🚫 未找到相关向量内容")
+            
+            return  # 只执行向量搜索，不执行其他搜索
         
         elif search_type == "文档搜索":
             # 纯JSON文档搜索
+            st.markdown("### 📄 文档搜索模式")
+            st.info("仅使用JSON文档搜索，基于关键词匹配查找结构化医疗记录")
+            
             st.write(f"📄 正在JSON文档搜索: '{query}'")
             json_results = get_oracle_json_search_results(query)
             st.write(f"📊 JSON搜索返回了 {len(json_results) if json_results else 0} 个结果")
             
             st.write("📄 Oracle JSON文档搜索结果:")
             if json_results:
-                for result in json_results:
-                    st.info(result)
+                for i, result in enumerate(json_results, 1):
+                    st.success(f"**文档结果 {i}**:")
+                    st.write(result)
+                    if i < len(json_results):
+                        st.markdown("---")
             else:
-                st.write("未找到相关文档内容")
+                st.warning("🚫 未找到相关文档内容")
+            
+            return  # 只执行文档搜索，不执行其他搜索
         
         elif search_type == "图数据库":
             # 纯图数据库搜索
+            st.markdown("### 🕸️ 图数据库搜索模式")
+            st.info("仅使用图数据库搜索，基于关系遍历查找医疗实体间的关联")
+            
+            st.write(f"🕸️ 正在图数据库搜索: '{query}'")
             graph_results = get_oracle_graph_search_results(query)
+            st.write(f"📊 图搜索返回了 {len(graph_results) if graph_results else 0} 个结果")
             
             st.write("🕸️ Oracle图数据库搜索结果:")
             if graph_results:
-                for result in graph_results:
-                    st.info(result)
+                for i, result in enumerate(graph_results, 1):
+                    st.success(f"**图关系结果 {i}**:")
+                    st.write(result)
+                    if i < len(graph_results):
+                        st.markdown("---")
             else:
-                st.write("未找到相关图数据")
+                st.warning("🚫 未找到相关图数据")
+            
+            return  # 只执行图数据库搜索，不执行其他搜索
         
         else:  # 混合检索
             # 并行执行所有搜索
+            st.markdown("### 🎯 混合检索模式")
+            st.info("同时使用向量搜索、JSON文档搜索和图数据库搜索，提供最全面的结果")
+            
             st.write(f"🔍 正在执行混合搜索: '{query}'")
             
             vector_results = get_oracle_vector_search_results(query)
@@ -326,7 +354,32 @@ def perform_oracle_search(query: str, search_type: str = "混合检索"):
             
             # 生成综合回答
             if vector_results or json_results or graph_results:
-                st.write("🤖 综合分析结果:")
+                # 显示AI正在分析的动态效果
+                analysis_placeholder = st.empty()
+                progress_placeholder = st.empty()
+                
+                # 显示分析进度
+                with analysis_placeholder:
+                    st.markdown("### 🤖 AI正在分析最终结果...")
+                    
+                with progress_placeholder:
+                    progress_bar = st.progress(0)
+                    status_text = st.empty()
+                    
+                    import time
+                    # 模拟分析进度
+                    steps = [
+                        (20, "🔍 整合向量搜索结果..."),
+                        (40, "📄 分析JSON文档数据..."),
+                        (60, "🕸️ 解析图数据库关系..."),
+                        (80, "🧠 AI深度理解与推理..."),
+                        (100, "✨ 生成智能答案...")
+                    ]
+                    
+                    for progress, message in steps:
+                        progress_bar.progress(progress)
+                        status_text.text(message)
+                        time.sleep(0.3)  # 每步延迟0.3秒
                 
                 try:
                     client, model, temperature = get_openai_client()
@@ -376,9 +429,17 @@ def perform_oracle_search(query: str, search_type: str = "混合检索"):
                     )
                     
                     answer = response.choices[0].message.content.strip()
+                    
+                    # 清除分析中的提示，显示最终结果
+                    analysis_placeholder.empty()
+                    progress_placeholder.empty()
+                    st.markdown("### 🎯 AI智能分析结果")
                     st.success(answer)
                     
                 except Exception as e:
+                    # 清除分析中的提示
+                    analysis_placeholder.empty()
+                    progress_placeholder.empty()
                     st.warning(f"AI回答生成失败: {str(e)}，显示原始搜索结果")
     
     except Exception as e:
@@ -613,7 +674,7 @@ cols = st.columns(len(example_questions))
 for i, question in enumerate(example_questions):
     with cols[i]:
         if st.button(question, key=f"example_{i}"):
-            perform_oracle_search(question, "混合检索")
+            perform_oracle_search(question, search_type)
 
 # 系统信息
 st.markdown("---")
