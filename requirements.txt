@@ -12,3 +12,4 @@ pymongo[srv]==4.6.1
 pinecone
 scikit-learn
 neo4j>=5
+python-dotenv

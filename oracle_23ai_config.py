@@ -7,12 +7,16 @@ import os
 from typing import Dict, Any, List, Optional
 import oracledb
 import json
+from dotenv import load_dotenv
+
+# 加载环境变量
+load_dotenv()
 
 # Oracle 23ai 数据库配置
 ORACLE_23AI_CONFIG = {
-    "username": "vector",
-    "password": "vector",
-    "dsn": "localhost:1521/FREEpdb1",  # 本地Oracle 23ai Free
+    "username": os.getenv("ORACLE_USERNAME", "vector"),
+    "password": os.getenv("ORACLE_PASSWORD", "vector"),
+    "dsn": os.getenv("ORACLE_DSN", "localhost:1521/FREEpdb1"),  # 本地Oracle 23ai Free
     # "dsn": "your_cloud_instance.oraclecloud.com:1521/your_service",  # Oracle Cloud
     "config_dir": "./oracle_config",  # Oracle客户端配置目录
     "wallet_location": "./oracle_wallet",  # 钱包位置（云端连接）
